@@ -1,0 +1,163 @@
+<nb-layout>
+  <nb-layout-column>
+    <div class="content" *ngIf="bill" >
+      <div class="p-5" id="pdfContent" #pdf>
+        <div class="row" >
+          <div class="col-6">
+            <h5 *ngIf="company">{{company.name}}</h5>
+          </div>
+          <div class="col-6 text-end">
+            <h5>{{ 'general.bill' | translate }}</h5>
+            <div class="mt-4"><b>{{ 'general.reference' | translate }}: </b> {{bill.reference}}</div>
+            <div class="mt-2"> <b>{{ 'general.date' | translate }}:</b> {{bill.billDate | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2" *ngIf="bill.orderNumber"><b>{{ 'general.number' | translate }}:</b> {{bill.orderNumber}}</div>
+            <div class="mt-2"><b>{{ 'bill.index.dueDate' | translate }}: </b> {{bill.issueDate | date: 'MMM d, y, HH:mm'}}</div>
+          </div>
+        </div>
+
+        <div class="row" >
+          <div class="col-6" *ngIf="company">
+            <div class="mb-2"><b>{{ 'general.from' | translate }}</b></div>
+            <div>
+              {{company.name}}
+             </div>
+            <div>
+              {{company.phone}}
+            </div>
+            <div *ngIf="company.billingAddress">
+              <address>
+                <div>{{company.billingAddress.addressLine1}}</div>
+                <div>{{company.billingAddress.addressLine2}}</div>
+                <div>{{company.billingAddress.zipCode}} {{company.billingAddress.city}} - {{company.billingAddress.country}}</div>
+              </address>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+
+          </div>
+        </div>
+
+        <div class="row  mt-5">
+          <div class="col-6">
+            <div class="mb-2"><b>{{ 'general.sentTo' | translate }}</b></div>
+            <div>
+              {{bill.vendor.name}}
+            </div>
+            <div>
+              {{bill.vendor.phone}}
+            </div>
+            <div *ngIf="bill.vendor.billingAddress">
+              <address>
+                <div>{{bill.vendor.billingAddress.addressLine1}}</div>
+                <div>{{bill.vendor.billingAddress.addressLine2}}</div>
+                <div>{{bill.vendor.billingAddress.zipCode}} {{bill.vendor.billingAddress.city}} - {{bill.vendor.billingAddress.country}}</div>
+              </address>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+            <div class="">
+              <h4>{{ 'general.amountDue' | translate }}</h4>
+              <h2 class="text-primary"> <span *ngIf="bill.currency">{{bill.currency.symbol}}</span> {{bill.totalAmount}} </h2>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-12">
+            <h6>{{'bill.detail.productsAndServices' | translate}}</h6>
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">{{ 'bill.detail.items' | translate }}</th>
+                    <th scope="col">{{ 'bill.detail.category' | translate }}</th>
+                    <th scope="col">{{ 'bill.detail.quantity' | translate }}</th>
+                    <th scope="col">{{ 'bill.detail.price' | translate }}</th>
+                    <th scope="col">{{ 'bill.detail.tax' | translate }}</th>
+                    <th scope="col">{{ 'bill.detail.discount' | translate }} (%)</th>
+                    <th scope="col">{{ 'bill.detail.totalPrice' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="bill.billLineItems && bill.billLineItems.length > 0; else empty">
+                  <ng-container *ngFor="let item of bill.billLineItems">
+                    <tr>
+                      <td>
+                        <b>
+                          <span *ngIf="item.product != null && item.category === 'product'" >{{item.product.name}} </span>
+                          <span *ngIf="item.service != null && item.category === 'service'" >{{item.service.name}}</span>
+                        </b>
+                        <span><br />{{item.description}}</span>
+                      </td>
+                      <td>{{item.category}}</td>
+                      <td>{{item.quantity}}</td>
+                      <td><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{item.price}}</td>
+                      <td *ngIf="item.product != null && item.category === 'product'" >{{item.product.tax.name}} ({{item.product.tax.rate}}%)</td>
+                      <td *ngIf="item.service != null && item.category === 'service'" >{{item.service.tax.name}} ({{item.service.tax.rate}}%)</td>
+                      <td>{{item.discount}}%</td>
+                      <td><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{item.totalPrice}}</td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+                <ng-template #empty>
+                  <tbody>
+                    <tr>
+                    <td colspan="8" class="text-center"><b>{{ 'general.noItemAdded' | translate }}</b></td>
+                    </tr>
+                  </tbody>
+                </ng-template>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-4">
+              </div>
+              <div class="col-8 bg-light">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>{{ 'general.subTotal' | translate }}: </td>
+                      <td><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{bill.subTotalPrice}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'general.discount' | translate }}:</td>
+                      <td><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{bill.totalDiscount}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'general.tax' | translate }}:</td>
+                      <td><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{bill.totalTax}}</td>
+                    </tr>
+                    <ng-container *ngIf="bill.totalDebitNote">
+                      <tr>
+                        <td>{{ 'general.debitNote' | translate }}: </td>
+                        <td><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{bill.totalDebitNote}}</td>
+                      </tr>
+                    </ng-container>
+                    <tr>
+                      <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                      <td><b><span *ngIf="bill.currency">{{bill.currency.symbol}}</span>{{bill.totalAmount}}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5" *ngIf="bill.description">
+          <div class="col-12">
+            <div>{{ 'bill.detail.noteAndTerms' | translate }} </div>
+            <div>{{bill.description}}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </nb-layout-column>
+</nb-layout>

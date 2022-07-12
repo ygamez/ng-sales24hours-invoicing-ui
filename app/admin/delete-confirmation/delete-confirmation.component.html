@@ -1,0 +1,12 @@
+<nb-card accent="danger" class="dialog">
+  <nb-card-header>
+    {{'general.deleting' | translate }}...
+  </nb-card-header>
+  <nb-card-body class="mt-3 mb-3 mr-5">
+    {{'general.deletingConfirmation' | translate }} ?
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton size="small" status="danger" (click)="confirm()" class="me-2">{{'general.delete' | translate }}</button>
+    <button nbButton size="small" status="basic" (click)="close()">{{'form.cancel' | translate }}</button>
+  </nb-card-footer>
+</nb-card>

@@ -1,0 +1,35 @@
+<nb-card [nbSpinner]="cardLoading"
+          accent="primary"
+         nbSpinnerSize="large"
+         nbSpinnerMessage="">
+  <nb-card-header>
+    {{ 'general.updateLicense' | translate }}<br />
+    <span *ngIf="licenseName">{{ 'general.currentLicense' | translate }}: <b>{{licenseName}}</b></span>
+  </nb-card-header>
+
+  <nb-card-body>
+    <form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="license">{{ 'general.license' | translate }}</label>
+				<div class="col-5">
+					<input class="form-control" id="license" name="license"
+            formControlName="license"  nbInput placeholder="{{ 'general.license' | translate }}"
+            fullWidth status="primary" type="text">
+            <div>
+              <small>{{'general.useOrderLicense' | translate }}</small>
+            </div>
+				</div>
+			</div>
+
+			<div class="mg-top form-group row mb-4">
+				<div class="offset-sm-3 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+
+		</form>
+
+  </nb-card-body>
+
+</nb-card>

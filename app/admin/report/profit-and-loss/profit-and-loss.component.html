@@ -1,0 +1,111 @@
+<div>
+  <nb-card accent="primary" [nbSpinner]="loading">
+    <nb-card-header  class="text-center">
+      <h4>{{ 'general.profitAndLoss' | translate }}</h4>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="container">
+        <nb-card class="mb-5 mt-4">
+          <nb-card-body>
+            <div class="row">
+              <div class="col-4">
+                <div class="mb-2">
+                  <b>{{ 'general.dateRange' | translate }}</b>
+                </div>
+                <div>
+                  <input status="primary" nbInput placeholder="Pick Date Range" [nbDatepicker]="dateRangePicker" fullWidth
+                    [formControl]="dateRangePcikerControl" size="medium">
+                  <nb-rangepicker #dateRangePicker (rangeChange)="getDateRange($event)"></nb-rangepicker>
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+        <div class="row mb-3">
+          <div class="col-12">
+            <button (click)="downloadPdf()" class="float-end" nbButton status="primary" size="small">
+              <nb-icon icon="download-outline"></nb-icon>
+              {{ 'general.download' | translate }}
+            </button>
+            <button (click)="getProfitAndLoss()" class="float-end me-2" nbButton status="primary" size="small">
+              <nb-icon icon="refresh-outline"></nb-icon>
+              {{ 'general.refresh' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive" id="pdfContent">
+          <table class="table table-borderless" >
+            <thead class="table-info">
+              <tr>
+                <th scope="col">{{ 'general.account' | translate }}</th>
+                <th scope="col" class="text-end">{{ 'general.totalAmount' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let report of reports" >
+                <ng-container  *ngIf="report.accountType.name === 'Income'">
+                  <tr >
+                    <td class="text-primary">{{ 'general.incomes' | translate }}</td>
+                  </tr>
+                  <tr *ngFor="let item of report.accountStatementReportItems">
+                    <td>{{item.account.accountName}}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td>{{ 'general.totalIncome' | translate }}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container  *ngIf="report.accountType.name === 'Cost of Goods Sold'">
+                  <tr><td></td></tr>
+                  <tr >
+                    <td class="text-primary">{{ 'general.costOfGoodSold' | translate }}</td>
+                    <td></td>
+                  </tr>
+                  <tr *ngFor="let item of report.accountStatementReportItems">
+                    <td>{{item.account.accountName}}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td>{{ 'general.totalCostOfGoodSold' | translate }}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container  *ngIf="report.accountType.name === 'Operating Expense'">
+                  <tr><td></td></tr>
+                  <tr>
+                    <td></td>
+                    <td class="bg-light">
+                      <span class="text-start"> {{ 'general.grossProfit' | translate }}</span>
+                      <span class="float-end"> <span *ngIf="currency">{{currency.symbol}}</span>{{grossProfit.toFixed(2)}}</span></td>
+                  </tr>
+                  <tr><td></td></tr>
+                  <tr>
+                    <td class="text-primary">{{ 'general.operatingExpense' | translate }}</td>
+                    <td></td>
+                  </tr>
+                  <tr *ngFor="let item of report.accountStatementReportItems">
+                    <td>{{item.account.accountName}}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td>{{ 'general.totalOperatingExpense' | translate }}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                  <tr><td></td></tr>
+                  <tr>
+                    <td></td>
+                    <td class="bg-light">
+                      <span class="text-start">{{ 'general.netProfit' | translate }}</span>
+                      <span class="float-end"><span *ngIf="currency">{{currency.symbol}}</span>{{netProfit.toFixed(2)}}</span></td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>

@@ -1,0 +1,63 @@
+<nb-layout>
+
+  <nb-layout-header fixed>
+    <app-header></app-header>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="sidebar" class="menu-sidebar" responsive>
+    <app-sidebar></app-sidebar>
+  </nb-sidebar>
+
+  <nb-layout-column>
+    <nb-card *ngIf="subscription != null && subscription.plan.price == 0 && grantLKAccess">
+      <nb-card-body >
+         <div class="row">
+          <div class="col-12 col-sm-12 col-md-8">
+            <div class="" >{{ 'subscription.message.freePlan' | translate }}</div>
+            <div class="" >{{ 'subscription.message.updatePlan' | translate }}</div>
+
+           </div>
+           <div class="col-12 col-sm-12 col-md-4">
+            <a nbButton status="primary" class="float-end" size="medium" routerLink="/dashboard/setting-list/pricings">
+              {{ 'subscription.btnUpgrade' | translate }}
+            </a>
+          </div>
+         </div>
+      </nb-card-body>
+    </nb-card>
+    <nb-card *ngIf="subscription != null && subscription.plan.price > 0 && !subscription.renew">
+      <nb-card-body>
+         <div class="row">
+          <div class="col-12 col-sm-12 col-md-8">
+            <div class="" >{{ 'subscription.message.paymentFailed' | translate }}.</div>
+            <div class="" >{{ 'subscription.message.renew' | translate }}.</div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-4">
+            <a nbButton status="primary" class="float-end" size="medium" [href]="subscription.subscriptionPortalUrl" *ngIf="subscription.subscriptionPortalUrl">
+              {{ 'subscription.updatePM' | translate }}
+            </a>
+          </div>
+         </div>
+      </nb-card-body>
+    </nb-card>
+    <!-- <nb-card *ngIf="!hasPayPalConnected || !hasStripeConnected" class="mt-4">
+      <nb-card-body >
+         <div class="row">
+          <div class="col-12 col-sm-12 col-md-8">
+            <div *ngIf="!hasStripeConnected" >{{ 'bankConnect.connectStripeWarning' | translate }}</div>
+            <div *ngIf="!hasPayPalConnected" >{{ 'bankConnect.connectPayPalWarning' | translate }}</div>
+           </div>
+           <div class="col-12 col-sm-12 col-md-4">
+            <a nbButton status="primary" class="float-end" size="medium" routerLink="/dashboard/bank-account/connect">{{ 'bankConnect.btn' | translate }}</a>
+          </div>
+         </div>
+      </nb-card-body>
+    </nb-card> -->
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    <app-footer></app-footer>
+  </nb-layout-footer>
+
+</nb-layout>

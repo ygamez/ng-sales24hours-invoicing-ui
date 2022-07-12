@@ -1,0 +1,41 @@
+.border-radius-effect {
+    border-radius: 73% 27% 38% 62%/40% 43% 57% 60%;
+}
+
+.separated {
+	overflow: hidden;
+	> * {
+		box-shadow: -1px -1px 0px 0px #eee;
+	}
+}
+
+
+.border-style {
+	position: relative;
+	&:after {
+		content: '';
+		display: block;
+		width: 80%;
+		position: absolute;
+		left: 0;
+		right: 0;
+		margin: auto;
+		height: 1px;
+		background: radial-gradient(ellipse at center, #dee4ef 0, rgba(255, 255, 255, 0) 75%);
+	}
+	&.bottom {
+		&:after {
+			bottom:0;
+		}
+	}
+	&.top {
+		&:after {
+			top:0;
+		}
+	}
+	&.light {
+		&:after {
+			background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.2) 0, rgba(31, 45, 61, 0) 75%);
+		}
+	}
+}

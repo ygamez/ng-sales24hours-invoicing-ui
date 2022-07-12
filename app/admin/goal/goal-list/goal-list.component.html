@@ -1,0 +1,38 @@
+<ng-container *ngIf="goals != null && goals.length > 0">
+  <nb-card accent="primary">
+    <nb-card-body>
+      <h5>{{'general.goals' | translate }}</h5>
+      <div  class="mt-5" *ngFor="let item of goals">
+        <div class="row">
+          <div class="col-6">
+            <h6>{{'general.amountToReach' | translate }}: <span class="text-primary">${{item.amount}}</span></h6>
+          </div>
+          <div class="col-3 text-end">
+            <b>{{'general.startAt' | translate }}: <span class="primary">{{item.from | date: 'MMM d, y, HH:mm'}}</span></b>
+          </div>
+          <div class="col-3 text-end">
+            <b>{{'general.endAt' | translate }}: <span class="primary">{{item.to | date: 'MMM d, y, HH:mm'}}</span></b>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <nb-progress-bar [value]="item.value" [status]="item.status" [displayValue]="false"></nb-progress-bar>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-6">
+            <b *ngIf="item.name">{{'general.name' | translate }}: {{item.name}}</b>
+          </div>
+          <div class="col-6">
+            <a class="float-end" (click)="deleteConfirmation(item.id)" nbButton status="danger" size="tiny">
+              <nb-icon icon="trash-2-outline"></nb-icon> {{'general.delete' | translate }}
+            </a>
+            <a class="float-end me-2" [routerLink]="['/dashboard/goal/edit', item.id]" nbButton status="warning" size="tiny">
+              <nb-icon icon="edit-outline"></nb-icon> {{'form.edit' | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-container>

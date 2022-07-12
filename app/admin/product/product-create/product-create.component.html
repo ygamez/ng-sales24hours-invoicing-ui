@@ -1,0 +1,84 @@
+<nb-card accent="primary" [nbSpinner]="editLoading">
+	<nb-card-header>
+		<h6>{{ 'product.index.title' | translate }}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="name">{{ 'product.index.name' | translate }} *</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="name" name="name" formControlName="name"  nbInput placeholder="{{ 'product.index.name' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['name']) && formDir.submitted" for="name">
+            {{ 'product.form.requiredName' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="sku">
+          {{ 'product.index.sku' | translate }}
+        </label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="sku" name="sku" formControlName="sku"  nbInput placeholder="{{ 'product.index.sku' | translate }}" fullWidth status="primary" type="text">
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="sale-price">{{ 'product.index.salePrice' | translate }} (<span *ngIf="currency">{{currency.symbol}}</span>) *</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="sale-price" name="salePrice" formControlName="salePrice"  nbInput placeholder="{{ 'product.index.salePrice' | translate }} " fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['salePrice']) && formDir.submitted" for="sale-price">{{ 'product.form.requiredSalePrice' | translate }} </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="purchase-price">{{ 'product.index.purchasePrice' | translate }}  (<span *ngIf="currency">{{currency.symbol}}</span>) *</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="purchase-price" name="purchasePrice" formControlName="purchasePrice"  nbInput placeholder="{{ 'product.index.purchasePrice' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['purchasePrice']) && formDir.submitted" for="purchase-price"> {{ 'product.form.requiredPurchasePrice' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="category">{{ 'product.index.category' | translate }} *</label>
+				<div class="col-4">
+					<nb-select id="category" name="category" formControlName="categoryId"  placeholder="{{ 'product.index.category' | translate }}" fullWidth status="primary">
+						<nb-option *ngFor="let category of categories" [(value)]="category.id">{{category.name}}</nb-option>
+					</nb-select>
+          <div>
+					  <span class="text-danger" *ngIf="entityForm.hasError('required', ['categoryId']) && formDir.submitted" for="category">
+              {{ 'product.form.requiredCategory' | translate }}
+            </span>
+          </div>
+          <a routerLink="/dashboard/setting-list/category/create" nbButton class="mt-2" status="basic" size="tiny">
+            <nb-icon icon="plus"></nb-icon> {{ 'product.form.btnNewCategory' | translate }}
+          </a>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="tax">{{ 'product.index.tax' | translate }}</label>
+				<div class="col-4">
+					<nb-select id="tax" name="tax" formControlName="taxId"  placeholder="{{ 'product.index.tax' | translate }}" fullWidth status="primary">
+						<nb-option *ngFor="let tax of taxes" [(value)]="tax.id">{{tax.name}} ({{tax.rate}}%)</nb-option>
+					</nb-select>
+          <a routerLink="/dashboard/setting-list/taxes/create" nbButton class="mt-2" status="basic" size="tiny">
+            <nb-icon icon="plus"></nb-icon> {{ 'product.form.btnNewTax' | translate }}
+          </a>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="description">{{ 'product.form.description' | translate }}</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<textarea class="form-control" id="description" name="description" formControlName="description" nbInput placeholder="{{ 'product.form.description' | translate }}" fullWidth status="primary" rows="6"></textarea>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-4 offset-sm-4 offset-md-2 col-7 col-sm-7 col-md-6">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

@@ -1,0 +1,209 @@
+<nb-card accent="primary" [nbSpinner]="cardLoading">
+	<nb-card-header>
+		<h6>{{'general.invoiceCustomization' | translate }}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <h5>{{ 'general.template' | translate }}</h5>
+
+      <div class="row">
+        <label class="col-2" for="name">{{'general.chooseTemplate' | translate }}</label>
+        <div class="col-5">
+          <h5 class="card-title">Standard</h5>
+          <div class="card" (click)="selectTemplate('standard')" [ngClass]="template == 'standard'? 'active' : ''">
+            <div class="card-body bg-light">
+              <img class="img-fluid" src="assets/images/inv-standard.JPG">
+            </div>
+          </div>
+        </div>
+        <div class="col-5">
+          <h5 class="card-title">Trappist-1</h5>
+          <div class="card" (click)="selectTemplate('trappist-1')" [ngClass]="template == 'trappist-1'? 'active' : ''">
+            <div class="card-body bg-light">
+              <img class="img-fluid " src="assets/images/inv-trappist-1.JPG">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="mt-4">{{ 'general.invoice' | translate }}</h5>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultTitle' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="invoiceTitle" name="invoiceTitle" formControlName="invoiceTitle" nbInput placeholder="{{'general.defaultTitle' | translate }}"
+           fullWidth status="primary" type="text">
+          <div>
+  					<span class="text-danger" *ngIf="entityForm.hasError('required', ['invoiceTitle']) && formDir.submitted" for="name">{{'general.invoiceRequiredTitle' | translate }}</span>
+          </div>
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultSubtitle' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="subtitle" name="subtitle" formControlName="invoiceSubtitle" nbInput placeholder="{{'general.defaultSubtitle' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultFooter' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="defaultFooter" name="defaultFooter" formControlName="invoiceFooter" nbInput placeholder="{{'general.defaultFooter' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultNotes' | translate }}</label>
+				<div class="col-8">
+          <textarea class="form-control" id="defaultNotes" name="defaultNotes" formControlName="invoiceNotes" nbInput placeholder="{{'general.defaultNotes' | translate }}"
+            fullWidth status="primary" type="text"></textarea>
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hideShippingAddress"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hideShippingAddress"
+            formControlName="hideShippingAddress"
+            labelPosition="end"
+            status="primary" >{{'general.hideShippingAddress' | translate}}</nb-toggle>
+        </div>
+      </div>
+
+      <h5 class="mt-5">{{ 'general.estimate' | translate }}</h5>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultTitle' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="estimateTitle" name="estimateTitle" formControlName="estimateTitle" nbInput placeholder="{{'general.defaultTitle' | translate }}"
+           fullWidth status="primary" type="text">
+          <div>
+  					<span class="text-danger" *ngIf="entityForm.hasError('required', ['estimateTitle']) && formDir.submitted" for="name">{{'general.estimateRequiredTitle' | translate }}</span>
+          </div>
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultSubtitle' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="subtitle" name="subtitle" formControlName="estimateSubtitle" nbInput placeholder="{{'general.defaultSubtitle' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultFooter' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="defaultFooter" name="defaultFooter" formControlName="estimateFooter" nbInput placeholder="{{'general.defaultFooter' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.defaultNotes' | translate }}</label>
+				<div class="col-8">
+          <textarea class="form-control" id="defaultNotes" name="defaultNotes" formControlName="estimateNotes" nbInput placeholder="{{'general.defaultNotes' | translate }}"
+            fullWidth status="primary" type="text"></textarea>
+				</div>
+			</div>
+
+      <h5 class="mt-5">{{ 'general.itemsSetting' | translate }}</h5>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.itemsLabel' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="itemsLabel" name="itemsLabel" formControlName="items" nbInput placeholder="{{'general.itemsLabel' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.priceLabel' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="price" name="price" formControlName="price" nbInput placeholder="{{'general.price' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+				<label class="col-2" for="name">{{'general.amountLabel' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="amountLabel" name="price" formControlName="amount" nbInput placeholder="{{'general.amountLabel' | translate }}"
+           fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hideDescription"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hideDescription"
+            formControlName="hideDescription"
+            labelPosition="end"
+            status="primary" >Hide description </nb-toggle>
+        </div>
+      </div>
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hideQuantity"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hideQuantity"
+            formControlName="hideQuantity"
+            labelPosition="end"
+            status="primary" >Hide quantity </nb-toggle>
+        </div>
+      </div>
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hidePrice"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hidePrice"
+            formControlName="hidePrice"
+            labelPosition="end"
+            status="primary" >Hide price </nb-toggle>
+        </div>
+      </div>
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hidePrice"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hideTax"
+            formControlName="hideTax"
+            labelPosition="end"
+            status="primary" >Hide tax </nb-toggle>
+        </div>
+      </div>
+
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hideCategory"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hideCategory"
+            formControlName="hideCategory"
+            labelPosition="end"
+            status="primary" >Hide category </nb-toggle>
+        </div>
+      </div>
+
+      <div class="mt-4 form-group row">
+        <label class="col-2" for="hideDiscount"></label>
+        <div class="col-8">
+          <nb-toggle aria-describedby="hideDiscount"
+            formControlName="hideDiscount"
+            labelPosition="end"
+            status="primary" >Hide discount</nb-toggle>
+        </div>
+      </div>
+
+      <div class="mt-4 form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+
+		</form>
+	</nb-card-body>
+</nb-card>

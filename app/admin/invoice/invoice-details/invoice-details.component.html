@@ -1,0 +1,401 @@
+<div class="container" *ngIf="invoice; else noContent">
+  <div class="row mb-3">
+	  <div class="col-12">
+      <a class="float-end" nbButton size="small" status="warning" [routerLink]="['/dashboard/invoice/edit', invoice.id]" *ngIf="!invoice.isRecurring">
+        <nb-icon icon="edit-outline"></nb-icon> {{ 'form.edit' | translate }}
+      </a>
+      <a class="float-end" nbButton size="small" status="warning" [routerLink]="['/dashboard/recurring-invoices/edit', invoice.id]" *ngIf="invoice.isRecurring">
+        <nb-icon icon="edit-outline"></nb-icon> {{ 'form.edit' | translate }}
+      </a>
+    </div>
+	</div>
+  <nb-card accent="primary">
+    <nb-card-header>
+      <h6>{{ 'invoice.detail.title' | translate }}</h6>
+      <small>{{ 'invoice.index.reference' | translate }}: <b>{{invoice.reference}}</b></small>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="mt-4">
+        <nb-stepper orientation="horizontal" #stepper [(selectedIndex)]="invoice.stepperIndex" disableStepNavigation>
+          <nb-step label="{{labelOne}}" [completed]="invoice.approved">
+            <h4>{{ 'invoice.stepper.desc1' | translate }}</h4>
+            <p>
+              <span class="mt-1">{{ 'general.status' | translate }}: </span> <span class="badge {{invoice.badgeStatus}}">{{invoice.status}}</span>
+            </p>
+            <button nbButton size="small" status="primary" class="mt-2" (click) ="approve(invoice)">{{ 'general.approve' | translate }} <nb-icon icon="checkmark-outline"></nb-icon></button>
+          </nb-step>
+          <nb-step label="{{labelTwo}}" [completed]="invoice.sent">
+            <div class="text-center">
+              <p>
+                <span class="mt-1">{{ 'general.status' | translate }}: </span> <span class="badge {{invoice.badgeStatus}}">{{invoice.status}}</span>
+              </p>
+              <button nbButton status="primary" size="small" (click)="markAsSent(invoice)" class="me-2">{{ 'general.markAsSent' | translate }}<nb-icon icon="checkmark-outline"></nb-icon></button>
+              <button nbButton status="primary" size="small" (click)="send(invoice)" >{{ 'general.send' | translate }} <nb-icon icon="paper-plane-outline"></nb-icon></button>
+            </div>
+          </nb-step>
+          <nb-step label="{{labelThree}}" [completed]="invoice.paid">
+           <div class="text-end">
+            <h4>{{ 'invoice.stepper.desc2' | translate }}</h4>
+            <p>{{ 'general.status' | translate }}:
+              <span class="badge {{invoice.badgeStatus}}">{{invoice.status}}</span>
+            </p>
+            <button nbButton nbStepperNext status="primary" size="small" (click)="pay(invoice.id)" [disabled]="invoice.status === 'Paid'">
+              <nb-icon icon="file-outline"></nb-icon>
+              {{ 'general.payment' | translate }}
+            </button>
+           </div>
+          </nb-step>
+          <nb-step [hidden]="true" label="Third step">
+            <div class="text-end">
+              <h4>{{ 'invoice.stepper.desc2' | translate }}</h4>
+              <p>{{ 'general.status' | translate }}:
+                <span class="badge {{invoice.badgeStatus}}">{{invoice.status}}</span>  </p>
+                <button nbButton nbStepperNext status="primary" size="small" (click)="pay(invoice.id)" [disabled]="invoice.status === 'Paid'">
+                  <nb-icon icon="file-outline"></nb-icon>
+                  {{ 'general.payment' | translate }}
+                </button>
+             </div>
+          </nb-step>
+        </nb-stepper>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <nb-card accent="primary" *ngIf="invoice.isRecurring">
+    <nb-card-header>
+      <h6>{{ 'general.automaticSchedule' | translate }}</h6>
+    </nb-card-header>
+    <nb-card-body class="pb-4">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-4">
+          <div class="row form-group" >
+            <label class="col-4" for="startDate">{{ 'general.startDate' | translate }}:</label>
+            <div class="col-8">
+              <b>{{invoice.startDate |  date: 'MMM d, y, HH:mm' }}</b>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4" *ngIf="invoice.endDate">
+          <div class="row form-group" >
+            <label class="col-4" for="endDate">{{ 'general.endDate' | translate }}:</label>
+            <div class="col-8">
+              <b>{{invoice.endDate |  date: 'MMM d, y, HH:mm' }}</b>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4">
+          <div class="row form-group" >
+            <label class="col-5" for="repeatFrequency">{{ 'general.invoiceRepeat' | translate }}:</label>
+            <div class="col-7">
+              <b>{{invoice.repeatFrequency}}</b>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row mt-5">
+        <div class="col-12 col-sm-12 col-md-4">
+          <div class="row form-group" >
+            <label class="col-4" for="repeatFrequency">Never end:</label>
+            <div class="col-7">
+              <b>{{invoice.neverEnd}}</b>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4" *ngIf="invoice.repeatFrequency === 'Custom'">
+          <div class="row form-group" >
+            <label class="col-4" for="every">{{ 'general.every' | translate }}:</label>
+            <div class="col-7">
+              <b>{{invoice.repeat}} {{invoice.customFrequency}}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+	<div class="row mt-5 mb-2">
+	  <div class="col-12">
+      <a class="float-end me-2" target="_blank" (click)="downloadPdf()" nbButton status="primary" size="small" [nbSpinner]="downloading">
+        <nb-icon icon="download-outline"></nb-icon>
+        {{ 'general.download' | translate }}
+      </a>
+      <a class="float-end me-2" target="_blank" (click)="printPdf()" nbButton status="primary" size="small" [nbSpinner]="downloading">
+        <nb-icon icon="printer-outline"></nb-icon>
+        {{ 'general.print' | translate }}
+      </a>
+      <button class="float-end me-2" (click)="previewCustomerInvoice(invoice.customerPreviewUrl)" nbButton status="primary" size="small">
+        <nb-icon icon="eye-outline"></nb-icon>
+        {{ 'invoice.detail.customerPreview' | translate }}
+      </button>
+      <button class="float-end me-2" nbButton status="primary" size="small" *ngIf="invoice.status === 'Paid'" (click)="receiptDialog()">
+        <nb-icon icon="paper-plane-outline"></nb-icon>
+        {{ 'invoice.detail.sendReceipt' | translate }}
+      </button>
+      <a *ngIf="['Paid','Partially paid', 'Sent'].includes(invoice.status)" class="float-end me-2" (click)="resend(invoice)" nbButton status="primary" size="small" [nbSpinner]="sendingInvoice">
+        <nb-icon icon="paper-plane-outline"></nb-icon>
+        {{ 'invoice.detail.resendInvoice' | translate }}
+      </a>
+      <a *ngIf="['Approved','Sent'].includes(invoice.status)" class="float-end me-2" (click)="sendReminder(invoice)" nbButton status="primary" size="small" [nbSpinner]="sendingReminder">
+        <nb-icon icon="paper-plane-outline"></nb-icon>
+        {{ 'invoice.detail.sendReminder' | translate }}
+      </a>
+	  </div>
+	</div>
+  <nb-card accent="primary" id="pdfContent">
+    <nb-card-body>
+      <div class="p-5">
+        <div class="row">
+          <div class="col-6">
+            <div class="row" *ngIf="invoice.customer">
+              <div class="col-10">
+                <div class="mb-2"><b> {{ 'invoice.detail.invoicedTo' | translate }}</b></div>
+                <div>
+                  {{invoice.customer.name}}
+                 </div>
+                <div>
+                  {{invoice.customer.phone}}
+                </div>
+                <div *ngIf="invoice.customer.billingAddress">
+                  <address>
+                    <div>{{invoice.customer.billingAddress.addressLine1}} </div>
+                    <div>{{invoice.customer.billingAddress.addressLine2}}</div>
+                    <div>{{invoice.customer.billingAddress.zipCode}} {{invoice.customer.billingAddress.city}} -
+                      {{invoice.customer.billingAddress.country}}</div>
+                  </address>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4" >
+              <div class="col-10">
+                <div class="mb-2"><b>{{ 'invoice.detail.paidTo' | translate }}</b></div>
+                <div *ngIf="company">
+                  <div>
+                    {{company.name}}
+                   </div>
+                  <div>
+                    {{company.phone}}
+                  </div>
+                  <div *ngIf="company.billingAddress">
+                    <address>
+                      <div>{{company.billingAddress.addressLine1}}</div>
+                      <div>{{company.billingAddress.addressLine2}}</div>
+                      <div>{{company.billingAddress.zipCode}} {{company.billingAddress.city}} - {{company.billingAddress.country}}</div>
+                    </address>
+                  </div>
+                </div>
+                <div>
+                  <a routerLink="/dashboard/setting-list/company" nbButton status="basic" size="tiny">
+                    <nb-icon icon="edit-outline"></nb-icon> {{ 'general.editCompany' | translate }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+            <div><b>{{ 'general.date' | translate }}:</b> {{invoice.invoiceDate | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2"><b>{{ 'general.dueDate' | translate }}: </b> {{invoice.issueDate | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2"><b>{{ 'invoice.index.reference' | translate }}: </b> {{invoice.reference}}</div>
+            <div class="mt-2" *ngIf="invoice.invoiceNumber"><b>{{ 'general.number' | translate }}:</b> {{invoice.invoiceNumber}}</div>
+            <div class="mt-2"><b>{{ 'general.status' | translate }}: </b><span class="badge  {{invoice.badgeStatus}}">{{invoice.status}}</span></div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <h6 class="mt-5">{{ 'invoice.detail.productsAndServices' | translate }}</h6>
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">{{ 'invoice.detail.items' | translate }}</th>
+                  <th scope="col">{{ 'invoice.detail.category' | translate }}</th>
+                  <th scope="col">{{ 'general.quantity' | translate }}</th>
+                  <th scope="col">{{ 'invoice.detail.price' | translate }}</th>
+                  <th scope="col">{{ 'invoice.detail.tax' | translate }}</th>
+                  <th scope="col">{{ 'invoice.detail.discount' | translate }} (%)</th>
+                  <th scope="col">{{ 'invoice.detail.totalPrice' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="invoice.invoiceLineItems && invoice.invoiceLineItems.length > 0; else empty">
+                <ng-container *ngFor="let item of invoice.invoiceLineItems">
+                  <tr>
+                    <td>
+                      <b>
+                        <span *ngIf="item.product != null && item.category === 'product'" >{{item.product.name}} </span>
+                        <span *ngIf="item.service != null && item.category === 'service'" >{{item.service.name}}</span>
+                      </b>
+                      <span><br />{{item.description}}</span>
+                    </td>
+                    <td>{{item.category}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{item.price}}</td>
+                    <td *ngIf="item.product != null && item.category === 'product'" >
+                      <span *ngIf="item.product != null && item.product.tax != null">{{item.product.tax.name}} ({{item.product.tax.rate}}%)</span>
+                    </td>
+                    <td *ngIf="item.service != null && item.category === 'service'" >
+                      <span *ngIf="item.service != null && item.service.tax != null">{{item.service.tax.name}} ({{item.service.tax.rate}}%)</span>
+                    </td>
+                    <td>{{item.discount}}%</td>
+                    <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{item.totalPrice}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <ng-template #empty>
+                <tbody>
+                  <tr>
+                   <td colspan="8" class="text-center"><b>{{ 'general.addAnItem' | translate }}</b></td>
+                  </tr>
+                </tbody>
+              </ng-template>
+            </table>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-6">
+              </div>
+              <div class="col-6 bg-light">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>{{ 'general.subTotal' | translate }}: </td>
+                      <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.subTotalPrice}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'general.discount' | translate }}:</td>
+                      <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalDiscount}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'general.tax' | translate }}:</td>
+                      <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalTax}}</td>
+                    </tr>
+                    <ng-container *ngIf="invoice.totalCreditNote">
+                      <tr>
+                        <td>{{ 'general.creditNote' | translate }}: </td>
+                        <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalCreditNote}}</td>
+                      </tr>
+                    </ng-container>
+                    <tr>
+                      <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                      <td><b><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalAmount}}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mg-top row mt-5" *ngIf="invoice.description">
+          <div class="col-12">
+            <div >{{ 'general.noteAndTerms' | translate }} </div>
+            <div>{{invoice.description}}</div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <nb-card class="mt-5" accent="primary" nbSpinnerStatus="primary" nbSpinnerSize="large"  *ngIf="creditnotes && creditnotes.length > 0">
+      <nb-card-header class="row">
+        <h4 class="col-6">{{ 'general.creditNotes' | translate }}</h4>
+      </nb-card-header>
+      <nb-card-body>
+        <div>
+          <div class="table-responsive mt-4">
+            <table class="table table-striped table-borderless">
+              <thead>
+                <tr>
+                  <th class="date" scope="col">{{ 'general.date' | translate }}</th>
+                  <th class="amount" scope="col">{{ 'general.amount' | translate }}</th>
+                  <th class="description" scope="col">{{ 'general.description' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of creditnotes">
+                  <td>
+                    {{item.date | date: 'MMM d, y, HH:mm'}}
+                  </td>
+                  <td>
+                    <span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>
+                    {{item.amount}}
+                  </td>
+                  <td>
+                    {{item.description}}
+                  </td>
+                  <td>
+                    <a [routerLink]="['/dashboard/credit-note/edit',item.id]" nbButton ghost status="warning">
+                      <nb-icon icon="edit"></nb-icon>
+                    </a>
+                    <a nbButton ghost status="danger" (click)="deleteCreditNote(item.id)">
+                      <nb-icon icon="close-outline"></nb-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </nb-card-body>
+  </nb-card>
+
+  <nb-card accent="primary" class="mt-5" *ngIf="revenues && revenues.length > 0" >
+    <nb-card-header>
+      {{ 'general.payments' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <table class="table table-striped table-borderless">
+        <thead>
+          <tr>
+            <th class="date" scope="col" >{{ 'general.date' | translate }}</th>
+            <th class="amount" scope="col" >{{ 'general.amount' | translate }}</th>
+            <th class="bank-account" scope="col">{{ 'general.bankAccount' | translate }}</th>
+            <th class="account" scope="col">{{ 'general.account' | translate }}</th>
+            <th class="account" scope="col">{{ 'general.receipt' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of revenues">
+            <td>
+              {{item.date | date: 'MMM d, y, HH:mm'}}
+            </td>
+            <td>
+              <span *ngIf="currency">{{currency.symbol}}</span>{{item.amount}}
+            </td>
+            <td>
+              <a *ngIf="item.bankAccount" [routerLink]="['/dashboard/bank-account/details', item.bankAccount.id]">
+                {{item.bankAccount.bankName}}
+              </a>
+              <span *ngIf="!item.bankAccount">N/A</span>
+            </td>
+            <td>
+              <a *ngIf="item.account" [routerLink]="['/dashboard/chart-accounts/details', item.account.id]">
+               {{item.account.accountName}}
+              </a>
+              <span *ngIf="!item.account">N/A</span>
+            </td>
+            <td>
+              <a *ngIf="item.receipt != null && invoice.customerReceiptLink == null" [href]="item.customerReceiptLink" target="_blank">
+               {{item.receipt.createdAt | date: 'MMM d, y, HH:mm'}}
+              </a>
+              <a *ngIf="item.receipt != null && invoice.customerReceiptLink != null" [href]="invoice.customerReceiptLink" target="_blank">
+                {{item.receipt.createdAt | date: 'MMM d, y, HH:mm'}}
+               </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </nb-card-body>
+  </nb-card>
+
+</div>
+
+<ng-template #noContent>
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

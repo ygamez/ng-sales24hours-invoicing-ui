@@ -1,0 +1,265 @@
+/*Galletry*/
+.gallery-box {
+	position: relative;
+	overflow: hidden;
+	.gallery-info {
+	    position: absolute;
+	    top: -50px;
+	    right: -50px;
+	    width: 100px;
+	    height: 100px;
+	    background: $px-white;
+	    box-shadow: 0px 0px 19px 0px rgba(0, 0, 0, 0.1);
+	    opacity: 0;
+	    transition: ease all 0.55s;
+	    a {
+		    position: absolute;
+		    bottom: 13px;
+		    left: 16px;
+		    color: $px-dark;
+	    }
+	}
+	&:hover {
+		.gallery-info {
+			opacity: 1;
+		}
+	}
+}
+
+/*Portfolio Filter*/
+.portfolio-filter-01 {
+	.filter {
+		li {
+			cursor: pointer;
+			margin: 0 15px;
+			color: $px-dark;
+			position: relative;
+			padding: 5px 0;
+			font-weight: 600;
+			text-transform: uppercase;
+			font-size: 14px;
+			line-height: normal;
+			&:after {
+				content:"";
+				width: 0px;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				margin: auto;
+				height: 2px;
+				background: $px-primary;
+				position: absolute;
+				transition: ease all 0.55s;
+			}
+			&:last-child {
+				margin-right: 0;
+			}
+			&:first-child {
+				margin-left: 0;
+			}
+			&:hover {
+				color: $px-primary;
+			}
+			&.active {
+				color: $px-primary;
+				&:after {
+					width:100%;
+				}
+			}
+		}
+	}
+}
+
+
+/*Portfolio Style 1*/
+.portfolio-box {
+    position: relative;
+    overflow: hidden;
+	&:before {
+	    display: block;
+	    content: "";
+	    width: 100%;
+	    padding-top: 100%;
+	}
+	&.lg {
+		&:before {
+			padding-top: 125%;
+		}	
+	}
+	.portfolio-bg {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+	    background-position: 50% 50%;
+	    background-size: cover;
+	    bottom: 0;
+	    transition: ease all 0.35s;
+	    transform: scale(1.2);
+	}
+	.portfolio-link {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
+	    z-index: 1;
+	    height: 100%;
+	    h3 {
+	    	margin: 10px 0 0;
+	    }
+	    .portfolio-label {
+	    	background: linear-gradient(to top, $px-black, rgba($px-dark, 0));
+		    width: 100%;
+		    padding: 25px 20px 20px;
+	    }
+	}
+	&:hover {
+		.portfolio-bg {
+			transform: scale(1.1);	
+		}
+	}
+}
+
+/*Portfolio Style 2*/
+.portfolio-box-01 {
+	position: relative;
+	overflow: hidden;
+	.portfolio-img {
+		overflow: hidden;
+		background: $px-white;
+		img {
+			transition: ease all 0.35s;
+			transform: scale(1);
+		}
+	}
+	.portfolio-info {
+		position: absolute;
+		bottom: -100%;
+		left: 0;
+		right: 0;
+		transition: ease all 0.35s;
+	}
+	.portfolio-icons {
+	    position: absolute;
+	    top: 0;
+	    right: 0px;
+	    z-index: 1;
+	    padding: 15px;
+	    transition: ease all 0.35s;
+	    opacity: 0;
+	}
+	&:hover {
+		.portfolio-img {
+			overflow: hidden;
+			img {
+				transform: scale(1.1);
+				opacity: 0.8;
+			}
+		}
+		.portfolio-icons {
+			opacity: 1;
+		}
+		.portfolio-info {
+			bottom: 0;
+		}
+	}
+	
+}
+
+/*Portfolio Style 3*/
+.portfolio-box-02 {
+	position: relative;
+	overflow: hidden;
+	.portfolio-img {
+		img {
+			transition: ease all 0.55s;
+			transform: scale(1);
+		}
+	}
+	.portfolio-info {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+		background: rgba($px-primary, 0.8);
+		transition: ease all 0.55s;
+		opacity: 0;
+	}
+	.gallery-link {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		line-height: 52px;
+		border:1px solid $px-white;
+		color: $px-white;
+		text-align: center;
+		border-radius: 50%;
+		font-size: 20px;
+		transition: ease all 0.55s;
+		i {
+			display: inline-block;
+		}
+		&:hover {
+			background:$px-white;
+			color: $px-primary;
+		}
+	}
+	.portfolio-desc {
+		position: absolute;
+		left: 20px;
+		bottom: 20px;
+		transition: ease all 0.55s;
+		transition-delay: 0.15s;
+		opacity: 0;
+		h5 {
+	        font-size: 16px;
+		    margin: 0 0 15px;
+		    font-weight: 500;
+			a {
+				color: $px-white;
+				text-decoration: none;
+			}
+		}
+		.pb-tag {
+			a {
+			    display: inline-block;
+			    vertical-align: top;
+			    background: $px-white;
+			    border:1px solid $px-white;
+			    padding: 4px 15px;
+			    color: $px-primary;
+			    border-radius: 3px;
+			    margin-right: 8px;
+			    margin-bottom: 3px;
+			    font-size: 12px;
+			    font-weight: 600;
+			    text-transform: uppercase;
+			    line-height: normal;
+			    transition: ease all 0.55s;
+				&:hover {
+					background:$px-primary;
+					color: $px-white;
+				}
+			}
+		}
+	}
+	&:hover {
+		.portfolio-img {
+			img {
+				transform: scale(1.2);
+			}
+		}
+		.portfolio-desc {
+			opacity: 1;
+		}
+		.portfolio-info {
+			position: absolute;
+			opacity: 1;
+		}	
+	}
+}

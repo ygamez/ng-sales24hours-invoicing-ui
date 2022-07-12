@@ -1,0 +1,42 @@
+/* ----------------------
+*   owl 
+---------------------------*/
+.owl-dots {
+    text-align: center;
+    .owl-dot {
+        display: inline-block;
+        vertical-align: top;
+        width: 15px;
+        height: 15px;
+        background: $px-white;
+        border: 1px solid $px-primary;
+        transition: ease all 0.55s;
+        border-radius: 50%;
+        margin: 0 5px;
+        .owl-carousel-white & {
+            border-color: $px-white;
+            background: none;
+        }
+        &.active {
+            background: $px-primary;
+            .owl-carousel-white & {
+                background: $px-white;
+            }
+        }
+    }
+}
+
+.owl-carousel {
+    .owl-item {
+        img {
+            width: auto;
+            max-width: 100%;
+        }
+    }
+}
+
+.owl-no-overflow {
+    .owl-stage-outer {
+        overflow: inherit;
+    }
+}

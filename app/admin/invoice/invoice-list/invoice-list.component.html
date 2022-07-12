@@ -1,0 +1,56 @@
+<ng-container>
+  <nb-card class="mb-5" *ngIf="subscriptionPercentLimit > 90">
+    <nb-card-body>
+      <div class="row">
+        <div class="col-8">
+          <div>{{ 'general.youHave' | translate }} {{totalInvoice}}/{{subscription.plan.maxOrder}} {{
+            'subscription.message.invoiceLimit' | translate }}. </div>
+          <div>{{ 'subscription.message.updatePlan' | translate }} </div>
+        </div>
+        <div class="col-4">
+          <a nbButton status="primary" class="float-end" size="medium" routerLink="/dashboard/setting-list/pricings">{{
+            'subscription.btnUpgrade' | translate }}</a>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-12">
+        <a class="float-end" routerLink="/dashboard/invoice/create" nbButton status="primary" size="small">
+          <nb-icon icon="plus"></nb-icon>Nueva Factura
+        </a>
+      </div>
+    </div>
+    <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+      <nb-card-header class="row">
+        <h4 class="col-6">{{ 'invoice.index.title' | translate }}</h4>
+      </nb-card-header>
+      <nb-card-body>
+        <nb-tabset (changeTab)="tabChanged($event)">
+          <nb-tab tabId="all" tabTitle="{{ 'general.all' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+          <nb-tab tabId="recurring" tabTitle="{{ 'general.recurring' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+          <nb-tab tabId="drafted" tabTitle="{{ 'general.drafted' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+          <nb-tab tabId="approved" tabTitle="{{ 'general.approved' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+          <nb-tab tabId="sent" tabTitle="{{ 'general.sent' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+          <nb-tab tabId="overdue" tabTitle="{{ 'general.overdue' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+          <nb-tab tabId="paid" tabTitle="{{ 'general.paid' | translate }}">
+            <invoice-table [invoices]="invoices"></invoice-table>
+          </nb-tab>
+         </nb-tabset>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</ng-container>

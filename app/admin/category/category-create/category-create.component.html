@@ -1,0 +1,31 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="name">{{ 'general.name' | translate }}</label>
+				<div class="col-5">
+					<input class="form-control" id="name" name="name" formControlName="name"nbInput placeholder="{{ 'general.name' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['name']) && formDir.submitted" for="name">{{ 'general.requiredName' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+        <label class="col-2" for="category">{{ 'general.type' | translate }}</label>
+        <div class="col-5">
+          <nb-select id="category" formControlName="type" status="primary" fullWidth>
+            <nb-option value="product">{{ 'general.product' | translate }}</nb-option>
+            <nb-option value="service">{{ 'general.service' | translate }}</nb-option>
+          </nb-select>
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['type']) && formDir.submitted" for="type">{{ 'general.requiredType' | translate }}</span>
+        </div>
+      </div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

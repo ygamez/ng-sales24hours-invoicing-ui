@@ -1,0 +1,78 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{'general.websiteSetting' | translate}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="app-title">{{'general.appTitle' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="app-title" name="title" formControlName="appTitle"
+            nbInput placeholder="{{'general.appTitle' | translate }}" fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="language">{{'general.language' | translate }}</label>
+				<div class="col-8">
+          <nb-select fullWidth name="language" formControlName="language" id="language">
+            <nb-option *ngFor="let lang of langs" [value]="lang.value" >{{lang.name}}</nb-option>
+          </nb-select>
+          <div>
+            <small id="languageHelp" class="form-text text-muted">{{'general.languageHelp' | translate }}</small>
+          </div>
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="app-title">{{'general.freeCurrencyApiKey' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="app-title" name="title" formControlName="currency"
+            nbInput placeholder="{{'general.freeCurrencyApiKey' | translate }}" fullWidth status="primary" type="text">
+          <div>
+            <small id="freeCurrencyHelp" class="form-text text-muted">{{'general.freeCurrencyApiKeyHelp' | translate }}</small>
+          </div>
+				</div>
+			</div>
+
+
+			<div class="mg-top form-group row mb-4">
+				<label class="col-3" for="logo">{{'general.logo' | translate }}</label>
+				<div class="col-8">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="logoFile" aria-describedby="logo" (change)="restrict()">
+          </div>
+          <div class="illustration-preview rounded shadow mt-3">
+            <img [src]="logoUri" alt="image upload preview" class="img-fluid bg-white" />
+          </div>
+          <button nbButton status="danger" size="tiny" class="mt-2" (click)="delete('logo')">
+            {{'general.delete' | translate }}
+          </button>
+        </div>
+			</div>
+
+			<div class="mg-top form-group row mb-4">
+				<label class="col-3" for="favicon">{{'general.favicon' | translate }}</label>
+				<div class="col-8">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="faviconFile" aria-describedby="favicon" (change)="restrict()">
+          </div>
+          <div class="illustration-preview rounded shadow mt-2">
+            <img [src]="faviconUri" alt="image upload preview" class="img-fluid bg-white" />
+          </div>
+          <button nbButton status="danger" size="tiny" class="mt-2" (click)="delete('favicon')">
+            {{'general.delete' | translate }}
+          </button>
+				</div>
+			</div>
+
+			<div class="mg-top form-group row mb-4">
+				<div class="offset-sm-3 col-sm-9">
+					<button type="submit" [nbSpinner]="saving" status="primary" nbButton> {{'form.save' | translate }}</button>
+				</div>
+			</div>
+
+		</form>
+	</nb-card-body>
+</nb-card>

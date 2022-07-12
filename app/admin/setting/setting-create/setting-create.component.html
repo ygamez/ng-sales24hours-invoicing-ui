@@ -1,0 +1,266 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="logo">Logo</label>
+				<div class="col-5">
+					<input class="form-control" id="logo" name="logo" formControlName="logo"nbInput placeholder="Logo" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['logo']) && formDir.submitted" for="logo">Logo is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="send-invoice">Enable invoice</label>
+				<div class="col-5">
+					<input class="form-control" id="send-invoice" name="sendInvoice" formControlName="sendInvoice"nbInput placeholder="Enable invoice" fullWidth status="primary" type="checkbox">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['sendInvoice']) && formDir.submitted" for="send-invoice">Enable invoice is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="stripe-webhook-secret">Stripe webhook secret</label>
+				<div class="col-5">
+					<input class="form-control" id="stripe-webhook-secret" name="stripeWebhookSecret" formControlName="stripeWebhookSecret"nbInput placeholder="Stripe webhook secret" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['stripeWebhookSecret']) && formDir.submitted" for="stripe-webhook-secret">Stripe webhook secret is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="theme">Application theme</label>
+				<div class="col-5">
+					<input class="form-control" id="theme" name="theme" formControlName="theme"nbInput placeholder="Application theme" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['theme']) && formDir.submitted" for="theme">Application theme is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="language">Language</label>
+				<div class="col-5">
+					<input class="form-control" id="language" name="language" formControlName="language"nbInput placeholder="Language" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['language']) && formDir.submitted" for="language">Language is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="email-confirmation">Email confirmation</label>
+				<div class="col-5">
+					<input class="form-control" id="email-confirmation" name="emailConfirmation" formControlName="emailConfirmation"nbInput placeholder="Email confirmation" fullWidth status="primary" type="checkbox">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['emailConfirmation']) && formDir.submitted" for="email-confirmation">Email confirmation is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="app-title">Application title</label>
+				<div class="col-5">
+					<input class="form-control" id="app-title" name="appTitle" formControlName="appTitle"nbInput placeholder="Application title" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['appTitle']) && formDir.submitted" for="app-title">Application title is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="favicon">favicon</label>
+				<div class="col-5">
+					<input class="form-control" id="favicon" name="favicon" formControlName="favicon"nbInput placeholder="favicon" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['favicon']) && formDir.submitted" for="favicon">favicon is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="type">Type</label>
+				<div class="col-5">
+					<input class="form-control" id="type" name="type" formControlName="type"nbInput placeholder="Type" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['type']) && formDir.submitted" for="type">Type is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="enable-payments">Enable payments</label>
+				<div class="col-5">
+					<input class="form-control" id="enable-payments" name="enablePayments" formControlName="enablePayments"nbInput placeholder="Enable payments" fullWidth status="primary" type="checkbox">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['enablePayments']) && formDir.submitted" for="enable-payments">Enable payments is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="currency">Currency</label>
+				<div class="col-5">
+					<input class="form-control" id="currency" name="currency" formControlName="currency"nbInput placeholder="Currency" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['currency']) && formDir.submitted" for="currency">Currency is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="enable-discount">Enable discount</label>
+				<div class="col-5">
+					<input class="form-control" id="enable-discount" name="enableDiscount" formControlName="enableDiscount"nbInput placeholder="Enable discount" fullWidth status="primary" type="checkbox">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['enableDiscount']) && formDir.submitted" for="enable-discount">Enable discount is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="enable-paypal">Enable Paypal</label>
+				<div class="col-5">
+					<input class="form-control" id="enable-paypal" name="enablePaypal" formControlName="enablePaypal"nbInput placeholder="Enable Paypal" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['enablePaypal']) && formDir.submitted" for="enable-paypal">Enable Paypal is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="paypal-mode">Paypal Mode</label>
+				<div class="col-5">
+					<input class="form-control" id="paypal-mode" name="paypalMode" formControlName="paypalMode"nbInput placeholder="Paypal Mode" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['paypalMode']) && formDir.submitted" for="paypal-mode">Paypal Mode is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="paypal-client-id">Paypal Client Id</label>
+				<div class="col-5">
+					<input class="form-control" id="paypal-client-id" name="paypalClientId" formControlName="paypalClientId"nbInput placeholder="Paypal Client Id" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['paypalClientId']) && formDir.submitted" for="paypal-client-id">Paypal Client Id is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="paypal-secret">Paypal secret</label>
+				<div class="col-5">
+					<input class="form-control" id="paypal-secret" name="paypalSecret" formControlName="paypalSecret"nbInput placeholder="Paypal secret" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['paypalSecret']) && formDir.submitted" for="paypal-secret">Paypal secret is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="enable-stripe">Enable Stripe</label>
+				<div class="col-5">
+					<input class="form-control" id="enable-stripe" name="enableStripe" formControlName="enableStripe"nbInput placeholder="Enable Stripe" fullWidth status="primary" type="checkbox">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['enableStripe']) && formDir.submitted" for="enable-stripe">Enable Stripe is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="stripe-publishable-key">Stripe publishable key</label>
+				<div class="col-5">
+					<input class="form-control" id="stripe-publishable-key" name="stripePublishableKey" formControlName="stripePublishableKey"nbInput placeholder="Stripe publishable key" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['stripePublishableKey']) && formDir.submitted" for="stripe-publishable-key">Stripe publishable key is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="stripe-secret-key">Stripe secret key</label>
+				<div class="col-5">
+					<input class="form-control" id="stripe-secret-key" name="stripeSecretKey" formControlName="stripeSecretKey"nbInput placeholder="Stripe secret key" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['stripeSecretKey']) && formDir.submitted" for="stripe-secret-key">Stripe secret key is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="youtube">Youtube</label>
+				<div class="col-5">
+					<input class="form-control" id="youtube" name="youtube" formControlName="youtube"nbInput placeholder="Youtube" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['youtube']) && formDir.submitted" for="youtube">Youtube is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="facebook">Facebook</label>
+				<div class="col-5">
+					<input class="form-control" id="facebook" name="facebook" formControlName="facebook"nbInput placeholder="Facebook" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['facebook']) && formDir.submitted" for="facebook">Facebook is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="twitter">Twitter</label>
+				<div class="col-5">
+					<input class="form-control" id="twitter" name="twitter" formControlName="twitter"nbInput placeholder="Twitter" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['twitter']) && formDir.submitted" for="twitter">Twitter is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="from-name-email">From Name</label>
+				<div class="col-5">
+					<input class="form-control" id="from-name-email" name="fromNameEmail" formControlName="fromNameEmail"nbInput placeholder="From Name" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['fromNameEmail']) && formDir.submitted" for="from-name-email">From Name is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="instagram">Instagram</label>
+				<div class="col-5">
+					<input class="form-control" id="instagram" name="instagram" formControlName="instagram"nbInput placeholder="Instagram" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['instagram']) && formDir.submitted" for="instagram">Instagram is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="from-email">From Email</label>
+				<div class="col-5">
+					<input class="form-control" id="from-email" name="fromEmail" formControlName="fromEmail"nbInput placeholder="From Email" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['fromEmail']) && formDir.submitted" for="from-email">From Email is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="email-host">Email host</label>
+				<div class="col-5">
+					<input class="form-control" id="email-host" name="emailHost" formControlName="emailHost"nbInput placeholder="Email host" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['emailHost']) && formDir.submitted" for="email-host">Email host is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="encryption">Encryption</label>
+				<div class="col-5">
+					<input class="form-control" id="encryption" name="encryption" formControlName="encryption"nbInput placeholder="Encryption" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['encryption']) && formDir.submitted" for="encryption">Encryption is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="email-port">Port</label>
+				<div class="col-5">
+					<input class="form-control" id="email-port" name="emailPort" formControlName="emailPort"nbInput placeholder="Port" fullWidth status="primary" type="number">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['emailPort']) && formDir.submitted" for="email-port">Port is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="authentication">Authentication</label>
+				<div class="col-5">
+					<input class="form-control" id="authentication" name="authentication" formControlName="authentication"nbInput placeholder="Authentication" fullWidth status="primary" type="checkbox">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['authentication']) && formDir.submitted" for="authentication">Authentication is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="username">Username</label>
+				<div class="col-5">
+					<input class="form-control" id="username" name="username" formControlName="username"nbInput placeholder="Username" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['username']) && formDir.submitted" for="username">Username is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="password">Password</label>
+				<div class="col-5">
+					<input class="form-control" id="password" name="password" formControlName="password"nbInput placeholder="Password" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['password']) && formDir.submitted" for="password">Password is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="custom-head-script">Head Scripts</label>
+				<div class="col-5">
+					<textarea class="form-control" id="custom-head-script" name="customHeadScript" formControlName="customHeadScript"nbInput placeholder="Head Scripts" fullWidth status="primary" rows="6"></textarea>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['customHeadScript']) && formDir.submitted" for="custom-head-script">Head Scripts is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="custom-css">Custom CSS</label>
+				<div class="col-5">
+					<textarea class="form-control" id="custom-css" name="customCss" formControlName="customCss"nbInput placeholder="Custom CSS" fullWidth status="primary" rows="6"></textarea>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['customCss']) && formDir.submitted" for="custom-css">Custom CSS is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="email-notification">Email notification</label>
+				<div class="col-5">
+					<input class="form-control" id="email-notification" name="emailNotification" formControlName="emailNotification"nbInput placeholder="Email notification" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['emailNotification']) && formDir.submitted" for="email-notification">Email notification is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="license">License / Purchase Code</label>
+				<div class="col-5">
+					<input class="form-control" id="license" name="license" formControlName="license"nbInput placeholder="License / Purchase Code" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['license']) && formDir.submitted" for="license">License / Purchase Code is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="license-type">License Type</label>
+				<div class="col-5">
+					<input class="form-control" id="license-type" name="licenseType" formControlName="licenseType"nbInput placeholder="License Type" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['licenseType']) && formDir.submitted" for="license-type">License Type is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>Save</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

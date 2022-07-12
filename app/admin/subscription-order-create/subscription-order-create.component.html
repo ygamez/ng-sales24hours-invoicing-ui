@@ -1,0 +1,143 @@
+<div class="container" *ngIf="plan">
+
+  <div class="row">
+    <div class="col-8">
+      <nb-card accent="primary">
+        <nb-card-header>
+          <h4>{{ 'general.subscribeTo' | translate }} {{plan.title}}</h4>
+        </nb-card-header>
+        <nb-card-body>
+          <h6 class="mt-5">{{ 'general.price' | translate }}</h6>
+          <div class="card active mt-3 p-2">
+            <div class="card-body d-flex align-items-center justify-content-between">
+              <div class="card-title mb-0">
+                <b>{{ 'general.billedMontly' | translate }}</b>
+              </div>
+              <div class="text-size-36">
+                  <span> {{plan.currency.symbol}} {{plan.price}}</span>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="mt-5">{{ 'general.paymentMethod' | translate }}</h6>
+          <div class="card mt-2" (click)="toggleCheckoutMethod('free')" *ngIf="plan.price == 0"
+            [ngClass]="activeChekoutMethod == 'free'? 'active' : ''">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                      <b>{{ 'general.free' | translate }}</b>
+                    </div>
+                <div class="">
+                  {{ 'general.NoCCRequired' | translate }}
+                </div>
+            </div>
+          </div>
+          <div class="card mt-2" (click)="toggleCheckoutMethod('stripe')" *ngIf="plan.price > 0"
+            [ngClass]="activeChekoutMethod == 'stripe'? 'active' : ''">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                      <b>{{ 'general.cc' | translate }}</b>
+
+                    </div>
+                <div class="text-size-36">
+                    <span><i class="fab fa-fw fa-stripe"></i></span>
+                </div>
+            </div>
+          </div>
+          <div class="card mt-4" (click)="toggleCheckoutMethod('paypal')"  *ngIf="plan.price > 0"
+            [ngClass]="activeChekoutMethod == 'paypal'? 'active' : ''">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                  <div class="card-title mb-0">
+                    <b>{{ 'general.paypal' | translate }}</b> <br />
+                  </div>
+                  <div class="text-size-36 ">
+                      <span><i class="fab fa-fw fa-paypal"></i></span>
+                  </div>
+              </div>
+          </div>
+          <div class="mt-5 mb-5">
+            <a nbButton status="primary" size="medium" fullWidth (click)="checkout()" [nbSpinner]="loading" *ngIf="!disabledBtn">
+              {{ 'general.subscribe' | translate }}
+            </a>
+          </div>
+
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+    <div class="col-4">
+      <nb-card accent="primary" >
+        <nb-card-header>
+          {{ 'general.wwygwtp' | translate }}
+        </nb-card-header>
+        <nb-list>
+          <nb-list-item class="p-3">
+            {{plan.description}}
+          </nb-list-item>
+          <nb-list-item class="p-3">
+            <b>
+              <span class="me-2">
+                <nb-icon icon="checkmark-circle-outline"status="success" ></nb-icon>
+              </span>
+              <span *ngIf="plan.maxOrder > 0" class="mr-1">{{plan.maxOrder}} </span>
+              <span *ngIf="plan.maxOrder == 0" class="mr-1">Unlimited </span>
+              {{ 'general.invoices' | translate }}
+            </b>
+          </nb-list-item>
+          <nb-list-item class="p-3">
+            <b>
+              <span class="me-2">
+                <nb-icon icon="checkmark-circle-outline"status="success" ></nb-icon>
+              </span>
+              <span *ngIf="plan.maxEstimate > -1" class="mr-1">{{plan.maxEstimate}} </span>
+              <span *ngIf="plan.maxEstimate == -1" class="mr-1">Unlimited </span>
+              {{ 'general.estimates' | translate }}
+            </b>
+          </nb-list-item>
+          <!--Product & service -->
+          <nb-list-item class="p-3">
+            <b>
+              <span class="me-2">
+                <nb-icon icon="checkmark-circle-outline"status="success" ></nb-icon>
+              </span>
+              <span *ngIf="plan.maxProduct > -1" class="mr-1">{{plan.maxProduct}} </span>
+              <span *ngIf="plan.maxProduct == -1" class="mr-1">Unlimited </span>
+              {{ 'general.productsAndServices' | translate }}
+            </b>
+          </nb-list-item>
+          <!-- Customers -->
+          <nb-list-item class="p-3">
+            <b>
+              <span class="me-2">
+                <nb-icon icon="checkmark-circle-outline"status="success" ></nb-icon>
+              </span>
+              <span *ngIf="plan.maxCustomer > -1" class="mr-1">{{plan.maxCustomer}} </span>
+              <span *ngIf="plan.maxCustomer == -1" class="mr-1">Unlimited </span>
+              {{ 'general.customers' | translate }}
+            </b>
+          </nb-list-item>
+          <!-- user -->
+          <nb-list-item class="p-3">
+            <b>
+              <span class="me-2">
+                <nb-icon icon="checkmark-circle-outline"status="success" ></nb-icon>
+              </span>
+              <span *ngIf="plan.maxUser > -1" class="mr-1">{{plan.maxUser}} </span>
+              <span *ngIf="plan.maxUser == -1" class="mr-1">Unlimited </span>
+              {{ 'general.users' | translate }}
+            </b>
+          </nb-list-item>
+          <!--Support -->
+          <nb-list-item class="p-3">
+            <b>
+              <span class="me-2">
+                <nb-icon icon="checkmark-circle-outline"status="success" ></nb-icon>
+              </span>
+              24/7 {{ 'general.support' | translate }}
+            </b>
+          </nb-list-item>
+        </nb-list>
+      </nb-card>
+    </div>
+
+  </div>
+</div>

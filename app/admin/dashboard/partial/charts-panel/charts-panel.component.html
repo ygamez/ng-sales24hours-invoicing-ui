@@ -1,0 +1,39 @@
+<!-- <nb-card size="large" accent="primary" [nbSpinner]="loading" >
+  <nb-tabset fullWidth (changeTab)="changeTab($event)">
+    <nb-tab tabTitle="Profit & Loss">
+      <div class="chart-container">
+        <ngx-chart-panel-summary [summary]="transactionSummury"></ngx-chart-panel-summary>
+        <ngx-chart-panel-header [type]="period"
+                                (periodChange)="setPeriodAndGetChartData($event)">
+        </ngx-chart-panel-header>
+        <ngx-orders-chart #ordersChart [transactionChartData]="lineChartData"></ngx-orders-chart>
+      </div>
+    </nb-tab>
+    <nb-tab tabTitle="Activities" [lazyLoad]="true">
+      <div class="chart-container">
+        <ngx-chart-panel-summary [summary]="transactionSummury"></ngx-chart-panel-summary>
+        <ngx-chart-panel-header [type]="period"
+                                (periodChange)="setPeriodAndGetChartData($event)">
+        </ngx-chart-panel-header>
+        <ngx-profit-chart *ngIf="activities" #profitChart [activityChartData]="activities"></ngx-profit-chart>
+      </div>
+    </nb-tab>
+  </nb-tabset>
+</nb-card> -->
+
+<nb-card size="large" accent="primary" [nbSpinner]="loading" class="line-chart" >
+  <nb-card-header>
+    {{ 'general.profitAndLoss' | translate }}
+  </nb-card-header>
+  <nb-card-body>
+    <div class="chart-container">
+      <ngx-chart-panel-header [type]="period"
+                              (periodChange)="setPeriodAndGetChartData($event)">
+      </ngx-chart-panel-header>
+      <ngx-orders-chart #ordersChart [transactionChartData]="lineChartData"></ngx-orders-chart>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <ngx-chart-panel-summary [summary]="transactionSummury"></ngx-chart-panel-summary>
+  </nb-card-footer>
+</nb-card>

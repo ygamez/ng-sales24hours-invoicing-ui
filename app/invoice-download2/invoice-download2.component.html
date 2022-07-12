@@ -1,0 +1,178 @@
+<section class="back" id="pdfContent"  *ngIf="invoice && customization">
+  <div class="">
+    <div class="row">
+      <div class="col-12">
+        <div class="invoice-wrapper">
+          <div class="invoice-top">
+            <div class="row">
+              <div class="col-6">
+                <div class="invoice-top-left">
+                  <div class="mb-2"><b>{{'general.invoicedTo' | translate}}</b></div>
+                  <h2 class="client-company-name">{{invoice.customer.name}}.</h2>
+                  <h6>{{invoice.customer.phone}}</h6>
+                  <div class="row">
+                    <div class="col-6">
+                      <h6 class="client-address" *ngIf="invoice.customer.billingAddress">
+                        <address>
+                          <div>{{invoice.customer.billingAddress.addressLine1}}</div>
+                          <div>{{invoice.customer.billingAddress.addressLine2}}</div>
+                          <div>{{invoice.customer.billingAddress.zipCode}} {{invoice.customer.billingAddress.city}}</div>
+                          <div>{{invoice.customer.billingAddress.country}}</div>
+                        </address>
+                      </h6>
+                    </div>
+                    <div class="col-6">
+                      <h6 class="client-address" *ngIf="invoice.customer.shippingAddress && !customization.hideShippingAddress">
+                        <address>
+                          <div>{{ 'address.shippingAddress' | translate }}</div>
+                          <div>{{invoice.customer.billingAddress.addressLine1}}</div>
+                          <div>{{invoice.customer.billingAddress.addressLine2}}</div>
+                          <div>{{invoice.customer.billingAddress.zipCode}} {{invoice.customer.billingAddress.city}}</div>
+                          <div>{{invoice.customer.billingAddress.country}}</div>
+                        </address>
+                      </h6>
+                    </div>
+                  </div>
+
+                  <h4>{{'general.reference' | translate}}</h4>
+                  <h5>{{invoice.reference}}.</h5>
+                </div>
+              </div>
+              <div class="col-6" *ngIf="company">
+                <div class="invoice-top-right">
+                  <h2 class="our-company-name">{{company.name}}</h2>
+                  <h6>{{company.phone}}</h6>
+                  <h6 class="our-address" *ngIf="company.billingAddress">
+                    <address>
+                      <div>{{company.billingAddress.addressLine1}}</div>
+                      <div>{{company.billingAddress.addressLine2}}</div>
+                      <div>{{company.billingAddress.zipCode}} {{company.billingAddress.city}}</div>
+                      <div>{{company.billingAddress.country}}</div>
+                    </address>
+                  </h6>
+                  <h2 class="text-primary"> <span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span> {{invoice.totalAmount}} </h2>
+                  <h6 class="mt-2"><b>{{'invoice.index.dueDate' | translate }}: </b> {{invoice.issueDate | date: 'MMM d, y, HH:mm'}}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="invoice-bottom">
+            <div class="row">
+              <div class="col-12">
+                <h2 *ngIf="customization.invoiceTitle">{{customization.invoiceTitle}}</h2>
+                <h2 class="title" *ngIf="!customization.invoiceTitle">{{'general.invoice' | translate}}</h2>
+                <small *ngIf="!customization.invoiceSubtitle">{{customization.invoiceSubtitle}}</small>
+              </div>
+              <div class="clearfix"></div>
+
+              <div class="col-3 col-3">
+                <div class="invoice-bottom-left">
+                  <h5>{{'general.invoice' | translate}} No.</h5>
+                  <h4>{{invoice.invoiceNumber}}</h4>
+                </div>
+              </div>
+              <div class="col-offset-1 col-8 col-9">
+                <div class="invoice-bottom-right">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <span  *ngIf="customization.items">{{customization.items}}</span>
+                          <span  *ngIf="!customization.items">{{ 'invoice.detail.items' | translate }}</span>
+                        </th>
+                        <th scope="col" *ngIf="!customization.hideCategory">{{ 'invoice.detail.category' | translate }}</th>
+                        <th scope="col" *ngIf="!customization.hideQuantity">{{ 'general.quantity' | translate }}</th>
+                        <th scope="col" *ngIf="!customization.hidePrice">
+                          <span  *ngIf="customization.price">{{customization.price}}</span>
+                          <span  *ngIf="!customization.price"> {{ 'invoice.detail.price' | translate }}</span>
+                        </th>
+                        <th scope="col" *ngIf="!customization.hideTax">{{ 'invoice.detail.tax' | translate }}</th>
+                        <th scope="col"  *ngIf="!customization.hideDiscount">{{ 'invoice.detail.discount' | translate }} (%)</th>
+                        <th scope="col" >
+                          <span  *ngIf="customization.amount">{{customization.amount}}</span>
+                          <span  *ngIf="!customization.amount"> {{ 'invoice.detail.totalPrice' | translate }}</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="invoice.invoiceLineItems && invoice.invoiceLineItems.length > 0">
+                      <ng-container *ngFor="let item of invoice.invoiceLineItems">
+                        <tr>
+                          <td>
+                            <b>
+                              <span *ngIf="item.product != null && item.category === 'product'" >{{item.product.name}} </span>
+                              <span *ngIf="item.service != null && item.category === 'service'" >{{item.service.name}}</span>
+                            </b>
+                            <span *ngIf="!customization.hideDescription"><br />{{item.description}}</span>
+                          </td>
+                          <td *ngIf="!customization.hideCategory" >{{item.category}}</td>
+                          <td *ngIf="!customization.hideQuantity" >{{item.quantity}}</td>
+                          <td  *ngIf="!customization.hidePrice"><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{item.price}}</td>
+                          <td *ngIf="item.product != null && item.category === 'product' && !customization.hideTax" >
+                            <span *ngIf="item.product.tax != null">{{item.product.tax.name}} ({{item.product.tax.rate}}%)</span>
+                          </td>
+                          <td *ngIf="item.service != null && item.category === 'service' && !customization.hideTax" >
+                            <span *ngIf="item.service.tax != null">{{item.service.tax.name}} ({{item.service.tax.rate}}%)</span>
+                          </td>
+                          <td  *ngIf="!customization.hideDiscount">{{item.discount}}%</td>
+                          <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{item.totalPrice}}</td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+
+                  <div class="mt-5">
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-4">
+                        </div>
+                        <div class="col-8 bg-light">
+                          <table class="table table-borderless">
+                            <tbody>
+                              <tr>
+                                <td>{{ 'general.subTotal' | translate }}: </td>
+                                <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.subTotalPrice}}</td>
+                              </tr>
+                              <tr *ngIf="!customization.hideDiscount">
+                                <td>{{ 'general.discount' | translate }}:</td>
+                                <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalDiscount}}</td>
+                              </tr>
+                              <tr *ngIf="!customization.hideTax">
+                                <td>{{ 'general.tax' | translate }}:</td>
+                                <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalTax}}</td>
+                              </tr>
+                              <ng-container *ngIf="invoice.totalCreditNote">
+                                <tr>
+                                  <td>{{ 'general.creditNote' | translate }}: </td>
+                                  <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalCreditNote}}</td>
+                                </tr>
+                              </ng-container>
+                              <tr>
+                                <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                                <td><b><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalAmount}}</b></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h4 class="terms mt-5">{{ 'general.noteAndTerms' | translate }}</h4>
+                  <div *ngIf="customization.invoiceNotes && !invoice.description">{{customization.invoiceNotes}}</div>
+                  <div  *ngIf="customization.invoiceNotes || invoice.description">{{invoice.description}}</div>
+
+                  <div class="row mt-5">
+                    <hr>
+                    <div class="col-12">
+                      <div class="text-center" *ngIf="customization.invoiceFooter">{{customization.invoiceFooter}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

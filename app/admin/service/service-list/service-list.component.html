@@ -1,0 +1,131 @@
+<ng-container>
+  <nb-card class="mb-5" *ngIf="subscriptionPercentLimit > 90">
+    <nb-card-body  >
+       <div class="row">
+        <div class="col-8">
+          <div>{{ 'subscription.message.product1' | translate }} {{totalService}}/{{subscription.plan.maxProduct}} {{ 'subscription.message.product2' | translate }} </div>
+          <div>{{ 'subscription.message.updatePlan' | translate}}</div>
+        </div>
+        <div class="col-4">
+          <a nbButton status="primary" class="float-end" size="medium" routerLink="/dashboard/setting-list/pricings">
+            {{ 'subscription.btnUpgrade' | translate }}
+          </a>
+        </div>
+       </div>
+    </nb-card-body>
+  </nb-card>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-12">
+        <a class="float-end" routerLink="/dashboard/service/create" nbButton status="primary" size="small"> <nb-icon icon="plus"></nb-icon>
+          {{ 'service.index.btnNew' | translate }}
+        </a>
+      </div>
+    </div>
+      <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+          <nb-card-header class="row">
+						<h4 class="col-6">{{ 'service.index.title' | translate }}</h4>
+          </nb-card-header>
+          <nb-card-body>
+						<div class="row mt-4">
+							<div class="col-6">
+								<nb-select [(ngModel)]="_tableService.pageSize">
+									<nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+									<nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+									<nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+								</nb-select>
+							</div>
+							<div class="col-6">
+								<nb-form-field class="float-end">
+									<nb-icon nbPrefix icon="search-outline"></nb-icon>
+									<input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+								</nb-form-field>
+							</div>
+						</div>
+						<div>
+							<div class="table-responsive mt-4">
+								<table class="table table-striped table-borderless">
+									<thead>
+										<tr>
+											<th class="name" scope="col" sortable="name" (sort)="onSort($event)">
+                        {{ 'service.index.name' | translate }}
+                      </th>
+											<th class="name" scope="col" sortable="createdAt" (sort)="onSort($event)">
+                        {{ 'table.createdAt' | translate }}
+                      </th>
+											<th class="category" scope="col" sortable="category" (sort)="onSort($event)">
+                        {{ 'service.index.category' | translate }}
+                      </th>
+											<th class="sku" scope="col" sortable="sku" (sort)="onSort($event)">
+                        {{ 'service.index.sku' | translate }}
+                      </th>
+											<th class="tax" scope="col" sortable="tax" (sort)="onSort($event)">
+                        {{ 'service.index.tax' | translate }}
+                      </th>
+											<th class="purchase-price" scope="col" sortable="purchasePrice" (sort)="onSort($event)">
+                        {{ 'service.index.purchasePrice' | translate }}
+                      </th>
+											<th class="sale-price" scope="col" sortable="salePrice" (sort)="onSort($event)">
+                        {{ 'service.index.salePrice' | translate }}
+                      </th>
+											<th>
+                        {{ 'table.actions' | translate }}
+                      </th>
+										</tr>
+									</thead>
+									<tbody *ngIf="services">
+										<tr *ngFor="let item of services | async">
+											<td>
+                        <a [routerLink]="['/dashboard/service/edit',item.id]">
+                          <ngb-highlight [result]="item.name" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </a>
+											</td>
+                      <td>
+                        <ngb-highlight [result]="item.createdAt | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+                      <td>
+												<span *ngIf="item.category">
+                          <ngb-highlight [result]="item.category.name" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </span>
+											</td>
+											<td>
+												<ngb-highlight [result]="item.sku" [term]="_tableService.searchTerm"></ngb-highlight>
+                        <span *ngIf="!item.sku">N\A</span>
+											</td>
+                      <td>
+												<span *ngIf="item.tax" >
+                          <ngb-highlight [result]="item.tax.name" [term]="_tableService.searchTerm"></ngb-highlight>
+                          ({{item.tax.rate}}%)
+                        </span>
+                        <span *ngIf="!item.tax">N\A</span>
+											</td>
+											<td>
+                        <span *ngIf="currency">{{currency.symbol}}</span>
+												<ngb-highlight [result]="item.purchasePrice" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+                      <td>
+                        <span *ngIf="currency">{{currency.symbol}}</span>
+												<ngb-highlight [result]="item.salePrice" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+											<td>
+												<a [routerLink]="['/dashboard/service/edit',item.id]" nbButton ghost status="warning">
+												  <nb-icon icon="edit"></nb-icon>
+												</a>
+												<a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+												  <nb-icon icon="close-outline"></nb-icon>
+												</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<ngb-pagination [(page)]="_tableService.page"
+							                [pageSize]="_tableService.pageSize"
+							                [collectionSize]="total$ | async">
+							</ngb-pagination>
+						</div>
+          </nb-card-body>
+      </nb-card>
+  </div>
+</ng-container>

@@ -1,0 +1,66 @@
+.section {
+    @include media-breakpoint-up(md) {
+        padding-top: $px-section-lg-padding-y;
+        padding-bottom: $px-section-lg-padding-y;
+    }
+    @include media-breakpoint-up(lg) {
+        padding-top: $px-section-padding-y;
+        padding-bottom: $px-section-padding-y;
+    }
+    padding-top: $px-section-md-padding-y;
+    padding-bottom: $px-section-md-padding-y;
+}
+
+.section-heading {
+    @include media-breakpoint-up(md) {
+        margin-bottom: 2rem;
+    }
+    @include media-breakpoint-up(lg) {
+        margin-bottom: 3rem;
+    }
+    margin-bottom: 2.5rem;
+}
+
+
+
+// Width 
+.min-vh-50 {
+    min-height: 50vh; 
+}
+
+.min-h-150px {
+    min-height: 150px; 
+}
+
+.min-h-350px {
+    min-height: 350px; 
+}
+
+@include media-breakpoint-up(sm) {
+    @each $size, $value in $px-sizes {
+        .w-sm-#{$size} {
+            width: $value !important;
+        }
+    }
+}
+@include media-breakpoint-up(md) {
+    @each $size, $value in $px-sizes {
+        .w-md-#{$size} {
+            width: $value !important;
+        }
+    }
+}
+@include media-breakpoint-up(lg) {
+    @each $size, $value in $px-sizes {
+        .w-lg-#{$size} {
+            width: $value !important;
+        }
+    }
+}
+@include media-breakpoint-up(xl) {
+    @each $size, $value in $px-sizes {
+        .w-xl-#{$size} {
+            width: $value !important;
+        }
+    }
+}

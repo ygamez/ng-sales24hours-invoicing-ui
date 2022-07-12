@@ -1,0 +1,184 @@
+<ng-container>
+  <div class="container-fluid">
+    <nb-alert outline="warning" *ngIf="planId">
+     {{ 'pricing.updateWarning' | translate }}
+    </nb-alert>
+    <nb-card accent="primary">
+      <nb-card-header>{{ 'pricing.newSubscriptionPlan' | translate }}</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="planForm" (ngSubmit)="create(planForm.value)" #formDir="ngForm" novalidate>
+          <p *ngIf="errorMessage" class="text-danger">{{errorMessage}}</p>
+          <!--Plan title-->
+          <div class="mt-4 form-group row">
+            <label for="title" class="col-3 col-form-label">{{ 'pricing.title' | translate }}</label>
+            <div class="col-8">
+              <input type="text" nbInput fullWidth id="title" placeholder="Plan title" formControlName="title"
+                status="primary">
+              <span class="text-danger" *ngIf="planForm.hasError('required', ['title']) && formDir.submitted">
+                {{ 'pricing.requiredTitle' | translate }}
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-4 form-group row">
+            <label class="col-3" for="description">{{ 'general.description' | translate }}</label>
+            <div class="col-8">
+              <textarea class="form-control" id="description" name="description" formControlName="description" nbInput
+                placeholder="{{ 'general.description' | translate }}" fullWidth status="primary" rows="4"></textarea>
+            </div>
+          </div>
+
+          <!--price-->
+          <div class="mt-4 form-group row">
+            <label for="price" class="col-3 col-form-label">{{ 'pricing.price' | translate }}</label>
+            <div class="col-8">
+              <input type="number" nbInput fullWidth id="price" placeholder="{{ 'pricing.price' | translate }}" formControlName="price"
+                status="primary" disabled *ngIf="planId" aria-describedby="priceHelp">
+              <input type="number" nbInput fullWidth id="price" placeholder="{{ 'pricing.price' | translate }}" formControlName="price"
+                status="primary" *ngIf="!planId" aria-describedby="priceHelp">
+              <small id="priceHelp" class="form-text text-muted">
+                {{ 'pricing.priceHelp' | translate }}.
+              </small>
+              <div>
+                <span class="text-danger" *ngIf="planForm.hasError('required', ['price']) && formDir.submitted">
+                  {{ 'pricing.requiredPrice' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Currency -->
+          <div class="mt-4 form-group row">
+            <label class="col-3" for="currency">{{ 'general.currency' | translate }}</label>
+            <div class="col-4">
+              <nb-select *ngIf="!planId" id="currency" formControlName="currencyId" fullWidth status="primary"
+                placeholder="{{ 'general.currency' | translate }}">
+                <nb-option *ngFor="let item of currencies" [(value)]="item.id">{{item.name}} ({{item.isoCode}})
+                </nb-option>
+              </nb-select>
+              <nb-select disabled *ngIf="planId" id="currency" formControlName="currencyId" fullWidth status="primary"
+                placeholder="{{ 'general.currency' | translate }}">
+                <nb-option *ngFor="let item of currencies" [(value)]="item.id">{{item.name}} ({{item.isoCode}})
+                </nb-option>
+              </nb-select>
+              <span class="text-danger" *ngIf="planForm.hasError('required', ['currencyId']) && formDir.submitted">
+                {{ 'general.requiredCurrency' | translate }}
+              </span>
+              <div>
+                <a routerLink="/dashboard/super-admin-console/currencies" nbButton class="mt-2" status="basic"
+                  size="tiny">
+                  <nb-icon icon="plus"></nb-icon> {{ 'general.newCurrency' | translate }}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!--Max Order-->
+          <div class="mt-4 form-group row">
+            <label for="maxOrder" class="col-3 col-form-label"> {{ 'pricing.maxInvoice' | translate }}</label>
+            <div class="col-8">
+              <input type="number" nbInput fullWidth id="maxOrder" placeholder="{{ 'pricing.maxInvoice' | translate }}" formControlName="maxOrder"
+                status="primary" aria-describedby="invoiceHelp">
+              <small id="invoiceHelp" class="form-text text-muted">
+                {{ 'pricing.maxInvoiceHelp' | translate }}.
+              </small>
+              <div>
+                <span class="text-danger" *ngIf="planForm.hasError('required', ['maxInvoice']) && formDir.submitted">
+                  {{ 'pricing.requiredMaxInvoice' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!--Max Proposal-->
+          <div class="mt-4 form-group row">
+            <label for="maxOrder" class="col-3 col-form-label">{{ 'pricing.maxEstimate' | translate }}</label>
+            <div class="col-8">
+              <input type="number" nbInput fullWidth id="maxEstimate" placeholder="{{ 'pricing.maxEstimate' | translate }}" formControlName="maxEstimate"
+                status="primary" aria-describedby="estimateHelp">
+              <small id="estimateHelp" class="form-text text-muted">
+                {{ 'pricing.maxInvoiceHelp' | translate }}.
+              </small>
+              <div>
+                <span class="text-danger" *ngIf="planForm.hasError('required', ['maxEstimate']) && formDir.submitted">
+                  {{ 'pricing.requiredMaxEstimate' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!--Max product-->
+          <div class="mt-4 form-group row">
+            <label for="maxProduct" class="col-3 col-form-label"> {{ 'pricing.maxProductService' | translate }}</label>
+            <div class="col-8">
+              <input type="number" nbInput fullWidth id="maxProduct" placeholder="Max Product"
+                formControlName="maxProduct" status="primary" aria-describedby="pdtHelp">
+              <small id="pdtHelp" class="form-text text-muted">
+                {{ 'pricing.pdtHelp' | translate }}.
+              </small>
+              <div>
+                <span class="text-danger" *ngIf="planForm.hasError('required', ['maxProduct']) && formDir.submitted">
+                  {{ 'pricing.requiredMaxPdtSvc' | translate }}.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!--Max Customer-->
+          <div class="mt-4 form-group row">
+            <label for="maxCustomer" class="col-3 col-form-label">{{ 'pricing.maxCustomer' | translate }}</label>
+            <div class="col-8">
+              <input type="number" nbInput fullWidth id="maxCustomer" placeholder="{{ 'pricing.maxCustomer' | translate }}"
+                formControlName="maxCustomer" status="primary" aria-describedby="customerHelp">
+              <small id="customerHelp" class="form-text text-muted">
+                {{ 'pricing.maxCustomerHelp' | translate }}.
+              </small>
+              <div>
+                <span class="text-danger" *ngIf="planForm.hasError('required', ['maxCustomer']) && formDir.submitted">
+                  {{ 'pricing.requiredMaxCustomer' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!--Max User-->
+          <div class="mt-4 form-group row">
+            <label for="maxUser" class="col-3 col-form-label">{{ 'pricing.maxUser' | translate }}</label>
+            <div class="col-8">
+              <input type="number" nbInput fullWidth id="maxUser" placeholder="{{ 'pricing.maxUser' | translate }}" formControlName="maxUser"
+                status="primary" aria-describedby="userHelp">
+              <small id="userHelp" class="form-text text-muted">
+                {{ 'pricing.maxUserhelp' | translate }}.
+              </small>
+              <div>
+                <span class="text-danger" *ngIf="planForm.hasError('required', ['maxUser']) && formDir.submitted">
+                  {{ 'pricing.requiredMaxUser' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="mt-4 form-group row">
+            <label class="col-3" for="state">{{ 'general.state' | translate }}</label>
+            <div class="col-4">
+              <nb-select id="state" formControlName="state" fullWidth status="primary" placeholder="{{ 'general.state' | translate }}">
+                <nb-option *ngFor="let item of statuses" [value]="item">{{item}}</nb-option>
+              </nb-select>
+              <span class="text-danger" *ngIf="planForm.hasError('required', ['state']) && formDir.submitted">
+                {{ 'general.requiredState' | translate }}
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mt-4">
+            <div class="offset-sm-3 col-sm-4">
+              <button [nbSpinner]="loading" type="submit" nbButton status="primary">{{ 'form.save' | translate }}</button>
+            </div>
+          </div>
+
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</ng-container>

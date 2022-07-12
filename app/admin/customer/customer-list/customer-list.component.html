@@ -1,0 +1,147 @@
+<ng-container>
+  <nb-card class="mb-5" *ngIf="subscriptionPercentLimit > 90">
+    <nb-card-body>
+      <div class="row">
+        <div class="col-8">
+          <div>{{ 'general.youHave' | translate }} {{totalCustomer}}/{{subscription.plan.maxCustomer}} {{
+            'subsciption.message.customerLimit' | translate }} </div>
+          <div>{{ 'subsciption.message.updatePlan' | translate }} </div>
+        </div>
+        <div class="col-4">
+          <a nbButton status="primary" class="float-end" size="medium" routerLink="/dashboard/setting-list/pricings">{{
+            'subsciption.btnUpgrade' | translate }}</a>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-12">
+        <a class="float-end" routerLink="/dashboard/customer/create" nbButton status="primary" size="small">
+          <nb-icon icon="plus"></nb-icon>
+          {{ 'invoice.form.btnNewCustomer' | translate }}
+        </a>
+      </div>
+    </div>
+    <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+      <nb-card-header class="row">
+        <h4 class="col-6">{{ 'general.customer' | translate }}</h4>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-4">
+          <div class="col-6">
+            <nb-select [(ngModel)]="_tableService.pageSize">
+              <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+              <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+              <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+            </nb-select>
+          </div>
+          <div class="col-6">
+            <nb-form-field class="float-end">
+              <nb-icon nbPrefix icon="search-outline"></nb-icon>
+              <input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+            </nb-form-field>
+          </div>
+        </div>
+        <div>
+          <div class="table-responsive mt-4">
+            <table class="table table-striped table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col" 
+                      sortable="name" 
+                      (sort)="onSort($event)">{{ 'general.name' | translate }}</th>
+                  <th scope="col" 
+                      sortable="name" 
+                      (sort)="onSort($event)">{{ 'table.createdAt' | translate }}</th>
+                  <th class="ruc" 
+                      scope="col" 
+                      sortable="ruc" 
+                      (sort)="onSort($event)">{{ 'address.ruc' | translate
+                  }}</th>
+                  <th class="phone" 
+                      scope="col" 
+                      sortable="phone" 
+                      (sort)="onSort($event)">{{ 'address.phone' | translate
+                    }}</th>
+                  <th class="billing-address" 
+                      scope="col" 
+                      sortable="billingAddress" 
+                      (sort)="onSort($event)">{{'address.billingAddress' | translate }} </th>
+                  <th class="shipping-address" 
+                      scope="col" 
+                      sortable="shippingAddress" 
+                      (sort)="onSort($event)">{{'address.shippingAddress' | translate }}</th>
+                  <th>{{ 'table.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of customers | async">
+                  <td>
+                    <a [routerLink]="['/dashboard/customer/edit',item.id]">
+                      <nb-user size="medium" 
+                                name="{{item.name}}" 
+                                title="{{item.email}}" 
+                                [showTitle]="true">
+                      </nb-user>
+                    </a>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="item.createdAt | date: 'MMM d, y, HH:mm'" 
+                                  [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="item.ruc" 
+                                   [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="item.phone" 
+                                   [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <span class="text-wrap">
+                      <ngb-highlight [result]="item.billingAddress.addressLine1 +' '
+                          +item.billingAddress.addressLine2+' '
+                          +item.billingAddress.zipCode+ ' '
+                          +item.billingAddress.city+ ' '
+                          +item.billingAddress.country
+                          " [term]="_tableService.searchTerm">
+                      </ngb-highlight>
+                    </span>
+                  </td>
+                  <td class="text-wrap">
+                    <ngb-highlight [result]="item.shippingAddress.addressLine1 +' '
+                          +item.shippingAddress.addressLine2+' '
+                          +item.shippingAddress.zipCode+ ' '
+                          +item.shippingAddress.city+ ' '
+                          +item.shippingAddress.country
+                          " [term]="_tableService.searchTerm">
+                    </ngb-highlight>
+                  </td>
+                  <td>
+                    <a [routerLink]="['/dashboard/customer/edit',item.id]" 
+                        nbButton 
+                        ghost 
+                        status="warning">
+                      <nb-icon icon="edit"></nb-icon>
+                    </a>
+                    <a nbButton 
+                        ghost 
+                        status="danger" 
+                        (click)="deleteConfirmation(item.id)">
+                      <nb-icon icon="close-outline"></nb-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ngb-pagination [(page)]="_tableService.page" [pageSize]="_tableService.pageSize"
+            [collectionSize]="total$ | async">
+          </ngb-pagination>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</ng-container>

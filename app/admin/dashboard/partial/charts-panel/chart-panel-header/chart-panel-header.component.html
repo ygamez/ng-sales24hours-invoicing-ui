@@ -1,0 +1,14 @@
+<div class="legend d-flex flex-row">
+  <div class="d-inline-flex p-2 bd-highlight ">
+    <div class="legend-color me-2" style="background: rgb(0, 214, 143);"></div>
+    {{ 'general.profits' | translate }}
+  </div>
+  <div class="d-inline-flex p-2 bd-highlight"><div class="legend-color me-2" style="background: rgb(51, 102, 255);"></div>{{ 'general.incomes' | translate }}</div>
+  <div class="d-inline-flex p-2 bd-highlight"><div class="legend-color me-2" style="background: rgb(237, 241, 247);"></div>{{ 'general.expenses' | translate }}</div>
+</div>
+
+<nb-select class="period-select" [selected]="type" (selectedChange)="changePeriod($event)">
+  <nb-option *ngFor="let period of types" [value]="period">
+    {{ period }}
+  </nb-option>
+</nb-select>

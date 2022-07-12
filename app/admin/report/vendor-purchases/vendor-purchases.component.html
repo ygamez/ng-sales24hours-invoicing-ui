@@ -1,0 +1,64 @@
+<div>
+  <nb-card accent="primary" [nbSpinner]="false">
+    <nb-card-header  class="text-center">
+      <h4>{{ 'general.vendorReport' | translate }}</h4>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="container">
+
+        <nb-card>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-4">
+                <div class="mb-2">
+                  <b>{{ 'general.dateRange' | translate }}</b>
+                </div>
+                <div>
+                  <input status="primary" nbInput placeholder="Pick Date Range" [nbDatepicker]="dateRangePicker" fullWidth
+                    [formControl]="dateRangePcikerControl" size="medium">
+                  <nb-rangepicker #dateRangePicker (rangeChange)="getDateRange($event)"></nb-rangepicker>
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <div class="row mb-3">
+          <div class="col-12">
+            <button (click)="downloadPdf()" class="float-end" nbButton status="primary" size="small">
+              <nb-icon icon="download-outline"></nb-icon>
+              {{ 'general.download' | translate }}
+            </button>
+            <button (click)="getVendorReport()" class="float-end me-2" nbButton status="primary" size="small">
+              <nb-icon icon="refresh-outline"></nb-icon>
+              {{ 'general.refresh' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive" id="pdfContent">
+          <table class="table table-borderless">
+            <thead class="table-info">
+              <tr>
+                <th scope="col">{{ 'general.vendor' | translate }}</th>
+                <th scope="col" class="text-end">{{ 'general.totalPurchase' | translate }}</th>
+                <th scope="col" class="text-end">{{ 'general.paidPurchase' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let report of reports" >
+                <td>{{report.vendor.name}}</td>
+                <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.allPurchase.toFixed(2)}}</td>
+                <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.paidPurchase.toFixed(2)}}</td>
+              </tr>
+              <tr class="bg-light">
+                <td>{{ 'general.totalInvoice' | translate }}</td>
+                <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{totalPurchase.toFixed(2)}}</td>
+                <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{totalPaidPurchase.toFixed(2)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>

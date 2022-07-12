@@ -1,0 +1,136 @@
+<div>
+  <nb-card accent="primary" [nbSpinner]="loading">
+    <nb-card-header class="text-center">
+      <h4>{{ 'general.balanceSheet' | translate }}</h4>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="container">
+
+        <nb-card>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-4">
+                <div class="mb-2">
+                  <b>Date Range</b>
+                </div>
+                <div>
+                  <input status="primary" nbInput placeholder="Pick Date Range" [nbDatepicker]="dateRangePicker" fullWidth
+                    [formControl]="dateRangePcikerControl" size="medium">
+                  <nb-rangepicker #dateRangePicker (rangeChange)="getDateRange($event)"></nb-rangepicker>
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <div class="row mb-3">
+          <div class="col-12">
+            <button (click)="downloadPdf()" class="float-end" nbButton status="primary" size="small">
+              <nb-icon icon="download-outline"></nb-icon>
+              {{ 'general.download' | translate }}
+            </button>
+            <button (click)="getBalanceSheet()" class="float-end me-2" nbButton status="primary" size="small">
+              <nb-icon icon="refresh-outline"></nb-icon>
+              {{ 'general.refresh' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive" id="pdfContent">
+          <table class="table table-borderless">
+            <thead class="table-info">
+              <tr>
+                <th scope="col">{{ 'general.account' | translate }}</th>
+                <th scope="col" class="text-end">{{ 'general.totalAmount' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <ng-container *ngFor="let report of reports" >
+                <ng-container  *ngIf="report.category.name === 'Assets'">
+                  <tr class="bg-light">
+                    <td >
+                      {{ 'general.assets' | translate }}
+                    </td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngFor="let item of report.balanceSheetReportItems">
+                    <tr class="bg-light">
+                      <td class="ps-5">{{item.accountType.name}}</td>
+                      <td class="text-end"></td>
+                    </tr>
+                    <tr *ngFor="let detail of item.balanceSheetReportItemDetails">
+                      <td class="ps-5">{{detail.account.accountName}}</td>
+                      <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{detail.totalAmount.toFixed(2)}}</td>
+                    </tr>
+                    <tr>
+                      <td class="ps-5">{{ 'general.total' | translate }} {{item.accountType.name}}</td>
+                      <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalAmount.toFixed(2)}}</td>
+                    </tr>
+                  </ng-container>
+                  <tr>
+                    <td>{{ 'general.total' | translate }} {{report.category.name}}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container  *ngIf="report.category.name === 'Liabilities & Credit Cards'">
+                  <tr><td></td></tr>
+                  <tr class="bg-light">
+                    <td >
+                      {{ 'general.liabilityAndCreditCard' | translate }}
+                    </td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngFor="let item of report.balanceSheetReportItems">
+                    <tr class="bg-light">
+                      <td class="ps-5">{{item.accountType.name}}</td>
+                      <td class="text-end"></td>
+                    </tr>
+                    <tr *ngFor="let detail of item.balanceSheetReportItemDetails">
+                      <td class="ps-5">{{detail.account.accountName}}</td>
+                      <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{detail.totalAmount.toFixed(2)}}</td>
+                    </tr>
+                    <tr>
+                      <td class="ps-5">{{ 'general.total' | translate }} {{item.accountType.name}}</td>
+                      <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalAmount.toFixed(2)}}</td>
+                    </tr>
+                  </ng-container>
+                  <tr>
+                    <td>{{ 'general.total' | translate }} {{report.category.name}}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container  *ngIf="report.category.name === 'Equity'">
+                  <tr><td></td></tr>
+                  <tr class="bg-light">
+                    <td >
+                      {{ 'general.equity' | translate }}
+                    </td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngFor="let item of report.balanceSheetReportItems">
+                    <tr class="bg-light">
+                      <td class="ps-5">{{item.accountType.name}}</td>
+                      <td class="text-end"></td>
+                    </tr>
+                    <tr *ngFor="let detail of item.balanceSheetReportItemDetails">
+                      <td class="ps-5">{{detail.account.accountName}}</td>
+                      <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{detail.totalAmount.toFixed(2)}}</td>
+                    </tr>
+                    <tr>
+                      <td class="ps-5">{{ 'general.total' | translate }} {{item.accountType.name}}</td>
+                      <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalAmount.toFixed(2)}}</td>
+                    </tr>
+                  </ng-container>
+                  <tr>
+                    <td>{{ 'general.total' | translate }} {{report.category.name}}</td>
+                    <td class="text-end"><span *ngIf="currency">{{currency.symbol}}</span>{{report.totalAmount.toFixed(2)}}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>

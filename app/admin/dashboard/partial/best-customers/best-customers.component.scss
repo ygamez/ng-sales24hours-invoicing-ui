@@ -1,0 +1,10 @@
+@import '../../../../../themes.scss';
+
+@include nb-install-component() {
+    nb-card table{
+        color: nb-theme(table-text-color) !important;
+        td{
+            vertical-align: middle;
+        }
+    }
+}

@@ -1,0 +1,142 @@
+<nb-layout>
+  <nb-layout-column>
+
+    <section class="section">
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-12 col-sm-8 offset-sm-2 col-md-8 offset-md-2">
+
+            <nb-card [nbSpinner]="cardLoading">
+              <nb-card-header>
+                <nav class="navigation">
+                  <a href=""  class="link back-link" aria-label="Back">
+                    <nb-icon icon="arrow-back"></nb-icon>
+                    BILL.ECO
+                  </a>
+                </nav>
+              </nb-card-header>
+              <nb-card-body>
+
+                <h3 id="title" class="title">{{ 'general.signUp' | translate }}</h3>
+
+                <nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+                  <p class="alert-title"><b>{{ 'general.ohSnap' | translate }}</b></p>
+                  <ul class="alert-message-list">
+                    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+                  </ul>
+                </nb-alert>
+
+                <nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+                  <p class="alert-title"><b>{{ 'general.hooray' | translate }}!</b></p>
+                  <ul class="alert-message-list">
+                    <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+                  </ul>
+                </nb-alert>
+
+                <form [formGroup]="authForm" (ngSubmit)="signUp(authForm.value)"  #formDir="ngForm" aria-labelledby="title">
+
+                  <div class="form-control-group mt-5" >
+                    <label class="label" for="input-name">{{ 'general.fullname' | translate }}:</label>
+                    <input nbInput
+                           id="input-name"
+                           name="fullName"
+                           placeholder="{{ 'general.fullname' | translate }}"
+                           autofocus
+                           fullWidth
+                           formControlName="fullname"
+                           fieldSize="large">
+                    <ng-container  *ngIf="authForm.hasError('required', ['fullname']) && formDir.submitted" >
+                      <p class="caption status-danger">
+                        {{ 'general.requiredName' | translate }}
+                      </p>
+                    </ng-container>
+                  </div>
+
+                  <div class="form-control-group mt-4">
+                    <label class="label" for="input-email">{{ 'general.email' | translate }}:</label>
+                    <input nbInput
+                           id="input-email"
+                           name="email"
+                           pattern=".+@.+..+"
+                           placeholder="{{ 'general.email' | translate }}"
+                           fullWidth
+                           formControlName="email"
+                           fieldSize="large" >
+                    <ng-container *ngIf="authForm.hasError('required', ['email']) && formDir.submitted">
+                      <p class="caption status-danger" >
+                        {{ 'general.requiredEmail' | translate }}
+                      </p>
+                    </ng-container>
+                  </div>
+
+                  <div class="form-control-group mt-4">
+                    <label class="label" for="input-password">{{ 'general.password' | translate }}:</label>
+                    <input nbInput
+                           type="password"
+                           id="input-password"
+                           name="password"
+                           placeholder="{{ 'general.password' | translate }}"
+                           fullWidth
+                           formControlName="password"
+                           fieldSize="large"
+                           #box (keyup)="onKey(box.value)">
+                    <div *ngIf="passwordMessage" class="text-danger">{{passwordMessage}}</div>
+                    <ng-container *ngIf="authForm.hasError('required', ['password']) && formDir.submitted">
+                      <p class="caption status-danger">
+                        {{ 'general.requiredPassword' | translate }}
+                      </p>
+                    </ng-container>
+                  </div>
+
+                  <div class="form-control-group accept-group mt-4">
+                    <nb-checkbox name="terms" formControlName='agreeTerm' >
+                      {{ 'general.agreeTo' | translate }} <a href="#" target="_blank"><strong>{{ 'general.termsAndConditions' | translate }}</strong></a>
+                    </nb-checkbox>
+                  </div>
+
+                  <button class="mt-5 mb-4" nbButton
+                          fullWidth
+                          [nbSpinner]="loading"
+                          status="primary"
+                          size="large">
+                        {{ 'general.signUp' | translate }}
+                  </button>
+                </form>
+
+                <div class="row">
+                  <div class="col-sm-6 mt-2">
+                    <button (click)="signInWithGoogle()" nbButton size="medium" status="basic" fullWidth class="text-danger align-middle">
+                      <nb-icon icon="google-outline"></nb-icon> {{'auth.signUp.googleSignUp' | translate }}
+                    </button>
+                  </div>
+                  <div class="col-sm-6 mt-2">
+                    <button (click)="signInWithFB()" nbButton size="medium" status="basic" fullWidth class="text-primary">
+                      <nb-icon icon="facebook-outline"></nb-icon>{{'auth.signUp.fbSignUp' | translate }}
+                    </button>
+                  </div>
+                </div>
+
+                <section class="another-action mt-5" aria-label="Sign in">
+                  Already have an account? <a class="text-link" routerLink="/auth/sign-in">Sign in</a>
+                </section>
+
+              </nb-card-body>
+            </nb-card>
+
+            <div class="row">
+              <div class="col-12 col-sm-12  col-md-2 offset-md-5">
+                <nb-form-field *ngIf="langs && langs.length > 0">
+                  <nb-icon nbPrefix icon="globe-outline"></nb-icon>
+                  <nb-select placeholder="EN" (selectedChange)="onLangChange($event)" [(selected)]="selectedLang">
+                    <nb-option *ngFor="let lang of langs" [value]="lang.value" >{{lang.name}}</nb-option>
+                  </nb-select>
+                </nb-form-field>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </nb-layout-column>
+</nb-layout>

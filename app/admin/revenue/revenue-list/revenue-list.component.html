@@ -1,0 +1,126 @@
+<ng-container>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <h4 class="col-12">Incomes</h4>
+      <div class="col-12">
+        <a class="float-end" href="#" routerLink="/dashboard/revenue/create" nbButton status="primary" size="small">
+          <nb-icon icon="plus"></nb-icon>
+          {{ 'general.newIncome' | translate }}
+        </a>
+        <a class="float-end me-2" href="#" routerLink="/dashboard/goal/create" nbButton status="primary" size="small" >
+          <nb-icon icon="checkmark-circle-outline"></nb-icon> {{ 'general.setGoal' | translate }}
+        </a>
+      </div>
+    </div>
+
+    <goal-list></goal-list>
+
+    <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+        <nb-card-header class="row">
+          <h6 class="col-6">{{ 'general.totalIncome' | translate }}: <span class="text-primary">$ {{totalIcome}}</span></h6>
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row mt-4">
+            <div class="col-6">
+              <nb-select [(ngModel)]="_tableService.pageSize">
+                <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+              </nb-select>
+            </div>
+            <div class="col-6">
+              <nb-form-field class="float-end">
+                <nb-icon nbPrefix icon="search-outline"></nb-icon>
+                <input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+              </nb-form-field>
+            </div>
+          </div>
+          <div>
+            <div class="table-responsive mt-4">
+              <table class="table table-striped table-borderless">
+                <thead>
+                  <tr>
+                    <th class="date" scope="col" sortable="date" (sort)="onSort($event)">{{ 'general.date' | translate }}</th>
+                    <th class="vendor" scope="col" sortable="vendor" (sort)="onSort($event)">{{ 'general.customer' | translate }}</th>
+                    <th class="bill" scope="col" sortable="bill" (sort)="onSort($event)">{{ 'general.invoice' | translate }}</th>
+                    <th class="bank-account" scope="col" sortable="bankAccount" (sort)="onSort($event)">{{ 'general.bankAccount' | translate }}</th>
+										<th scope="col">{{ 'general.paymentMethod' | translate }}</th>
+                    <th class="account" scope="col" sortable="account" (sort)="onSort($event)">{{ 'general.account' | translate }}</th>
+                    <th class="cateogry" scope="col" sortable="account" (sort)="onSort($event)">{{ 'general.category' | translate }}</th>
+                    <th class="amount" scope="col" sortable="tax" (sort)="onSort($event)">{{ 'general.tax' | translate }}</th>
+                    <th class="amount" scope="col" sortable="amount" (sort)="onSort($event)">{{ 'general.amount' | translate }}</th>
+                    <th>{{ 'table.actions' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of revenues | async">
+                    <td>
+                      <a [routerLink]="['/dashboard/revenue/edit',item.id]" >
+                        <ngb-highlight [result]="item.date | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+                      </a>
+                    </td>
+                    <td>
+                      <span *ngIf="item.customer">
+                        <nb-user size="medium"
+                          name="{{item.customer.name}}"
+                          title="{{item.customer.email}}"
+                          [showTitle]="true">
+                        </nb-user>
+                      </span>
+                      <span *ngIf="!item.customer">N/A</span>
+                    </td>
+                    <td>
+                      <a *ngIf="item.invoice" [routerLink]="['/dashboard/invoice/details', item.invoice.id]">
+                        <ngb-highlight [result]="item.invoice.reference" [term]="_tableService.searchTerm"></ngb-highlight>
+                      </a>
+                      <span *ngIf="!item.invoice">N/A</span>
+                    </td>
+                    <td>
+                      <ngb-highlight *ngIf="item.bankAccount" [result]="item.bankAccount.bankName" [term]="_tableService.searchTerm"></ngb-highlight>
+                      <span *ngIf="!item.bankAccount">N/A</span>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="item.paymentMethod" [term]="_tableService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <span *ngIf="item.accountBalance">
+                        <ngb-highlight [result]="item.accountBalance.accountName" [term]="_tableService.searchTerm"></ngb-highlight>
+                      </span>
+                      <span *ngIf="!item.accountBalance">N/A</span>
+                    </td>
+                    <td>
+                      <span *ngIf="item.account">
+                        <ngb-highlight [result]="item.account.accountName" [term]="_tableService.searchTerm"></ngb-highlight>
+                      </span>
+                      <span *ngIf="!item.account">N/A</span>
+                    </td>
+                    <td>
+                      <span *ngIf="currency">{{currency.symbol}}</span>
+                      <ngb-highlight [result]="item.totalTax" [term]="_tableService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td class="text-primary">
+                      <span *ngIf="currency">{{currency.symbol}}</span>
+                      <ngb-highlight [result]="item.amount" [term]="_tableService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <a [routerLink]="['/dashboard/revenue/edit',item.id]" nbButton ghost status="warning">
+                        <nb-icon icon="edit"></nb-icon>
+                      </a>
+                      <a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <ngb-pagination [(page)]="_tableService.page"
+                            [pageSize]="_tableService.pageSize"
+                            [collectionSize]="total$ | async">
+            </ngb-pagination>
+          </div>
+        </nb-card-body>
+    </nb-card>
+  </div>
+</ng-container>

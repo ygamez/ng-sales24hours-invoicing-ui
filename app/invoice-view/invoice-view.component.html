@@ -1,0 +1,234 @@
+
+<nb-layout>
+  <nb-layout-column>
+    <div class="content" *ngIf="invoice; else noContent">
+      <div class="pb-2">
+        <a class="me-2" (click)="downloadPdf()" nbButton status="control" [nbSpinner]="downloading"
+          size="small">
+          <nb-icon icon="download-outline"></nb-icon>
+          {{ 'general.download' | translate }}
+        </a>
+        <a nbButton status="control" size="small" (click)="print()" [nbSpinner]="printing">
+          <nb-icon icon="printer-outline"></nb-icon>
+          {{ 'general.print' | translate }}
+        </a>
+      </div>
+      <div>
+        <nb-card accent="primary" [nbSpinner]="loading">
+          <nb-card-header>
+            <div>
+              <span>
+                {{ 'general.reference' | translate }}: <b>{{invoice.reference}}</b>
+              </span>
+              <span class="float-end">{{ 'invoice.index.dueDate' | translate }}: <b>{{invoice.issueDate | date: 'MMM d, y, HH:mm'}}</b></span>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <h6>{{ 'general.amountDue' | translate }}</h6>
+            <div>
+              <h2>
+                <span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span> {{invoice.totalAmount}}
+              </h2>
+            </div>
+            <div class="row mt-4">
+              <div class="col-10" *ngIf="hasStripeConnected">
+                <div class="d-flex flex-column bd-highlight">
+                  <div class="p-2 bd-highlight">
+                    <button (click)="stripeCheckout()" nbButton status="primary" size="medium" class="me-2"
+                      [nbSpinner]="checkoutLoading">
+                      <nb-icon icon="credit-card-outline"></nb-icon>
+                      {{ 'invoice.detail.ccp' | translate }}
+                    </button>
+                    <span class="icon-size mt-2 align-middle">
+                      <i class="fab fa-cc-mastercard"></i>
+                    </span>
+                    <span class="icon-size ms-2 align-middle">
+                      <i class="fab fa-cc-visa"></i>
+                    </span>
+                    <span class="icon-size ms-2 align-middle">
+                      <i class="fab fa-cc-amex"></i>
+                    </span>
+                    <span class="ms-2 align-middle">
+                      {{ 'general.andMore' | translate }}...
+                    </span>
+                  </div>
+                  <div class="p-1 bd-highlight">
+                    <div #paypal></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 align-text-bottom">
+
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="p-5" id="pdfContent" >
+        <div id="pdfSpace"></div>
+        <!-- <div class="p-5" id="pdfContent" #pdf>
+          <div class="row" >
+            <div class="col-6">
+              <h5 *ngIf="company">{{company.name}}</h5>
+            </div>
+            <div class="col-6 text-end">
+              <h5>{{'general.invoice' | translate}}</h5>
+
+              <div class="mt-2"><b>{{'general.reference' | translate }}: </b> {{invoice.reference}}</div>
+              <div class="mt-2"> <b>{{'general.date' | translate }}:</b> {{invoice.invoiceDate | date: 'MMM d, y, HH:mm'}}</div>
+              <div class="mt-2" *ngIf="invoice.invoiceNumber"><b>{{'general.number' | translate }}:</b> {{invoice.invoiceNumber}}</div>
+            </div>
+          </div>
+
+          <div class="row" >
+            <div class="col-6">
+              <div class=""><b>{{'general.invoicedTo' | translate }}</b></div>
+              <div>
+                {{invoice.customer.name}}
+              </div>
+              <div>
+                {{invoice.customer.phone}}
+              </div>
+              <div *ngIf="invoice.customer.billingAddress">
+                <address>
+                  <div>{{invoice.customer.billingAddress.addressLine1}}</div>
+                  <div>{{invoice.customer.billingAddress.addressLine2}} </div>
+                  <div>{{invoice.customer.billingAddress.zipCode}} {{invoice.customer.billingAddress.city}} - {{invoice.customer.billingAddress.country}}</div>
+                </address>
+              </div>
+            </div>
+            <div class="col-6 text-end" *ngIf="company">
+              <div class="mt-3"><b>{{'general.from' | translate }}</b></div>
+              <div>
+                {{company.name}}
+               </div>
+              <div>
+                {{company.phone}}
+              </div>
+              <div *ngIf="company.billingAddress">
+                <address>
+                  <div>{{company.billingAddress.addressLine1}} </div>
+                  <div>{{company.billingAddress.addressLine2}}</div>
+                  <div>{{company.billingAddress.zipCode}} {{company.billingAddress.city}} - {{company.billingAddress.country}}</div>
+                </address>
+              </div>
+            </div>
+          </div>
+
+          <div class="row  mt-5">
+            <div class="col-6">
+
+            </div>
+            <div class="col-6 text-end">
+              <div class="">
+                <h5>{{'general.amountDue' | translate }}</h5>
+                <h4 class="text-primary"> <span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span> {{invoice.totalAmount}} </h4>
+                <div class="mt-2"><b>{{'invoice.index.dueDate' | translate }}: </b> {{invoice.issueDate | date: 'MMM d, y, HH:mm'}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-5">
+            <div class="col-12">
+              <h6>{{ 'invoice.detail.productsAndServices' | translate }}</h6>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">{{ 'invoice.detail.items' | translate }}</th>
+                      <th scope="col">{{ 'invoice.detail.category' | translate }}</th>
+                      <th scope="col">{{ 'general.quantity' | translate }}</th>
+                      <th scope="col">{{ 'invoice.detail.price' | translate }}</th>
+                      <th scope="col">{{ 'invoice.detail.tax' | translate }}</th>
+                      <th scope="col">{{ 'invoice.detail.discount' | translate }} (%)</th>
+                      <th scope="col">{{ 'invoice.detail.totalPrice' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="invoice.invoiceLineItems && invoice.invoiceLineItems.length > 0">
+                    <ng-container *ngFor="let item of invoice.invoiceLineItems">
+                      <tr>
+                        <td>
+                          <b>
+                            <span *ngIf="item.product != null && item.category === 'product'" >{{item.product.name}} </span>
+                            <span *ngIf="item.service != null && item.category === 'service'" >{{item.service.name}}</span>
+                          </b>
+                          <span><br />{{item.description}}</span>
+                        </td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{item.price}}</td>
+                        <td *ngIf="item.product != null && item.category === 'product'" >
+                          <span *ngIf="item.product.tax != null">{{item.product.tax.name}} ({{item.product.tax.rate}}%)</span>
+                        </td>
+                        <td *ngIf="item.service != null && item.category === 'service'" >
+                          <span *ngIf="item.service.tax != null">{{item.service.tax.name}} ({{item.service.tax.rate}}%)</span>
+                        </td>
+                        <td>{{item.discount}}%</td>
+                        <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{item.totalPrice}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-5">
+            <div class="col-6"></div>
+            <div class="col-6">
+              <div class="row">
+                <div class="col-4">
+                </div>
+                <div class="col-8 bg-light">
+                  <table class="table table-borderless">
+                    <tbody>
+                      <tr>
+                        <td>{{ 'general.subTotal' | translate }}: </td>
+                        <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.subTotalPrice}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{ 'general.discount' | translate }}:</td>
+                        <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalDiscount}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{ 'general.tax' | translate }}:</td>
+                        <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalTax}}</td>
+                      </tr>
+                      <ng-container *ngIf="invoice.totalCreditNote">
+                        <tr>
+                          <td>{{ 'general.creditNote' | translate }}: </td>
+                          <td><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalCreditNote}}</td>
+                        </tr>
+                      </ng-container>
+                      <tr>
+                        <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                        <td><b><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span>{{invoice.totalAmount}}</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-5" *ngIf="invoice.description">
+            <div class="col-12">
+              <div for="description">{{ 'general.noteAndTerms' | translate }}</div>
+              <div>{{invoice.description}}</div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+    </div>
+
+    <ng-template #noContent>
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </ng-template>
+
+  </nb-layout-column>
+</nb-layout>

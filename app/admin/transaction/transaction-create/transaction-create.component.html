@@ -1,0 +1,36 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="date">Date</label>
+				<div class="col-5">
+					<input class="form-control" id="date" name="date" formControlName="date"  nbInput placeholder="Date" status="primary" autocomplete="off" [nbDatepicker]="datepickerdate">
+					<nb-datepicker #datepickerdate></nb-datepicker>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['date']) && formDir.submitted" for="date">Date is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="amount">Amount</label>
+				<div class="col-5">
+					<input class="form-control" id="amount" name="amount" formControlName="amount"  nbInput placeholder="Amount" fullWidth status="primary" type="number" min="1">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['amount']) && formDir.submitted" for="amount">Amount is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="note">Note</label>
+				<div class="col-5">
+					<textarea class="form-control" id="note" name="note" formControlName="note"nbInput placeholder="Note" fullWidth status="primary" rows="6"></textarea>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['note']) && formDir.submitted" for="note">Note is required</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>Save</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

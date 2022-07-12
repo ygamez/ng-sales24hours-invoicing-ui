@@ -1,0 +1,62 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{'chartOfAccount.title' | translate }}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="account-type">{{ 'chartOfAccount.accountType' | translate }} *</label>
+				<div class="col-4">
+          <nb-select id="account-type" name="accountType" formControlName="accountTypeId"  placeholder="{{ 'chartOfAccount.selectAccountType' | translate }} " fullWidth status="primary">
+						<nb-option-group *ngFor="let item of accountTypesCategoryzed" title="{{item.category}}">
+              <nb-option *ngFor="let type of item.accountTypes" [(value)]="type.id"> {{type.name}}</nb-option>
+            </nb-option-group>
+					</nb-select>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['accountTypeId']) && formDir.submitted" for="vendor">
+            {{ 'chartOfAccount.requiredAccountType' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="account-id">
+          {{ 'chartOfAccount.accountId' | translate }} *
+        </label>
+				<div class="col-5">
+					<input class="form-control" id="account-id" name="accountId" formControlName="accountId" nbInput placeholder="{{ 'chartOfAccount.accountId' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['accountId']) && formDir.submitted" for="account-id">
+            {{ 'chartOfAccount.requiredAccountId' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="account-name">
+          {{ 'chartOfAccount.accountName' | translate }} *
+        </label>
+				<div class="col-5">
+					<input class="form-control" id="account-name" name="accountName" formControlName="accountName" nbInput placeholder="{{ 'chartOfAccount.accountName' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['accountName']) && formDir.submitted" for="account-name">
+            {{ 'chartOfAccount.requiredAccountName' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="description">
+          {{ 'general.description' | translate }}
+        </label>
+				<div class="col-5">
+					<textarea class="form-control" id="description" name="description" formControlName="description" nbInput placeholder="{{ 'general.description' | translate }}" fullWidth status="primary" rows="6"></textarea>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

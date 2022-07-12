@@ -1,0 +1,67 @@
+<nb-layout >
+  <nb-layout-column>
+    <div class="content" *ngIf="invoice && receipt; else noView">
+      <div class="pb-2">
+        <a class="me-2" nbButton status="control" size="small" (click)="downloadPdf(invoice.reference)" [nbSpinner]="downloading">
+          <nb-icon icon="download-outline"></nb-icon>
+          {{ 'general.download' | translate }}
+        </a>
+        <a nbButton status="control" size="small" (click)="printPdf()" [nbSpinner]="printing">
+          <nb-icon icon="printer-outline"></nb-icon>
+          {{ 'general.print' | translate }}
+        </a>
+      </div>
+      <div id="pdfContent">
+        <nb-card class="text-center">
+          <nb-card-body class="p-5">
+            <h1>{{ 'general.paymentReceipt' | translate }}</h1>
+            <p class="mt-2">
+              {{ 'general.for' | translate }}: <b>{{invoice.customer.name}}</b>
+            </p>
+            <hr>
+
+            <p  class="mt-4">
+              <b>{{ 'general.invoice' | translate }} {{invoice.reference}}</b>
+              <br />
+              <small>{{ 'general.paidOn' | translate }} {{receipt.createdAt | date: 'MMM d, y, HH:mm'}}</small>
+            </p>
+
+            <div class="mt-5">
+              {{ 'general.amountPaid' | translate }}
+              <h3 class="mt-2"><span *ngIf="invoice.currency">{{invoice.currency.symbol}}</span> {{receipt.amount}}</h3>
+              <small>{{ 'general.paymentMethod' | translate }}: {{receipt.paymentMethod}}</small>
+            </div>
+
+            <h1 class="mt-5 text-white" *ngIf="receipt.paymentCompleted"><span class="badge bg-success">{{ 'general.paidCap' | translate }}</span></h1>
+            <h1 class="mt-5 text-white"*ngIf="!receipt.paymentCompleted"><span class="badge bg-info">{{ 'general.partiallyPaidCap' | translate }}</span></h1>
+
+            <p class="mt-5" *ngIf="company">
+              {{ 'general.from' | translate }}: {{company.name}} <br />
+                {{company.billingAddress.addressLine1}},
+                {{company.billingAddress.addressLine2}},
+                {{company.billingAddress.zipCode}},
+                {{company.billingAddress.city}} {{company.billingAddress.country}}
+            </p>
+
+            <p>
+              <small>
+                {{ 'general.contactUsAt' | translate }} {{company.email}}
+              </small>
+            </p>
+
+          </nb-card-body>
+        </nb-card>
+      </div>
+
+    </div>
+
+    <ng-template #noView>
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </ng-template>
+
+  </nb-layout-column>
+</nb-layout>

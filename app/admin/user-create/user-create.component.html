@@ -1,0 +1,149 @@
+<nb-card [nbSpinner]="cardLoading"
+          accent="primary"
+         nbSpinnerSize="large"
+         nbSpinnerMessage="">
+  <nb-card-header>
+    {{formTitle}}
+  </nb-card-header>
+
+  <nb-card-body>
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="userForm" (ngSubmit)="upsertUser(userForm.value)" #formDir="ngForm" novalidate >
+          <!-- fullname -->
+          <div class="mt-3 form-group row">
+            <label for="fullname" class="col-3 col-form-label">{{'general.fullname' | translate}}</label>
+            <div class="col-8">
+              <input type="text" nbInput fullWidth id="fullname" placeholder="{{'general.fullname' | translate}}" formControlName="fullname">
+              <span class="text-danger" *ngIf="userForm.hasError('required', ['fullname']) && formDir.submitted">
+                {{'general.requiredName' | translate}}
+              </span>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="mt-3 form-group row">
+            <label for="email" class="col-3 col-form-label">{{'general.email' | translate}}</label>
+            <div class="col-8">
+              <input *ngIf="!userId" type="email" nbInput fullWidth id="email" placeholder="{{'general.email' | translate}}" formControlName="email">
+              <input *ngIf="userId" type="email" nbInput fullWidth id="email" placeholder="{{'general.email' | translate}}" formControlName="email" disabled>
+              <span class="text-danger" *ngIf="userForm.hasError('required', ['email']) && formDir.submitted">
+                {{'general.requiredEmail' | translate}}.
+              </span>
+            </div>
+          </div>
+
+          <!-- Role -->
+          <div class="mt-3 form-group row">
+            <label for="email" class="col-3 col-form-label">{{'general.role' | translate}}</label>
+            <div class="col-8">
+              <nb-select placeholder="{{'general.selectRole' | translate}}" fullWidth (selected)="roles[0].id" (selectedChange)="selectedRoleChange($event)"
+                formControlName="roleId">
+                <nb-option *ngFor="let role of roles" [(value)]="role.id">{{role.name}}</nb-option>
+              </nb-select>
+              <span class="text-danger" *ngIf="userForm.hasError('required', ['roleId']) && formDir.submitted">
+                {{'general.selectRole' | translate}}.
+              </span>
+            </div>
+          </div>
+
+          <p class="text-danger" *ngIf="errorMessage">{{errorMessage}}</p>
+
+          <div class="mt-3 form-group row">
+            <div class="offset-sm-3 col-sm-7">
+              <button type="submit" nbButton status="primary" [nbSpinner]="loading" nbSpinnerStatus="control">{{txtBtnSubmit}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-12 mt-4" *ngIf="role && role === 'SuperAdmin'">
+        <h5>{{ 'superAdmin.title' | translate }}</h5>
+        <p>
+          {{ 'superAdmin.description' | translate }}
+        </p>
+        <div>
+          <ul>
+            <li>{{ 'superAdmin.li1' | translate }}.</li>
+            <li>{{ 'superAdmin.li2' | translate }}.</li>
+            <li>{{ 'superAdmin.li3' | translate }}.</li>
+            <li>{{ 'superAdmin.li4' | translate }}.</li>
+            <li>{{ 'superAdmin.li5' | translate }}.</li>
+            <li>{{ 'superAdmin.li6' | translate }}.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-8 mt-4" *ngIf="role && role==='Admin'">
+        <h5>{{ 'admin.title' | translate }}</h5>
+        <p>
+          {{ 'admin.description' | translate }}
+        </p>
+        <div>
+          <ul>
+            <li>{{ 'admin.li1' | translate }}.</li>
+            <li>{{ 'admin.li2' | translate }}.</li>
+            <li>{{ 'admin.li3' | translate }}.</li>
+            <li>{{ 'admin.li4' | translate }}.</li>
+            <li>{{ 'admin.li5' | translate }}.</li>
+            <li>{{ 'admin.li6' | translate }}.</li>
+            <li>{{ 'admin.li7' | translate }}.</li>
+            <li>{{ 'admin.li8' | translate }}.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12 mt-4" *ngIf="role && role==='SuperUser'">
+        <h5>{{ 'superUser.title' | translate }}</h5>
+        <p>
+          {{ 'superUser.description' | translate }}
+        </p>
+        <div>
+          <ul>
+            <li>{{ 'superUser.li1' | translate }}.</li>
+            <li>{{ 'superUser.li2' | translate }}.</li>
+            <li>{{ 'superUser.li3' | translate }}.</li>
+            <li>{{ 'superUser.li4' | translate }}.</li>
+            <li>{{ 'superUser.li5' | translate }}.</li>
+            <li>{{ 'superUser.li6' | translate }}.</li>
+            <li>{{ 'superUser.li7' | translate }}.</li>
+            <li>{{ 'superUser.li8' | translate }}.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12 mt-4" *ngIf="role && role==='User'">
+        <h5>{{ 'user.title' | translate }}</h5>
+        <p>
+          {{ 'user.description' | translate }}
+        </p>
+        <div>
+          <ul>
+            <li>{{ 'user.li1' | translate }}.</li>
+            <li>{{ 'user.li2' | translate }}.</li>
+            <li>{{ 'user.li3' | translate }}.</li>
+            <li>{{ 'user.li4' | translate }}.</li>
+            <li>{{ 'user.li5' | translate }}.</li>
+            <li>{{ 'user.li6' | translate }}.</li>
+            <li>{{ 'user.li7' | translate }}.</li>
+            <li>{{ 'user.li8' | translate }}.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12 mt-4" *ngIf="role && role==='Viewer'">
+        <h5>{{ 'viewer.title' | translate }}</h5>
+        <p>
+          {{ 'viewer.description' | translate }}
+        </p>
+        <div>
+          <ul>
+            <li>{{ 'viewer.li1' | translate }}.</li>
+            <li>{{ 'viewer.li2' | translate }}.</li>
+            <li>{{ 'viewer.li3' | translate }}.</li>
+            <li>{{ 'viewer.li4' | translate }}.</li>
+            <li>{{ 'viewer.li5' | translate }}.</li>
+            <li>{{ 'viewer.li6' | translate }}.</li>
+            <li>{{ 'viewer.li7' | translate }}.</li>
+            <li>{{ 'viewer.li8' | translate }}.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

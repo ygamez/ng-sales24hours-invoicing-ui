@@ -1,0 +1,104 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+      <div class="mg-top form-group row" *ngIf="bill">
+				<label class="col-2" for="date">{{ 'general.bill' | translate }} *</label>
+				<div class="col-5">
+          <input class="form-control" nbInput value="{{bill.reference}}" fullWidth status="primary" type="text" readonly>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="date">{{ 'general.date' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="date" name="date" formControlName="date"  nbInput placeholder="{{ 'general.date' | translate }}" status="primary"
+            autocomplete="off" [nbDatepicker]="datepickerdate">
+					<nb-datepicker #datepickerdate></nb-datepicker>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['date']) && formDir.submitted" for="date">{{ 'general.requiredDate' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="amount">{{ 'general.amount' | translate }} (<span *ngIf="currency">{{currency.symbol}}</span>) *</label>
+				<div class="col-5">
+					<input class="form-control" id="amount" name="amount" formControlName="amount"  nbInput placeholder="{{ 'general.amount' | translate }}" fullWidth status="primary" type="number" min="1">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['amount']) && formDir.submitted" for="amount">{{ 'general.requiredAmount' | translate }}</span>
+				</div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="totalTax">{{ 'general.tax' | translate }} (<span *ngIf="currency">{{currency.symbol}}</span>) *</label>
+				<div class="col-5">
+					<input class="form-control" id="totalTax" name="totalTax" formControlName="totalTax"  nbInput placeholder="{{ 'general.amount' | translate }}" fullWidth status="primary" >
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['totalTax']) && formDir.submitted" for="amount">{{ 'general.taxRequired' | translate }}</span>
+
+        </div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="vendor">{{ 'general.vendor' | translate }} *</label>
+				<div class="col-4">
+					<nb-select id="vendor" name="vendor" formControlName="vendorId"  placeholder="{{ 'general.vendor' | translate }}" fullWidth
+            status="primary" [disabled]="bill != null && bill.vendorId != null && bill.vendorId !== 0">
+						<nb-option *ngFor="let vendor of vendors" [(value)]="vendor.id">{{vendor.name}}</nb-option>
+					</nb-select>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['vendor']) && formDir.submitted" for="vendor">{{ 'general.requiredVendor' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="reference">{{ 'general.reference' | translate }}</label>
+				<div class="col-5">
+					<input class="form-control" id="reference" name="reference" formControlName="reference" nbInput placeholder="{{ 'general.reference' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['reference']) && formDir.submitted" for="reference">{{ 'general.requiredReference' | translate }}</span>
+				</div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="bankAccount">{{ 'general.bankAccount' | translate }} *</label>
+				<div class="col-4">
+          <nb-select id="bankAccount" name="bankAccount" formControlName="bankAccountId"  placeholder="{{ 'general.bankAccount' | translate }}" fullWidth status="primary">
+						<nb-option *ngFor="let item of banks" [(value)]="item.id">{{item.bankName}}</nb-option>
+					</nb-select>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['bankAccountId']) && formDir.submitted" for="vendor">{{ 'general.requiredBankAccount' | translate }}</span>
+
+				</div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="account">{{ 'general.account' | translate }}</label>
+				<div class="col-4">
+					<nb-select id="account" name="account" formControlName="accountBalanceId"  placeholder="{{ 'general.account' | translate }}" fullWidth status="primary">
+						<nb-option-group *ngFor="let item of accountBalances" title="{{item.category}}">
+              <nb-option *ngFor="let account of item.accounts" [(value)]="account.id"> {{account.accountName}}</nb-option>
+            </nb-option-group>
+					</nb-select>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="account">{{ 'general.category' | translate }}</label>
+				<div class="col-4">
+          <nb-select id="account" name="account" formControlName="accountId"  placeholder="{{ 'general.category' | translate }}" fullWidth status="primary">
+						<nb-option-group *ngFor="let item of accountCategories" title="{{item.category}}">
+              <nb-option *ngFor="let account of item.accounts" [(value)]="account.id">
+                {{account.accountName}}
+                </nb-option>
+            </nb-option-group>
+					</nb-select>
+				</div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="description">{{ 'general.description' | translate }}</label>
+				<div class="col-5">
+					<textarea class="form-control" id="description" name="description" formControlName="description" nbInput placeholder="{{ 'general.description' | translate }}" fullWidth status="primary" rows="6"></textarea>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

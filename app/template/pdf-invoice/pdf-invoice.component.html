@@ -1,0 +1,162 @@
+<nb-layout>
+  <nb-layout-column>
+    <div class="content" *ngIf="invoice" >
+      <div class="p-5" id="pdfContent">
+        <div class="row" >
+          <div class="col-6">
+            <img src="/assets/images/logo_transparent_2.png" alt="Company logo" width="200" />
+          </div>
+          <div class="col-6 text-end">
+            <h1>Invoice</h1>
+
+            <div class="mt-4"><b>Reference: </b> {{invoice.reference}}</div>
+            <div class="mt-2"> <b>Invoice date:</b> {{invoice.invoiceDate | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2" *ngIf="invoice.invoiceNumber"><b>Order number:</b> {{invoice.invoiceNumber}}</div>
+          </div>
+        </div>
+
+        <div class="row" >
+          <div class="col-6">
+            <div>
+              <h6>Company name</h6>
+            </div>
+            <div>
+              {{invoice.customer.phone}}
+            </div>
+            <div *ngIf="invoice.customer.billingAddress">
+              <address>
+                {{invoice.customer.billingAddress.addressLine1}} <br />
+                {{invoice.customer.billingAddress.addressLine2}}<br />
+                {{invoice.customer.billingAddress.zipCode}} {{invoice.customer.billingAddress.city}} - {{invoice.customer.billingAddress.country}}
+              </address>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+
+          </div>
+        </div>
+
+        <div class="row  mt-4">
+          <div class="col-6">
+            <div class="mb-2"><b>Invoiced to</b></div>
+            <div>
+              {{invoice.customer.name}}
+            </div>
+            <div>
+              {{invoice.customer.phone}}
+            </div>
+            <div *ngIf="invoice.customer.billingAddress">
+              <address>
+                {{invoice.customer.billingAddress.addressLine1}} <br />
+                {{invoice.customer.billingAddress.addressLine2}}<br />
+                {{invoice.customer.billingAddress.zipCode}} {{invoice.customer.billingAddress.city}} - {{invoice.customer.billingAddress.country}}
+              </address>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+            <div class="">
+              <h4>Amount due</h4>
+              <h2 class="text-primary">$ {{invoice.totalAmount}} (USD)</h2>
+              <div class="mt-2"><b>Due date: </b> {{invoice.issueDate | date: 'MMM d, y, HH:mm'}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-12">
+            <h6>Products & Services</h6>
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Items</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Tax</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Total price</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="invoice.invoiceLineItems && invoice.invoiceLineItems.length > 0; else empty">
+                  <ng-container *ngFor="let item of invoice.invoiceLineItems">
+                    <tr>
+                      <td>
+                        <b>
+                          <span *ngIf="item.product != null && item.category === 'product'" >{{item.product.name}} </span>
+                          <span *ngIf="item.service != null && item.category === 'service'" >{{item.service.name}}</span>
+                        </b>
+                        <span><br />{{item.description}}</span>
+                      </td>
+                      <td>{{item.category}}</td>
+                      <td>{{item.quantity}}</td>
+                      <td>{{item.price}}</td>
+                      <td *ngIf="item.product != null && item.category === 'product'" >{{item.product.tax.name}} ({{item.product.tax.rate}}%)</td>
+                      <td *ngIf="item.service != null && item.category === 'service'" >{{item.service.tax.name}} ({{item.service.tax.rate}}%)</td>
+                      <td>{{item.discount}}</td>
+                      <td>{{item.totalPrice}}</td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+                <ng-template #empty>
+                  <tbody>
+                    <tr>
+                    <td colspan="8" class="text-center"><b>No item added</b></td>
+                    </tr>
+                  </tbody>
+                </ng-template>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-4">
+              </div>
+              <div class="col-8 bg-light">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>Sub total: </td>
+                      <td>$ {{invoice.subTotalPrice}}</td>
+                    </tr>
+                    <tr>
+                      <td>Discount:</td>
+                      <td>$ {{invoice.totalDiscount}}</td>
+                    </tr>
+                    <tr>
+                      <td>Tax:</td>
+                      <td>$ {{invoice.totalTax}}</td>
+                    </tr>
+                    <ng-container *ngIf="invoice.totalCreditNote">
+                      <tr>
+                        <td>Credit note: </td>
+                        <td>$ {{invoice.totalCreditNote}}</td>
+                      </tr>
+                    </ng-container>
+                    <tr>
+                      <td><b>Total price:</b></td>
+                      <td><b>$ {{invoice.totalAmount}}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5" *ngIf="invoice.description">
+          <div class="col-12">
+            <div for="description">Note & terms </div>
+            <div>{{invoice.description}}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </nb-layout-column>
+</nb-layout>

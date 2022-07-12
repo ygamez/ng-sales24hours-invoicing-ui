@@ -1,0 +1,90 @@
+<ng-container>
+  <div class="container-fluid">
+	<div class="row mb-3">
+	  <div class="col-12">
+      <a class="float-end" href="#" routerLink="/dashboard/setting-list/pricings" nbButton status="primary" size="small">
+        <nb-icon icon="edit-outline"></nb-icon> {{ 'general.updatePlan' | translate }}
+      </a>
+	  </div>
+	</div>
+  <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+      <nb-card-header class="row">
+        <h4 class="col-6">{{ 'general.subscriptions' | translate }} </h4>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-4">
+          <div class="col-6">
+            <nb-select [(ngModel)]="_tableService.pageSize">
+              <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+              <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+              <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div>
+          <div class="table-responsive mt-4">
+            <table class="table table-striped table-borderless">
+              <thead>
+                <tr>
+                  <th *ngIf="userIsSuperAdmin && parentRoute === 'super-admin-console'" class="name" scope="col" >User</th>
+                  <th class="name" scope="col" >{{ 'general.plan' | translate }}</th>
+                  <th class="amount" scope="col">{{ 'general.price' | translate }}</th>
+                  <th class="purchase-date" scope="col">{{ 'general.subscribedOn' | translate }}</th>
+                  <th class="purchase-date" scope="col" >{{ 'general.startAt' | translate }}</th>
+                  <th class="supported-date" scope="col">{{ 'general.renewAt' | translate }}</th>
+                  <th *ngIf="parentRoute !== 'super-admin-console'">{{ 'general.status' | translate }}</th>
+                  <th>{{'table.actions' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody >
+                <tr *ngFor="let item of subscriptions | async">
+                  <td *ngIf="userIsSuperAdmin && parentRoute === 'super-admin-console'">
+                    <nb-user size="large"
+                      status="primary"
+                      [name]="item.user.fullname"
+                      [title]="item.user.email">
+                    </nb-user>
+                  </td>
+                  <td>
+                    <b>
+                      <ngb-highlight [result]="item.plan.title" [term]="_tableService.searchTerm"></ngb-highlight>
+                    </b>
+                  </td>
+                  <td>
+                    <span *ngIf="item.plan && item.plan.currency">{{item.plan.currency.symbol}}</span>
+                    <ngb-highlight *ngIf="item.plan" [result]="item.plan.price" [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="item.createdAt | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="item.currentPeriodStart | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="item.currentPeriodEnd | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <span class="badge badge-{{item.badgeStatus}}">{{item.status}}</span>
+                  </td>
+                  <td>
+                    <a  nbButton ghost status="danger" [href]="item.subscriptionPortalUrl" *ngIf="item.subscriptionPortalUrl">
+                      <nb-icon icon="edit-outline"></nb-icon>
+                    </a>
+                    <a nbButton status="warning" ghost size="tiny" (click)="cancelSubscription(item)" *ngIf="item.plan.price > 0 && item.active">
+                      {{ 'form.cancel' | translate }}
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ngb-pagination [(page)]="_tableService.page"
+                          [pageSize]="_tableService.pageSize"
+                          [collectionSize]="total$ | async">
+          </ngb-pagination>
+        </div>
+      </nb-card-body>
+  </nb-card>
+  </div>
+</ng-container>

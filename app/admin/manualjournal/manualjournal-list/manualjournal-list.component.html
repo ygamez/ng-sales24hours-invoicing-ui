@@ -1,0 +1,91 @@
+<ng-container>
+  <div class="container-fluid">
+	<div class="row mb-3">
+	  <div class="col-12">
+      <a class="float-end" href="#" [routerLink]="['/dashboard/manual-journal/create', lastManualJournalId]" nbButton status="primary" size="small"> <nb-icon icon="plus"></nb-icon> New Manual Journal</a>
+	  </div>
+	</div>
+      <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+          <nb-card-header class="row">
+						<h4 class="col-6">{{ 'general.manualJournals' | translate }}</h4>
+          </nb-card-header>
+          <nb-card-body>
+						<div class="row mt-4">
+							<div class="col-6">
+								<nb-select [(ngModel)]="_tableService.pageSize">
+									<nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+								</nb-select>
+							</div>
+							<div class="col-6">
+								<nb-form-field class="float-end">
+									<nb-icon nbPrefix icon="search-outline"></nb-icon>
+									<input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+								</nb-form-field>
+							</div>
+						</div>
+						<div>
+							<div class="table-responsive mt-4">
+								<table class="table table-striped table-borderless">
+									<thead>
+										<tr>
+											<th class="reference" scope="col" sortable="reference" (sort)="onSort($event)">{{ 'general.reference' | translate }}</th>
+											<th class="date" scope="col" sortable="date" (sort)="onSort($event)">{{ 'general.date' | translate }}</th>
+											<th class="total" scope="col" sortable="debits" (sort)="onSort($event)">{{ 'general.debits' | translate }}</th>
+											<th class="sub-total" scope="col" sortable="credits" (sort)="onSort($event)">{{ 'general.credits' | translate }}</th>
+											<th class="status" scope="col" sortable="status" (sort)="onSort($event)">{{ 'general.status' | translate }}</th>
+											<th>{{ 'table.actions' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let item of manualjournals | async">
+											<td>
+                        <a [routerLink]="['/dashboard/manual-journal/details', item.id]">
+                          <b>
+												    <ngb-highlight [result]="item.reference" [term]="_tableService.searchTerm"></ngb-highlight>
+                          </b>
+                        </a>
+											</td>
+                      <td>
+												<ngb-highlight [result]="item.date | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+                      </td>
+											<td class="text-primary">
+                        <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+												<ngb-highlight [result]="item.totalDebitPrice" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+											<td class="text-primary">
+                        <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+												<ngb-highlight [result]="item.totalCreditPrice" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+											<td>
+                        <span class="badge {{item.badgeStatus}}">
+                          <ngb-highlight [result]="item.status" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </span>
+											</td>
+											<td>
+												<a nbButton ghost status="basic" [routerLink]="['/manual-journal/details',item.id]" >
+												  <nb-icon icon="eye-outline"></nb-icon>
+												</a>
+												<a [routerLink]="['/dashboard/manual-journal/edit',item.id]" nbButton ghost status="warning">
+												  <nb-icon icon="edit"></nb-icon>
+												</a>
+												<a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+												  <nb-icon icon="close-outline"></nb-icon>
+												</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<ngb-pagination
+                [(page)]="_tableService.page"
+                [pageSize]="_tableService.pageSize"
+                [collectionSize]="total$ | async">
+							</ngb-pagination>
+						</div>
+          </nb-card-body>
+      </nb-card>
+  </div>
+</ng-container>

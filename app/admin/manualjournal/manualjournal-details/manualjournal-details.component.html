@@ -1,0 +1,151 @@
+<div class="container" *ngIf="manualJournal">
+	<div class="row mb-2">
+	  <div class="col-12">
+      <a class="float-end" nbButton size="small" status="warning" [routerLink]="['/dashboard/manual-journal/edit', manualJournal.id]" >edit <nb-icon icon="edit-outline"></nb-icon></a>
+	  </div>
+	</div>
+  <nb-card accent="primary">
+    <nb-card-header>
+      <h6>{{ 'general.manualJournal' | translate }}</h6>
+      <small>{{'general.reference' | translate}}: <b>{{manualJournal.reference}}</b></small>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="mt-4">
+        <nb-stepper orientation="horizontal" #stepper [(selectedIndex)]="stepperIndex" disableStepNavigation>
+          <nb-step label="{{labelOne}}" [completed]="approved">
+            <h4>{{'manualJournal.stepperMessage1' | translate}}</h4>
+            <p>
+              <span class="mt-1">{{'general.status' | translate }}: </span> <span class="badge {{manualJournal.badgeStatus}}">{{manualJournal.status}}</span>
+              <br />
+            <button nbButton size="small" status="primary" class="mt-2" (click) ="approve(manualJournal)">Approve <nb-icon icon="checkmark-outline"></nb-icon></button>
+            </p>
+          </nb-step>
+          <nb-step label="{{labelTwo}}" [completed]="published">
+            <div class="text-end">
+              <h4>{{'manualJournal.stepperMessage2' | translate}}</h4>
+              <p><span class="mt-1">{{'general.status' | translate }}: </span> <span class="badge {{manualJournal.badgeStatus}}">{{manualJournal.status}}</span> </p>
+              <button nbButton status="primary" size="small" (click)="publish(manualJournal)">Publish <nb-icon icon="paper-plane-outline"></nb-icon></button>
+            </div>
+          </nb-step>
+          <nb-step [hidden]="true" label="Third step">
+            <div class="text-end">
+              <h4>{{'manualJournal.stepperMessage2' | translate}}</h4>
+              <p>{{'general.status' | translate }}:
+                <span class="badge {{manualJournal.badgeStatus}}">{{manualJournal.status}}</span>  </p>
+                <button nbButton nbStepperNext status="primary" size="small" [disabled]="manualJournal.status === 'Publish'">
+                  <nb-icon icon="file-outline"></nb-icon>
+                  {{'general.publish' | translate }}
+                </button>
+             </div>
+          </nb-step>
+
+        </nb-stepper>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+	<div class="row mt-5 mb-2">
+	  <div class="col-12">
+      <a class="float-end me-2" (click)="captureScreen(manualJournal.reference)" nbButton status="primary" size="small">
+        <nb-icon icon="download-outline"></nb-icon>
+        {{'general.download' | translate }}
+      </a>
+	  </div>
+	</div>
+  <nb-card accent="primary" id="pdfContent">
+    <nb-card-body>
+      <div class="p-5">
+        <div class="row">
+          <div class="col-6">
+            <div class="row" *ngIf="manualJournal.notes">
+              <div class="col-10">
+                <div class="mb-2"><b> {{'general.notes' | translate }}</b></div>
+                <div>
+                  {{manualJournal.notes}}
+                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+            <div><b> {{'general.date' | translate }}:</b> {{manualJournal.date | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2"><b> {{'general.reference' | translate }}: </b> {{manualJournal.reference}}</div>
+            <div class="mt-2"><b>{{'general.status' | translate }}: </b><span class="badge  {{manualJournal.badgeStatus}}">{{manualJournal.status}}</span></div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <h6 class="mt-5"> {{'general.items' | translate }} </h6>
+          <div class="table-responsive">
+            <table class="table ">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">{{ 'general.account' | translate }}</th>
+                  <th scope="col">{{ 'general.description' | translate }}</th>
+                  <th scope="col">{{ 'general.contact' | translate }}</th>
+                  <th scope="col">{{ 'general.tax' | translate }}</th>
+                  <th scope="col">{{ 'general.debit' | translate }}</th>
+                  <th scope="col">{{ 'general.credit' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="manualJournal.manualJournalLineItems && manualJournal.manualJournalLineItems.length > 0">
+                <ng-container *ngFor="let item of manualJournal.manualJournalLineItems">
+                  <tr>
+                    <td>{{item.account.accountName}}</td>
+                    <td>{{item.description}}</td>
+                    <td>
+                      <span *ngIf="item.customer != null && item.category === 'customer'" >{{item.customer.name}} </span>
+                      <span *ngIf="item.vendor != null && item.category === 'vendor'" >{{item.vendor.name}}</span>
+                    </td>
+                    <td>
+                      <span *ngIf="item.tax">{{item.tax.name}} ({{item.tax.rate}}%)</span>
+                      <span *ngIf="!item.tax">N/A</span>
+                    </td>
+                    <td><span *ngIf="manualJournal.currency && item.debit">{{manualJournal.currency.symbol}}</span> {{item.debit}}</td>
+                    <td><span *ngIf="manualJournal.currency && item.credit">{{manualJournal.currency.symbol}}</span> {{item.credit}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-borderless bg-light">
+                  <tbody>
+                    <tr class="text-primary">
+                      <td colspan="2">{{'general.debit' | translate}}</td>
+                      <td colspan="2">{{'general.credit' | translate}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'general.subTotal' | translate }}: </td>
+                      <td><span *ngIf="manualJournal.currency">{{manualJournal.currency.symbol}}</span> {{manualJournal.subTotalDebitPrice}}</td>
+                      <td>{{ 'general.subTotal' | translate }}: </td>
+                      <td><span *ngIf="manualJournal.currency">{{manualJournal.currency.symbol}}</span> {{manualJournal.subTotalCreditPrice}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'general.totalTax' | translate }}:</td>
+                      <td><span *ngIf="manualJournal.currency">{{manualJournal.currency.symbol}}</span> {{manualJournal.totalDebitTax}}</td>
+                      <td>{{ 'general.totalTax' | translate }}:</td>
+                      <td><span *ngIf="manualJournal.currency">{{manualJournal.currency.symbol}}</span> {{manualJournal.totalCreditTax}}</td>
+                    </tr>
+                    <tr>
+                      <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                      <td><b><span *ngIf="manualJournal.currency">{{manualJournal.currency.symbol}}</span> {{manualJournal.totalDebitPrice}}</b></td>
+                      <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                      <td><b><span *ngIf="manualJournal.currency">{{manualJournal.currency.symbol}}</span> {{manualJournal.totalCreditPrice}}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+</div>

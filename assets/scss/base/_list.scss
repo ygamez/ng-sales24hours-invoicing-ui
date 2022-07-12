@@ -1,0 +1,125 @@
+.list-type-01 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+	    position: relative;
+		padding: 6px 25px 5px 0;
+		font-weight: 500;
+		i {
+		    position: absolute;
+		    top: 13px;
+		    right: 0;
+		    color: $px-dark;
+		}
+	}
+	&.theme {
+		li {
+			i {
+				color: $px-primary;
+			}
+		}
+	}
+	&.white {
+		li {
+			i {
+				color: $px-white;
+			}
+		}
+	}
+}
+
+.list-type-02 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+	    position: relative;
+		padding: 8px 0 8px 25px;
+		i {
+		    position: absolute;
+		    top: 13px;
+		    left: 0;
+		    color: $px-secondary;
+		}
+	}
+	&.theme {
+		li {
+			i {
+				color: $px-primary;
+			}
+		}
+	}
+}
+
+.list-type-03 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+        position: relative;
+	    padding: 8px 0;
+	    display: flex;
+	    align-items: center;
+		i {
+	        max-width: 32px;
+		    flex: 0 0 32px;
+		    line-height: 32px;
+		    background: $px-secondary;
+		    text-align: center;
+		    border-radius: 50%;
+		    margin-right: 20px;
+		    color: $px-white;
+		}
+	}
+}
+
+.list-type-04 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+		position: relative;
+		padding: 2px 0 2px 20px;
+		&:after {
+			content:"";
+			width: 10px;
+			height: 10px;
+			border: 2px solid $px-secondary;
+			position: absolute;
+			top: 9px;
+			left: 0;
+			border-radius: 50%;
+		}
+	}
+}
+
+.list-type-05 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+		position: relative;
+		padding: 2px 0 2px 30px;
+		&:after {
+		    content: "";
+		    width: 9px;
+		    height: 15px;
+		    border-right: 2px solid $px-primary;
+		    position: absolute;
+		    top: 6px;
+		    left: 0;
+		    border-bottom: 2px solid $px-primary;
+		    transform: rotate(45deg);
+		}
+	}
+}
+
+.list-type-06 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+		padding: 6px 0;
+	}
+}

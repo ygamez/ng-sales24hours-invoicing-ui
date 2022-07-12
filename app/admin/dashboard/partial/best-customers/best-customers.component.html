@@ -1,0 +1,55 @@
+<nb-card >
+    <nb-card-header>
+      Top customers
+      <button nbButton size="small" ghost status="primary" class="float-end">
+        <nb-icon icon="download-outline"></nb-icon>
+        Export
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+        <table class="table table-borderless ">
+            <thead>
+              <tr>
+                <th scope="col">Customers</th>
+                <th scope="col">Orders</th>
+                <th scope="col">Amounts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <nb-user size="medium"
+                            name="Melanie Mitchell"
+                            title="Los Angeles"
+                            [showTitle]="true">
+                    </nb-user>
+                </td>
+                <td>168</td>
+                <td>$15,120</td>
+              </tr>
+              <tr>
+                <td>
+                    <nb-user size="medium"
+                            name="Janne Doe"
+                            title="New York"
+                            [showTitle]="true">
+                    </nb-user>
+                </td>
+                <td>150</td>
+                <td>$14,120</td>
+              </tr>
+              <tr>
+                <td>
+                    <nb-user size="medium"
+                            name="Paul Crevard"
+                            title="Paris"
+                            [showTitle]="true">
+                    </nb-user>
+                </td>
+                <td>121</td>
+                <td>$11,120</td>
+              </tr>
+            </tbody>
+        </table>
+    </nb-card-body>
+  </nb-card>

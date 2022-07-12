@@ -1,0 +1,101 @@
+@import '../../../themes.scss';
+
+$legend-all-orders-color: #00977e;
+$legend-payment-color: #6935ca;
+$legend-canceled-color: #3f4fda;
+
+@include nb-install-component() {
+
+
+
+  .chart-line2-card-height{
+    min-height: 490px;
+  }
+
+  .progress{
+    height: 4px;
+  }
+
+  nb-tabset {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    ::ng-deep ul {
+      // make same size as card header
+      border-color: transparent;
+      padding-bottom: 1px;
+      .tab-link {
+        padding: 1.25rem 2rem;
+      }
+    }
+  }
+
+  nb-tab {
+    flex: 1;
+    padding: 0 0 1.25rem;
+    font-weight: 800;
+  }
+
+  .chart-panel{
+    height: 40vh;
+  }
+
+  .chart-container {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  ngx-profit-chart,
+  ngx-orders-chart {
+    padding: 0 1.25rem;
+  }
+
+  @media (min-width:767px) {
+    nb-icon.card-icon {
+      font-size: 4.75rem;
+      padding: 20px;
+      border-radius: 5px;
+      color: #fff;
+    }
+
+    nb-card.card-text{
+      color: #718096;
+    }
+  }
+
+  nb-icon.card-icon {
+    font-size: 4rem;
+    padding: 20px;
+    border-radius: 5px;
+    color: #fff;
+  }
+
+  nb-card.card-text{
+    color: #718096;
+  }
+
+  @media (max-width:992px) {
+    nb-icon.card-icon {
+      font-size: 4.75rem;
+      padding: 20px;
+      border-radius: 5px;
+      color: #fff;
+    }
+  }
+
+  nb-card.last-invoices{
+    height: 605px;
+  }
+
+  nb-card.last-transactions{
+    height: 655px;
+  }
+
+  nb-card.last-estimates{
+    height: 605px;
+  }
+}

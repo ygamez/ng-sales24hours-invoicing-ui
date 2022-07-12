@@ -1,0 +1,63 @@
+<div class="container">
+  <nb-card accent="primary">
+    <nb-card-header>
+      {{ 'bankAccount.index.btnConnectBank' | translate }}
+    </nb-card-header>
+    <nb-card-body class="mb-5">
+      <div class="row">
+        <div class="col-12">
+          <div class="text-center">
+            <div><img class="img-fluid" src="assets/images/stripe-vector.svg" alt="stripe credit card" width="30%"></div>
+            <h6> {{ 'bankConnect.connectStripeWarning' | translate }} </h6>
+            <p class="mt-3">
+              <span class="text-warning">
+                {{ 'bankConnect.stripeWarning' | translate }}
+              </span>
+            </p>
+            <div> <a class="stripe-connect" (click)="createStripeAccount()" [nbSpinner]="connectingStripe"><span>
+              {{ 'bankConnect.btnStripe' | translate }}
+            </span></a></div>
+          </div>
+          <div class="mt-5 text-center">
+            <div class="paypal-icon text-primary"><i class="fab fa-fw fa-paypal"></i></div>
+            <p class="mt-3">{{ 'bankConnect.connectPayPalWarning' | translate }}<br>
+              <span class="text-warning">
+                {{ 'bankConnect.PaypalWarning' | translate }}
+              </span>
+            </p>
+            <div>
+              <a class="ml-3" (click)="createPaypalAccount()" nbButton status="primary" size="small" [nbSpinner]="connectingPayPal">
+                <span>
+                  {{ 'bankConnect.btnPayPal' | translate }}
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="mt-5 text-center">
+            <div class="paypal-icon text-primary"><i class="fas fa-university"></i></div>
+            <p class="mt-3">{{ 'bankConnect.manualBank' | translate }}</p>
+            <div>
+              <a routerLink="/dashboard/bank-account/create" nbButton status="primary" size="small">
+                <nb-icon icon="plus"></nb-icon>
+                {{ 'bankConnect.btnManual' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Connect PayPal Account</nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+        <button nbButton size="tiny" (click)="ref.close()">Cancel</button>
+        <a nbButton size="tiny" status="danger" style="margin-left: 12px;" [href]="paypalActionUrl">Continue</a>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
+
+</div>

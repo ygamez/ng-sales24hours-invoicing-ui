@@ -1,0 +1,140 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <h6 class="mt-4 ">{{'general.stripeApiCredentials' | translate }}</h6>
+      <div>
+        <small>Setup stripe credentials for stripe subscriptions and stripe account onboarding  </small>
+      </div>
+
+      <div class="mt-4 form-group row mb-4">
+				<label class="col-3" for="stripePublishableKey">{{'general.stripePublishableKey' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="stripePublishableKey" name="stripePublishableKey"
+            formControlName="stripePublishableKey"  nbInput placeholder="{{'general.stripePublishableKey' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="stripeSecretKey">{{'general.stripeSecretKey' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="stripeSecretKey" name="stripeSecretKey"
+            formControlName="stripeSecretKey" nbInput placeholder="{{'general.stripeSecretKey' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="subscriptionWebhookSecret">{{'general.subscriptionWebhookSecret' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="subscriptionWebhookSecret" name="subscriptionWebhookSecret"
+            formControlName="subscriptionWebhookSecret" nbInput placeholder="{{'general.webhookSigningSecret' | translate }}"
+            fullWidth status="primary" type="text">
+            <div>
+              <small>{{'general.signingSecretDesc' | translate }}: <b>https://yourdomain.com/api/subscriptions/stripe/webhook</b> </small>
+            </div>
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="customerCheckoutWebhookSecret">{{'general.customerCheckoutWebhookSecret' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="customerCheckoutWebhookSecret" name="customerCheckoutWebhookSecret"
+            formControlName="customerCheckoutWebhookSecret" nbInput placeholder="{{'general.webhookSigningSecret' | translate }}"
+            fullWidth status="primary" type="text">
+            <div>
+              <small>{{'general.signingSecretDesc' | translate }}: <b>https://yourdomain.com/api/stripe/account/checkout/completed</b> </small>
+            </div>
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="transactionWebhookSecret">{{'general.transactionWebhookSecret' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="transactionWebhookSecret" name="transactionWebhookSecret"
+            formControlName="transactionWebhookSecret" nbInput placeholder="{{'general.webhookSigningSecret' | translate }}"
+            fullWidth status="primary" type="text">
+            <div>
+              <small>{{'general.signingSecretDesc' | translate }}: <b>https://yourdomain.com/api/stripe/account/transaction/webhook</b> </small>
+            </div>
+				</div>
+			</div>
+
+      <h6  class="mt-5">{{'general.paypalApiCredentials' | translate }}</h6>
+      <div class="mt-4  form-group row mb-4">
+				<label class="col-3" for="paypalClientId">{{'general.paypalClientId' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="paypalClientId" name="paypalClientId"
+            formControlName="paypalClientId"  nbInput placeholder="{{'general.paypalClientId' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="paypalSecret">{{'general.paypalSecret' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="paypalSecret" name="paypalSecret"
+            formControlName="paypalSecret" nbInput placeholder="{{'general.paypalSecret' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row">
+        <label class="col-3" for="paypalMode">{{ 'general.paypalMode' | translate }}</label>
+        <div class="col-7">
+          <nb-select id="paypalMode" formControlName="paypalMode" status="primary" fullWidth>
+            <nb-option value="sandbox">{{ 'general.sandbox' | translate }}</nb-option>
+            <nb-option value="live">{{ 'general.live' | translate }}</nb-option>
+          </nb-select>
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['paypalMode']) && formDir.submitted" for="type">
+            {{ 'general.requiredType' | translate }}
+          </span>
+        </div>
+      </div>
+
+      <h6  class="mt-5">{{'general.partnerApi' | translate }}</h6>
+
+      <div class="mt-4  form-group row mb-4">
+				<label class="col-3" for="paypalPlatformPartnerClientId">{{'general.partnerClientId' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="paypalPlatformPartnerClientId" name="paypalPlatformPartnerClientId"
+            formControlName="paypalPlatformPartnerClientId"  nbInput placeholder="{{'general.partnerClientId' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="paypalPlatformPartnerSecret">{{'general.partnerSecret' | translate }}</label>
+				<div class="col-7">
+					<input class="form-control" id="paypalPlatformPartnerSecret" name="paypalPlatformPartnerSecret"
+            formControlName="paypalPlatformPartnerSecret" nbInput placeholder="{{'general.partnerSecret' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+        <label class="col-3" for="paypalPlatformMode">{{ 'general.paypalMode' | translate }}</label>
+        <div class="col-7">
+          <nb-select id="paypalPlatformMode" formControlName="paypalPlatformMode" status="primary" fullWidth>
+            <nb-option value="sandbox">{{ 'general.sandbox' | translate }}</nb-option>
+            <nb-option value="live">{{ 'general.live' | translate }}</nb-option>
+          </nb-select>
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['paypalMode']) && formDir.submitted" for="type">
+            {{ 'general.requiredType' | translate }}
+          </span>
+        </div>
+      </div>
+
+			<div class="mg-top form-group row mb-4">
+				<div class="offset-sm-3 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{'form.save' | translate }}</button>
+				</div>
+			</div>
+
+		</form>
+	</nb-card-body>
+</nb-card>

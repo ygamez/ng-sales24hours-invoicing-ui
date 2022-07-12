@@ -1,0 +1,10 @@
+@import '../../../../../../themes.scss';
+
+@include nb-install-component() {
+  flex: 1;
+  .echart {
+    display: block;
+    height: 380px;
+    width: 100%;
+  }
+}

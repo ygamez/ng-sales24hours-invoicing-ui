@@ -1,0 +1,29 @@
+@import '../../../themes.scss';
+
+@include nb-install-component() {
+    nb-card {
+        margin-top: 12px;
+
+        .btn-group{
+            button{
+                margin-right: 8px;
+            }
+        }
+        table{
+            margin-top: 30px;
+            color: nb-theme(table-text-color) !important;
+            th{
+                vertical-align: middle;
+            }
+            td{
+                vertical-align: middle;
+                a{
+                    text-decoration: none;
+                    font-size: 15px;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
+

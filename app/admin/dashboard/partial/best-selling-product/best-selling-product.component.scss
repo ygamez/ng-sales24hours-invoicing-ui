@@ -1,0 +1,16 @@
+@import '../../../../../themes.scss';
+
+@include nb-install-component() {
+    nb-card table{
+        margin-top: 30px;
+        color: nb-theme(table-text-color) !important;
+        td{
+            vertical-align: middle;
+            a{
+                text-decoration: none;
+                font-size: 15px;
+                font-weight: 700;
+            }
+        }
+    }
+}

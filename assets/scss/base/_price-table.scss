@@ -1,0 +1,31 @@
+.price-table-01 {
+    .pt-head {
+	    i {
+    	    font-size: 60px;
+		    color: $px-white;
+		    position: absolute;
+		    top: 30px;
+		    right: 20px;
+		    opacity: 0.5;
+	    }
+	    &:after {
+    	    content: "";
+		    position: absolute;
+		    top: -50px;
+		    left: -20px;
+		    right: -10px;
+		    bottom: 0;
+		    background: $px-primary;
+		    z-index: -1;
+		    transform: rotate(-7deg);
+	    }
+    }
+
+    &.active {
+    	.pt-head {
+    		&:after {
+    			background:$px-secondary;
+    		}
+    	}
+    }
+}

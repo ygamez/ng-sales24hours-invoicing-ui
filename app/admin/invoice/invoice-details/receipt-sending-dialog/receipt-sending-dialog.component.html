@@ -1,0 +1,20 @@
+<nb-card accent="primary" class="dialog">
+  <nb-card-header>
+    Send a receipt...
+  </nb-card-header>
+  <nb-card-body>
+    <nb-card class="receipt-item p-3 bg-primary text-white" *ngFor="let item of receipts" (click)="confirm(item)">
+      <nb-card-body>
+        <div>
+          Paid on: <b>{{item.createdAt | date: 'MMM d, y, HH:mm'}}</b> <br />
+          Amount: <b>{{item.amount}}</b> <br />
+          Payment method: <b>{{item.paymentMethod}}</b> <br />
+          Status: <b><span *ngIf="item.paymentCompleted">Paid</span><span *ngIf="!item.paymentCompleted">Paid</span></b>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton size="small" status="basic" (click)="close()">Cancel</button>
+  </nb-card-footer>
+</nb-card>

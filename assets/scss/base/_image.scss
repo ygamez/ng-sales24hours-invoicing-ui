@@ -1,0 +1,43 @@
+img {
+	max-width: 100%;
+}
+
+.bg-center {
+	background-position: center;
+}
+
+.bg-cover {
+	background-size: cover;
+}
+
+.bg-no-repeat {
+	background-repeat: no-repeat;
+}
+
+
+.object-fit {
+	-o-object-fit: cover;
+ 	object-fit: cover;
+}
+
+
+
+@include media-breakpoint-up(lg) {
+	.img-lg-120 {
+		max-width: 120%;
+	}
+
+	.img-lg-140 {
+		max-width: 140%;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.img-md-120 {
+		max-width: 120%;
+	}
+
+	.img-md-140 {
+		max-width: 140%;
+	}	
+}

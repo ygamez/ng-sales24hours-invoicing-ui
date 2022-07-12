@@ -1,0 +1,67 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{ 'assets.index.title' | translate }}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="name">{{ 'general.name' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="name" name="name" formControlName="name" nbInput placeholder="Name" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['name']) && formDir.submitted" for="name">
+            {{ 'general.requiredName' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="amount">
+          {{ 'general.amount' | translate }} *
+        </label>
+				<div class="col-5">
+					<input class="form-control" id="amount" name="amount" formControlName="amount"  nbInput placeholder="Amount" fullWidth status="primary" type="number">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['amount']) && formDir.submitted" for="amount">
+            {{ 'general.requiredAmount' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="purchase-date">
+          {{ 'assets.index.purchaseDate' | translate }} *
+        </label>
+				<div class="col-5">
+					<input class="form-control" id="purchase-date" name="purchaseDate" formControlName="purchaseDate" nbInput placeholder="Purchase date" status="primary" autocomplete="off" [nbDatepicker]="datepickerpurchaseDate">
+					<nb-datepicker #datepickerpurchaseDate></nb-datepicker>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['purchaseDate']) && formDir.submitted" for="purchase-date">
+            {{ 'assets.form.requiredPurchaseDate' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="supported-date">{{ 'assets.index.supportedDate' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="supported-date" name="supportedDate" formControlName="supportedDate" nbInput placeholder="Supported date" status="primary" autocomplete="off" [nbDatepicker]="datepickersupportedDate">
+					<nb-datepicker #datepickersupportedDate></nb-datepicker>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['supportedDate']) && formDir.submitted" for="supported-date">
+            {{ 'assets.form.requiredSupportedDate' | translate }}
+          </span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="description">{{ 'general.description' | translate }}</label>
+				<div class="col-5">
+					<textarea class="form-control" id="description" name="description" formControlName="description" nbInput placeholder="Description" fullWidth status="primary" rows="6"></textarea>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

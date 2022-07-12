@@ -1,0 +1,276 @@
+// Color System
+$px-primary:				#3366ff !default;
+$px-secondary:				#15db95 !default;
+$px-success:				#2dca8c !default;
+$px-danger:					#ff5c75 !default;
+$px-warning:				#ff9f1c !default;
+$px-info:					#50b5ff !default;
+
+
+$px-dark:					#171347 !default;
+$px-light:					#f1f6fd !default;
+
+
+
+$px-white:					#ffffff !default;
+$px-gray-100:				#f1f6fd !default;
+$px-gray-200:				#eff2f7 !default;
+$px-gray-300:				#e2e8f0 !default;
+$px-gray-400:				#cbd5e0 !default;
+$px-gray-500:				#a0aec0 !default;
+$px-gray-600:				#718096 !default;
+$px-gray-700:				#4a5568 !default;
+$px-gray-800:				#2d3748 !default;
+$px-gray-900:				#273444 !default;
+$px-black:					#000000 !default;
+
+
+// Body
+//
+// Settings for the `<body>` element.
+$px-body-color:     #718096 !default;
+
+
+// scss-docs-start theme-colors-map
+$px-theme-colors: (
+  "primary":    $px-primary,
+  "secondary":  $px-secondary,
+  "success":    $px-success,
+  "info":       $px-info,
+  "warning":    $px-warning,
+  "danger":     $px-danger,
+  "light":      $px-light,
+  "dark":       $px-dark
+) !default;
+
+
+// fusv-disable
+$px-grays: (
+  "gray-100": $px-gray-100,
+  "gray-200": $px-gray-200,
+  "gray-300": $px-gray-300,
+  "gray-400": $px-gray-400,
+  "gray-500": $px-gray-500,
+  "gray-600": $px-gray-600,
+  "gray-700": $px-gray-700,
+  "gray-800": $px-gray-800,
+  "gray-900": $px-gray-900
+) !default;
+
+
+// The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+$px-min-contrast-ratio:    1.8 !default;
+
+
+$px-yiq-text-dark:    $px-dark;
+$px-yiq-text-light:    $px-white;
+$px-yiq-contrasted-threshold: 173;
+
+
+//- Added Extra Spacing
+//
+// Control the default styling of most Bootstrap elements by modifying these
+// variables. Mostly focused on spacing.
+// You can add more entries to the $spacers map, should you need more variation.
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: $spacer / 4,
+  2: $spacer / 2,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 2,
+  6: $spacer * 2.5,
+  7: $spacer * 3,
+  8: $spacer * 3.5,
+  9: $spacer * 4,
+  10: $spacer * 5,
+  11: $spacer * 6,
+  12: $spacer * 7,
+) !default;
+
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+$px-font-family-sans-serif: 	"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", 'Noto Color Emoji' !default;
+
+
+$px-font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
+$px-font-size-sm:                $px-font-size-base * .875 !default;
+$px-font-size-lg:                $px-font-size-base * 1.1 !default;
+
+
+$px-headings-font-weight:        700 !default;
+$px-headings-color:              $px-dark !default;
+$px-headings-color-light:       $px-white !default;
+
+// scss-docs-start display-headings
+$px-display-font-weight:         700 !default;
+
+$px-lead-font-size:              $px-font-size-base * 1.1 !default;
+$px-lead-font-weight:            400 !default;
+
+
+$px-mark-bg:                     linear-gradient(120deg,rgba(255,193,7,.4) 0,rgba(255,193,7,.4) 100%) !default;
+
+// Links
+//
+// Style anchor elements.
+$px-link-decoration:                         none !default;
+$px-link-hover-decoration:                   null !default;
+
+
+// Navbar
+
+$px-navbar-padding-y:                  0 !default;
+$px-navbar-nav-link-padding-x:         .75rem !default;
+
+$px-header-link-font-size:    1rem !default;
+$px-header-link-transform:    none !default;
+$px-header-link-height:       60px !default;
+$px-header-font-weight:       600 !default;
+
+$px-header-dropdown-item-font:  .95rem !default;
+$px-header-dropdown-item-padding-y: 0.4rem !default;
+$px-header-dropdown-item-padding-x: 1rem !default;
+
+// Header Dark Light Color
+$px-navbar-dark-color:          rgba($px-white, .5) !default;
+$px-navbar-light-color:         rgba($px-black, .5) !default;
+
+
+
+
+// This variable affects the `.h-*` and `.w-*` classes.
+$px-sizes: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$px-sizes: map-merge(
+  (
+    25: 25%,
+    50: 50%,
+    75: 75%,
+    100: 100%,
+    auto: auto
+  ),
+  $px-sizes
+);
+
+
+// Section
+$px-section-padding-y:      6.25rem !default;
+$px-section-lg-padding-y:   5rem !default;
+$px-section-md-padding-y:   3rem !default;
+
+
+// Section Heading
+$px-section-heading-bottom-margin:    2.8125rem !default;
+
+
+// Components
+//
+// Define common padding and border radius sizes and more.
+
+$border-width:                1px !default;
+$border-widths: (
+  0: 0,
+  1: 1px,
+  2: 2px,
+  3: 3px,
+  4: 4px,
+  5: 5px,
+  6: 6,
+  7: 7px,
+  8: 8px,
+  9: 9px,
+  10: 10px
+) !default;
+
+$px-box-shadow:                  0px 3px 10px 0px rgba(38, 59, 94, 0.1) !default;
+$px-box-shadow-lg:               0 1rem 3rem rgba(0,0,0,.175) !default;
+
+
+
+// Cards
+$px-card-spacer-x:                     1.75rem !default;
+$px-card-spacer-y:                     1.25rem !default;
+$px-card-border-color:                 $px-gray-200 !default;
+$px-card-border-radius:                .5rem !default;
+$px-card-box-shadow:                   0 3px 10px 0 rgba(38, 59, 94, 0.1) !default;
+$px-card-cap-bg:                       transparent !default;
+$px-card-cap-padding-y:                $px-card-spacer-y / 2 !default;
+$px-card-cap-padding-x:                $px-card-spacer-x !default;
+
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$px-enable-negative-margins:     true !default;
+
+
+// Avatar
+$px-avatar-width:         3.125rem !default;
+$px-avatar-height:          $px-avatar-width !default;
+
+$px-avatar-width-xl:        6rem !default;
+$px-avatar-height-xl:       $px-avatar-width-xl !default;
+
+$px-avatar-width-lg:        4rem !default;
+$px-avatar-height-lg:       $px-avatar-width-lg !default;
+
+$px-avatar-width-sm:        2.4375rem !default;
+$px-avatar-height-sm:       $px-avatar-width-sm !default;
+
+$px-avatar-font-size:       1rem !default;
+$px-avatar-font-size-lg:      1.25rem !default;
+$px-avatar-font-size-sm:      .75rem !default;
+
+
+$px-avatar-group-margin:       -1.25rem !default;
+$px-avatar-child-size:        0.9rem !default;
+$px-avatar-child-border-color:    $px-white !default;
+$px-avatar-child-bottom:      - ($px-avatar-child-size / 2) !default;
+
+
+
+// Accordion
+$px-accordion-button-focus-border-color:     none !default;
+$px-accordion-button-focus-box-shadow:       none !default;
+
+$px-accordion-button-color:                  $px-dark !default;
+
+$px-accordion-border-color:                  $px-gray-200 !default;
+$px-accordion-button-active-bg:              $px-white !default;
+$px-accordion-button-active-color:           $px-primary !default;
+
+
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+$px-input-btn-padding-y:         .65rem !default;
+$px-input-btn-padding-x:         1.25rem !default;
+
+$px-input-btn-padding-y-sm:      .5rem !default;
+$px-input-btn-padding-x-sm:      1.25rem !default;
+$px-btn-line-height-sm:          1.2 !default;
+
+
+$px-input-btn-padding-y-lg:      1rem !default;
+$px-input-btn-padding-x-lg:      1.875rem !default;
+$px-input-btn-font-size-lg:   1rem !default;
+
+$px-btn-font-weight:             500 !default;
+
+
+// Breadcrumbs
+$px-breadcrumb-bg:                     transparent !default;
+$px-breadcrumb-divider-color:          $px-gray-600 !default;
+
+
+// List group
+$px-list-group-border-color:           $px-gray-200 !default;
+$px-list-group-item-padding-y:         .80rem !default;

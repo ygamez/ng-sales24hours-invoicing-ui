@@ -1,0 +1,161 @@
+<nb-card accent="primary" class="container">
+  <nb-card-header>
+    <h6>{{'general.manualJournal' | translate}}</h6>
+  </nb-card-header>
+  <nb-card-body class="p-5">
+    <form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+      <div class="mg-top form-group row">
+        <label class="col-2" for="date">{{ 'general.date' | translate }} *</label>
+        <div class="col-5">
+          <input class="form-control" id="date" name="date" formControlName="date" nbInput placeholder="Date"
+            status="primary" autocomplete="off" [nbDatepicker]="datepickerdate">
+          <nb-datepicker #datepickerdate></nb-datepicker>
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['date']) && formDir.submitted"
+            for="date">{{ 'general.requiredDae' | translate }}</span>
+        </div>
+      </div>
+      <div class="mg-top form-group row">
+        <label class="col-2" for="reference">{{ 'general.reference' | translate }}</label>
+        <div class="col-5">
+          <input readonly class="form-control" id="reference" name="reference" formControlName="reference" nbInput
+            placeholder="Reference" fullWidth status="primary" type="text">
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['reference']) && formDir.submitted"
+            for="reference">{{ 'general.reference' | translate }}</span>
+        </div>
+      </div>
+      <div class="mg-top form-group row">
+        <label class="col-2" for="category">{{ 'general.currency' | translate }} *</label>
+        <div class="col-5">
+          <nb-select id="currency" name="currency" formControlName="currencyId" placeholder="{{ 'general.currency' | translate }}"
+            fullWidth status="primary" (selectedChange)="selectCurrency($event)">
+            <nb-option *ngFor="let currency of currencies" [(value)]="currency.id">{{currency.name}} ({{currency.symbol}})</nb-option>
+          </nb-select>
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['currencyId']) && formDir.submitted"
+            for="category">{{ 'general.requiredCurrency' | translate }}</span>
+        </div>
+      </div>
+      <div class="mg-top form-group row">
+        <label class="col-2" for="notes">{{ 'general.notes' | translate }} *</label>
+        <div class="col-5">
+          <textarea class="form-control" id="notes" name="notes" formControlName="notes" nbInput placeholder="{{ 'general.notes' | translate }}"
+            fullWidth status="primary" rows="6"></textarea>
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['notes']) && formDir.submitted"
+            for="notes">{{ 'general.requiredNotes' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="mg-top form-group row">
+        <label class="col-2" for="invoice-date">Status</label>
+        <div class="col-8">
+          <h6><span class="badge {{badgeStatus}}">{{status}}</span></h6>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <h6 class="mt-5">{{ 'general.items' | translate }} *</h6>
+        <div class="table-responsive">
+          <table class="table ">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">{{ 'general.account' | translate }}</th>
+                <th scope="col">{{ 'general.description' | translate }}</th>
+                <th scope="col">{{ 'general.contact' | translate }}</th>
+                <th scope="col">{{ 'general.tax' | translate }}</th>
+                <th scope="col">{{ 'general.debit' | translate }}</th>
+                <th scope="col">{{ 'general.credit' | translate }}</th>
+                <th scope="col">{{ 'table.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of manualjournallineitems">
+                <td>{{item.account.accountName}}</td>
+                <td>{{item.description}}</td>
+                <td>
+                  <span *ngIf="item.customer != null && item.category === 'customer'">{{item.customer.name}} </span>
+                  <span *ngIf="item.vendor != null && item.category === 'vendor'">{{item.vendor.name}}</span>
+                </td>
+                <td>
+                  <span *ngIf="item.tax">{{item.tax.name}} ({{item.tax.rate}}%)</span>
+                  <span *ngIf="!item.tax">N/A</span>
+                </td>
+                <td><span *ngIf="currency && item.debit">{{currency.symbol}}</span>{{item.debit}}</td>
+                <td><span *ngIf="currency && item.credit">{{currency.symbol}}</span>{{item.credit}}</td>
+                <td>
+                  <a nbButton ghost status="warning" size="medium" class="mr-3" (click)="editItem(item)" *ngIf="!id">
+                    <nb-icon icon="edit-outline"></nb-icon>
+                  </a>
+                  <a nbButton ghost status="danger" size="medium" (click)="deleteLineItem(item)">
+                    <nb-icon icon="trash-2-outline"></nb-icon>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="8" class="text-center" (click)="openAttributeDialog()" style="cursor:pointer">
+                  <b>
+                    <nb-icon icon="plus"></nb-icon> {{ 'general.addAnItem' | translate }}
+                  </b>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-6"></div>
+        <div class="col-6">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-borderless bg-light">
+                <tbody>
+                  <tr class="text-primary">
+                    <td colspan="2">{{ 'general.debit' | translate }}</td>
+                    <td colspan="2">{{ 'general.credit' | translate }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'general.subTotal' | translate }}: </td>
+                    <td><span *ngIf="currency">{{currency.symbol}}</span> {{subTotalDebitPrice}}</td>
+                    <td>{{ 'general.subTotal' | translate }}: </td>
+                    <td><span *ngIf="currency">{{currency.symbol}}</span> {{subTotalCreditPrice}}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'general.totalTax' | translate }}:</td>
+                    <td><span *ngIf="currency">{{currency.symbol}}</span>{{totalDebitTax}}</td>
+                    <td>{{ 'general.totalTax' | translate }}:</td>
+                    <td><span *ngIf="currency">{{currency.symbol}}</span>{{totalCreditTax}}</td>
+                  </tr>
+                  <tr>
+                    <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                    <td><b><span *ngIf="currency">{{currency.symbol}}</span>{{totalDebitPrice}}</b></td>
+                    <td><b>{{ 'general.totalPrice' | translate }}:</b></td>
+                    <td><b><span *ngIf="currency">{{currency.symbol}}</span>{{totalCreditPrice}}</b></td>
+                  </tr>
+                  <tr class="text-danger">
+                    <td colspan="4">{{ 'general.difference' | translate }}</td>
+                  </tr>
+                  <tr class="text-danger">
+                    <td></td>
+                    <td><span *ngIf="currency">{{currency.symbol}}</span>{{creditDifference}}</td>
+                    <td></td>
+                    <td><span *ngIf="currency">{{currency.symbol}}</span> {{debitDifference}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mg-top form-group row">
+        <div class="col-sm-12">
+          <button type="submit" [nbSpinner]="loading" status="primary" nbButton class="float-end">Save</button>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

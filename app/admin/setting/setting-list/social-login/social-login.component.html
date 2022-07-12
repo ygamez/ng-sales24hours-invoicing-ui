@@ -1,0 +1,54 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="googleClientId">{{ 'general.googleClientId' | translate }}</label>
+				<div class="col-5">
+					<input class="form-control" id="googleClientId" name="googleClientId"
+            formControlName="googleClientId"  nbInput placeholder="{{ 'general.googleClientId' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="enableGoogleLogin">{{'general.enableGoogleLogin' | translate }}</label>
+				<div class="col-7">
+          <nb-toggle
+            formControlName="enableGoogleLogin"
+            labelPosition="end"
+            status="primary" >{{'general.enableGoogleLogin' | translate }}</nb-toggle>
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="facebookAppId">{{ 'general.facebookAppId' | translate }}</label>
+				<div class="col-5">
+					<input class="form-control" id="facebookAppId" name="facebookAppId"
+            formControlName="facebookAppId" nbInput placeholder="{{ 'general.facebookAppId' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="enableFacebookLogin">{{'general.enableFacebookLogin' | translate }}</label>
+				<div class="col-7">
+          <nb-toggle
+            formControlName="enableFacebookLogin"
+            labelPosition="end"
+            status="primary" >{{'general.enableFacebookLogin' | translate }}</nb-toggle>
+				</div>
+			</div>
+
+			<div class="mg-top form-group row mb-4">
+				<div class="offset-sm-3 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+
+		</form>
+	</nb-card-body>
+</nb-card>

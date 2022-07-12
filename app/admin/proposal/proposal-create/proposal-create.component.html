@@ -1,0 +1,224 @@
+<div class="container" [nbSpinner]="editLoading">
+  <nb-card accent="primary">
+    <nb-card-header>
+      <h6>{{'general.estimate' | translate }}</h6>
+    </nb-card-header>
+    <nb-card-body class="p-5">
+      <form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6">
+            <div class="mg-top form-group row">
+              <label class="col-2" for="customer">{{ 'general.customer' | translate }} * </label>
+              <div class="col-10">
+                <nb-select id="customer" name="customer" formControlName="customerId" placeholder="Select a Customer"
+                  (selectedChange)="selectCustomer($event)" fullWidth status="primary">
+                  <nb-option *ngFor="let customer of customers" [(value)]="customer.id">{{customer.name}}</nb-option>
+                </nb-select>
+                <div>
+                  <span class="text-danger" *ngIf="entityForm.hasError('required', ['customerId']) && formDir.submitted"
+                    for="customer">{{ 'estimate.form.requiredCustomer' | translate }}</span>
+                </div>
+
+                <a routerLink="/dashboard/customer/create" nbButton class="mt-2" status="basic" size="tiny">
+                  <nb-icon icon="plus"></nb-icon> {{ 'estimate.form.btnNewCustomer' | translate }}
+                </a>
+              </div>
+            </div>
+            <div class="row" *ngIf="customer">
+              <label class="col-2" for="customer">{{ 'general.billedTo' | translate }}</label>
+              <div class="col-10">
+                <div>
+                  {{customer.name}}
+                </div>
+                <div>
+                  {{customer.phone}}
+                </div>
+                <div *ngIf="customer.billingAddress">
+                  <address>
+                    <div>{{customer.billingAddress.addressLine1}} </div>
+                    <div>{{customer.billingAddress.addressLine2}}</div>
+                    <div>{{customer.billingAddress.zipCode}} {{customer.billingAddress.city}}</div>
+                    <div>{{customer.billingAddress.country}}</div>
+                  </address>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6">
+            <div class="row">
+              <div class="col-6">
+                <div class="mg-top form-group row">
+                  <label class="col-4" for="proposal-date">{{ 'general.date' | translate }}</label>
+                  <div class="col-8">
+                    <input class="form-control" id="proposal-date" name="proposalDate" formControlName="proposalDate"
+                      nbInput placeholder="Proposal date" status="primary" autocomplete="off"
+                      [nbDatepicker]="datepickerproposalDate">
+                    <nb-datepicker #datepickerproposalDate></nb-datepicker>
+                  </div>
+                </div>
+
+                <div class="mg-top form-group row">
+                  <label class="col-4" for="currency">{{ 'estimate.form.currency' | translate }} * </label>
+                  <div class="col-8">
+                    <nb-select id="currency" name="currency" formControlName="currencyId"
+                      placeholder="Seleccione la moneda" fullWidth status="primary"
+                      (selectedChange)="selectCurrency($event)">
+                      <nb-option *ngFor="let currency of currencies" [(value)]="currency.id">{{currency.name}} ({{currency.symbol}})
+                      </nb-option>
+                    </nb-select>
+                    <span class="text-danger"
+                      *ngIf="entityForm.hasError('required', ['currencyId']) && formDir.submitted"
+                      for="currency">{{ 'estimate.form.requiredCurrency' | translate }}</span>
+                  </div>
+                </div>
+
+                <div class="row mt-5">
+                  <label class="col-4" for="proposal-date">{{ 'general.status' | translate }}</label>
+                  <div class="col-8">
+                    <h6><span class="badge {{badgeStatus}}">{{status}}</span></h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mg-top form-group row">
+                  <label class="col-4" for="issue-date">{{ 'estimate.index.expireAt' | translate }}</label>
+                  <div class="col-8">
+                    <input class="form-control" id="issue-date" name="issueDate" formControlName="issueDate" nbInput
+                      placeholder="Issue date" status="primary" autocomplete="off" [nbDatepicker]="datepickerissueDate">
+                    <nb-datepicker #datepickerissueDate></nb-datepicker>
+                  </div>
+                </div>
+                <div class="mg-top form-group row mt-5">
+                  <label class="col-4" for="reference">{{ 'estimate.index.reference' | translate }}</label>
+                  <div class="col-8">
+                    <input class="form-control" id="reference" name="reference" formControlName="reference" nbInput
+                      placeholder="Reference" fullWidth status="primary" type="text" readonly>
+                  </div>
+                </div>
+                <div class="mg-top form-group row mt-5">
+                  <label class="col-4" for="order-number">{{ 'general.number' | translate }}</label>
+                  <div class="col-8">
+                    <input class="form-control" id="order-number" name="orderNumber" formControlName="proposalNumber"
+                      nbInput placeholder="Order number" fullWidth status="primary" type="text">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <h6 class="mt-5">{{ 'estimate.detail.productsAndServices' | translate }} * </h6>
+          <div class="table-responsive">
+            <table class="table ">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">{{ 'estimate.detail.items' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.category' | translate }}</th>
+                  <th scope="col">{{ 'general.quantity' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.price' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.tax' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.discount' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.totalPrice' | translate }}</th>
+                  <th scope="col">{{ 'table.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of proposalLineItems">
+                  <td>
+                    <b>
+                      <span *ngIf="item.product != null && item.category === 'product'">{{item.product.name}} </span>
+                      <span *ngIf="item.service != null && item.category === 'service'">{{item.service.name}}</span>
+                    </b>
+                    <span><br />{{item.description}}</span>
+                  </td>
+                  <td>{{item.category}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td><span *ngIf="currency">{{currency.symbol}}</span>{{item.price}}</td>
+                  <td *ngIf="item.product != null && item.category === 'product'">
+                    <span *ngIf="item.product != null && item.product.tax != null">{{item.product.tax.name}} ({{item.product.tax.rate}}%)</span>
+                  </td>
+                  <td *ngIf="item.service != null && item.category === 'service'">
+                    <span *ngIf="item.service != null && item.service.tax != null">{{item.service.tax.name}} ({{item.service.tax.rate}}%)</span>
+                  </td>
+                  <td>{{item.discount}}%</td>
+                  <td><span *ngIf="currency">{{currency.symbol}}</span>{{item.totalPrice}}</td>
+                  <td>
+                    <a nbButton ghost status="warning" size="medium" class="mr-3" (click)="editItem(item)" *ngIf="!id">
+                      <nb-icon icon="edit-outline"></nb-icon>
+                    </a>
+                    <a nbButton ghost status="danger" size="medium" (click)="deleteLineItem(item)">
+                      <nb-icon icon="trash-2-outline"></nb-icon>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="8" class="text-center" (click)="openAttributeDialog()" style="cursor:pointer">
+                    <b>
+                      <nb-icon icon="plus"></nb-icon> {{ 'general.addAnItem' | translate }}
+                    </b>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-6">
+              </div>
+              <div class="col-6">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>{{ 'estimate.detail.subTotal' | translate }}: </td>
+                      <td><span *ngIf="currency">{{currency.symbol}}</span>{{subTotalPrice}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'estimate.detail.discount' | translate }}: </td>
+                      <td><span *ngIf="currency">{{currency.symbol}}</span>{{totalDiscount}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'estimate.detail.tax' | translate }}: </td>
+                      <td><span *ngIf="currency">{{currency.symbol}}</span>{{totalTax}}</td>
+                    </tr>
+                    <tr>
+                      <td><b>{{ 'estimate.detail.totalPrice' | translate }}:</b></td>
+                      <td><b><span *ngIf="currency">{{currency.symbol}}</span>{{totalPrice}}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mg-top form-group row mt-5">
+          <div class="col-12">
+            <div for="description">{{ 'estimate.detail.noteAndTerms' | translate }} </div>
+            <textarea class="form-control" id="description" name="description" formControlName="description" nbInput
+              placeholder="Escriba aquí" fullWidth status="info" rows="4"></textarea>
+          </div>
+        </div>
+
+        <div class="mg-top form-group row">
+          <div class="col-12">
+            <button type="submit" class="float-end" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+          </div>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
+
+</div>

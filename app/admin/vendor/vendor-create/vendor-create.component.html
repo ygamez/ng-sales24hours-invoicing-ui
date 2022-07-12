@@ -1,0 +1,150 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="name">{{'general.fullname' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="name" name="name" formControlName="name" nbInput placeholder="{{'general.fullname' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['name']) && formDir.submitted" for="name">{{'general.requiredName' | translate }}</span>
+				</div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-2" for="email">{{'general.email' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="email" name="email" formControlName="email"nbInput placeholder="{{'general.email' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['email']) && formDir.submitted" for="email">{{'general.requiredEmail' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="phone">{{'address.phone' | translate }}</label>
+				<div class="col-5">
+					<input class="form-control" id="phone" name="phone" formControlName="phone"nbInput placeholder="{{'address.phone' | translate }}" fullWidth status="primary" type="text">
+				</div>
+			</div>
+      <h6 class="txt-primary mb-2 mt-5 mb-3">{{'address.billingAddress' | translate }}</h6>
+      <ng-container formGroupName="billingAddress">
+				<div class="mg-top form-group row">
+					<label class="col-2" for="bill-address-line1">{{ 'address.address1' | translate }} *</label>
+					<div class="col-5">
+						<textarea rows="2" class="form-control" id="bill-address-line1" name="addressLine1" formControlName="addressLine1"  nbInput placeholder="{{ 'address.address1' | translate }}" fullWidth status="primary" type="text"></textarea>
+						<span class="text-danger" *ngIf="controlIsRequired('billingAddress','addressLine1','required') && formDir.submitted" for="address-line1">{{ 'address.requiredAddress1' | translate }}</span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="bill-address-line2">{{ 'address.address2' | translate }}</label>
+					<div class="col-5">
+						<textarea rows="2"  class="form-control" id="bill-address-line2" name="addressLine2" formControlName="addressLine2"  nbInput placeholder="{{ 'address.address2' | translate }}" fullWidth status="primary" type="text"></textarea>
+						<span class="text-danger" *ngIf="entityForm.hasError('required', ['addressLine2']) && formDir.submitted" for="address-line2">{{ 'address.requiredAddress2' | translate }}</span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="bill-zip-code">{{ 'address.zip' | translate }} *</label>
+					<div class="col-5">
+						<input class="form-control" id="bill-zip-code" name="zipCode" formControlName="zipCode"  nbInput placeholder="{{ 'address.zip' | translate }}" fullWidth status="primary" type="text">
+						<span class="text-danger" *ngIf="controlIsRequired('billingAddress','zipCode','required')  && formDir.submitted" for="zip-code">
+              {{ 'address.requiredZipCode' | translate }}
+            </span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="bill-city">{{ 'address.city' | translate }} *</label>
+					<div class="col-5">
+						<input class="form-control" id="bill-city" name="city" formControlName="city"  nbInput placeholder="{{ 'address.city' | translate }}" fullWidth status="primary" type="text">
+						<span class="text-danger" *ngIf="controlIsRequired('billingAddress','city','required') && formDir.submitted" for="city">
+              {{ 'address.requiredCity' | translate }}
+            </span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="bill-country">{{ 'address.country' | translate }} *</label>
+					<div class="col-5">
+						<input class="form-control" id="bill-country" name="country" formControlName="country"  nbInput placeholder="{{ 'address.country' | translate }}" fullWidth status="primary" type="text">
+						<span class="text-danger" *ngIf="controlIsRequired('billingAddress','country','required') && formDir.submitted" for="country">
+              {{ 'address.requiredCountry' | translate }}
+            </span>
+					</div>
+				</div>
+			</ng-container>
+      <div class="row mt-5">
+        <div class="offset-2 col-10">
+          <nb-toggle status="primary" (checkedChange)="checkIfSameAddress($event)">
+            {{ 'address.sameAddress' | translate }}
+          </nb-toggle>
+        </div>
+      </div>
+			<h6 class="txt-primary mb-2 mt-5 mb-3">
+        {{ 'address.shippingAddress' | translate }}
+      </h6>
+			<ng-container formGroupName="shippingAddress">
+				<div class="mg-top form-group row">
+					<label class="col-2" for="address-line1">
+            {{ 'address.address1' | translate }} *
+          </label>
+					<div class="col-5">
+						<textarea rows="2" class="form-control" id="address-line1" name="addressLine1" formControlName="addressLine1"  nbInput placeholder="{{ 'address.address1' | translate }}" fullWidth status="primary" type="text"></textarea>
+						<span class="text-danger" *ngIf="controlIsRequired('shippingAddress','addressLine1','required') && formDir.submitted" for="address-line1">
+              {{ 'address.requiredAddress1' | translate }}
+            </span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="address-line2">
+            {{ 'address.address2' | translate }}
+          </label>
+					<div class="col-5">
+						<textarea rows="2" class="form-control" id="address-line2" name="addressLine2" formControlName="addressLine2"  nbInput placeholder=" {{ 'address.address2' | translate }}" fullWidth status="primary" type="text"></textarea>
+						<span class="text-danger" *ngIf="entityForm.hasError('required', ['addressLine2']) && formDir.submitted" for="address-line2">
+              {{ 'address.requiredAddress2' | translate }}
+            </span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="zip-code">
+            {{ 'address.zip' | translate }} *
+          </label>
+					<div class="col-5">
+						<input class="form-control" id="zip-code" name="zipCode" formControlName="zipCode"  nbInput placeholder="Zip Code" fullWidth status="primary" type="text">
+						<span class="text-danger" *ngIf="controlIsRequired('shippingAddress','zipCode','required') && formDir.submitted" for="zip-code">
+              {{ 'address.requiredZipCode' | translate }}
+            </span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="city">
+            {{ 'address.city' | translate }} *
+          </label>
+					<div class="col-5">
+						<input class="form-control" id="city" name="city" formControlName="city"  nbInput placeholder="{{ 'address.city' | translate }}" fullWidth status="primary" type="text">
+						<span class="text-danger" *ngIf="controlIsRequired('shippingAddress','city','required') && formDir.submitted" for="city">
+              {{ 'address.requiredCity' | translate }}
+            </span>
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-2" for="country">
+            {{ 'address.country' | translate }} *
+          </label>
+					<div class="col-5">
+						<input class="form-control" id="country" name="country" formControlName="country"  nbInput placeholder="Country" fullWidth status="primary" type="text">
+						<span class="text-danger" *ngIf="controlIsRequired('shippingAddress','country','required') && formDir.submitted" for="country">
+              {{ 'address.requiredCountry' | translate }}
+            </span>
+					</div>
+				</div>
+			</ng-container>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

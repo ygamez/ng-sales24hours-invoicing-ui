@@ -1,0 +1,47 @@
+@import "variables";
+@import "custom.bootstrap.variables";
+
+// Vendor
+// @import "../vendor/bootstrap/scss/bootstrap.scss";
+@import '~bootstrap/scss/bootstrap';
+
+
+// Fonts
+@import "fonts";
+
+
+// Header Footer
+@import "header";
+@import "mega-menu";
+@import "footer";
+
+
+@import "base/mixin";
+@import "base/functions";
+@import "base/spinner";
+@import "base/typo";
+@import "base/opacity";
+@import "base/owl";
+@import "base/zindex";
+@import "base/price-table";
+@import "base/list";
+@import "base/page-title";
+@import "base/link";
+@import "base/pie-chart";
+@import "base/portfolio";
+@import "base/avatar";
+@import "base/border";
+@import "base/font-weight";
+@import "base/hover";
+@import "base/media";
+@import "base/image";
+@import "base/tabs";
+@import "base/effect";
+@import "base/icon";
+@import "base/color";
+@import "base/section";
+@import "base/form";
+@import "base/button";
+@import "base/process-bar";
+@import "base/heading";
+@import "base/mask";

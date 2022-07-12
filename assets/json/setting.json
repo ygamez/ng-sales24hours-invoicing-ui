@@ -1,0 +1,41 @@
+{
+  "application":{
+    "title":"Bill.eco",
+    "theme":"default",
+    "emailConfirmation": true,
+    "language": null,
+    "logo": null,
+    "favicon":null
+  },
+  "paymentSetings": {
+    "stripe":{
+      "publishableKey":null,
+      "secretKey":null,
+      "enable": false
+    },
+    "paypal":{
+      "clientId":null,
+      "secret":null,
+      "mode": null,
+      "enable":false
+    }
+  },
+  "email":{
+    "host":null,
+    "port":null,
+    "encryptioon":null,
+    "useAuthentication":false,
+    "username":null,
+    "password":null,
+    "fromEmail":null,
+    "fromName":null
+  },
+  "social":{
+    "youtube":null,
+    "twitch":null,
+    "github":null,
+    "instagram":null,
+    "facebook":null,
+    "twitter":null
+  }
+}

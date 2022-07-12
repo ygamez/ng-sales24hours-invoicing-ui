@@ -1,0 +1,157 @@
+<div id="generic_price_table">
+  <section>
+    <div class="container-fluid">
+      <div class="row mb-3" *ngIf="role == 'SuperAdmin' && parentRoute === 'super-admin-console'">
+        <!-- <div *ngIf="!grantLKAccess">
+          <p class="text-center text-warning">
+            {{'general.pricingCreateWarn' |translate }}
+          </p>
+        </div>
+        <div class="col-12" *ngIf="grantLKAccess">
+          <a class="float-end" routerLink="create" nbButton status="primary" size="small" >
+            <nb-icon icon="plus"></nb-icon>{{ 'pricing.newPricing' | translate }}
+          </a>
+        </div> -->
+        <div class="col-12" >
+          <a class="float-end" routerLink="create" nbButton status="primary" size="small" >
+            <nb-icon icon="plus"></nb-icon>{{ 'pricing.newPricing' | translate }}
+          </a>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <!--PRICE HEADING START-->
+          <div class="price-heading clearfix text-center">
+            <h3>{{ 'pricing.pricingTable' | translate }}</h3>
+            <p class="text-success" *ngIf="successMessage">{{successMessage}}</p>
+            <p class="text-danger" *ngIf="errorMessage">{{errorMessage}}</p>
+          </div>
+          <!--//PRICE HEADING END-->
+        </div>
+      </div>
+    </div>
+    <div class="container" style="margin-top: 30px;">
+
+      <ng-template #noPlan>
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </ng-template>
+
+
+      <!--BLOCK ROW START-->
+      <div class="row" *ngIf="plans else noPlan">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 mt-5" *ngFor="let plan of plans">
+
+          <nb-card status="{{plan.cardStatus}}">
+            <nb-card-header>
+              <h5 class="text-center text-white p-3">{{plan.title}}</h5>
+            </nb-card-header>
+            <nb-card-body>
+              <div class="text-center">
+                <div class="price_tag">
+                  <span class="price">
+                    <span class="sign">{{plan.currency.symbol}}</span>
+                    <span class="currency"><b>{{plan.price}}</b></span>
+                    <span class="month">/{{ 'general.month' | translate }}</span>
+                  </span>
+                </div>
+                <div class="generic_feature_list">
+                  <ul>
+                    <li class="text-center" *ngIf="plan.description">
+                      {{plan.description}}
+                      <!-- <hr /> -->
+                    </li>
+                    <li>
+                      <span *ngIf="plan.maxOrder > -1">{{plan.maxOrder}}</span>
+                      <span *ngIf="plan.maxOrder == -1">Unlimited</span>
+                      {{ 'general.invoices' | translate }}
+                    </li>
+                    <li>
+                      <span *ngIf="plan.maxEstimate > -1">{{plan.maxEstimate}}</span>
+                      <span *ngIf="plan.maxEstimate == -1">Unlimited</span>
+                      {{ 'general.estimates' | translate }}
+                    </li>
+                    <li>
+                      <span *ngIf="plan.maxProduct >-1">{{plan.maxProduct}}</span>
+                      <span *ngIf="plan.maxProduct ==-1">Unlimited</span>
+                      {{ 'general.productServices' | translate }}
+                    </li>
+                    <li>
+                      <span *ngIf="plan.maxCustomer > -1">{{plan.maxCustomer}}</span>
+                      <span *ngIf="plan.maxCustomer ==-1">Unlimited</span>
+                      {{ 'general.customers' | translate }}
+                    </li>
+                    <li>
+                      <span *ngIf="plan.maxUser > -1">{{plan.maxUser}}</span>
+                      <span *ngIf="plan.maxUser == -1">Unlimited</span>
+                      {{ 'general.users' | translate }}
+                    </li>
+                    <li>Accounting features</li>
+                    <li>Unlimited reports</li>
+                    <li><span>24/7</span> {{ 'general.support' | translate }}</li>
+                  </ul>
+                </div>
+              </div>
+            </nb-card-body>
+            <nb-card-footer>
+              <div class="text-center">
+
+                <div *ngIf="userId != null && userId != ''; else nullUser">
+                  <a nbButton status="primary" size="small" [nbSpinner]="loading" (click)="assign(plan.id)"
+                    *ngIf="userIsSuperAdmin && parentRoute === 'super-admin-console'" >
+                    {{ 'general.assign' | translate }}
+                  </a>
+                </div>
+
+                <ng-template #nullUser>
+                  <div>
+                    <a nbButton status="primary" size="small" [nbSpinner]="loading"
+                      *ngIf=" subscription == null || (subscription !=null && subscription.planId != plan.id)"
+                      (click)="choosePlan(plan.id)">
+                      {{ 'general.select' | translate }}
+                    </a>
+                  </div>
+
+                  <div>
+                    <a nbButton status="success" size="small" class="btn-*cursor"
+                      *ngIf=" subscription != null && subscription.planId == plan.id">
+                      {{ 'general.selected' | translate }}
+                    </a>
+                  </div>
+
+                  <div *ngIf="userIsSuperAdmin && parentRoute === 'super-admin-console'">
+                    <a nbButton status="warning" size="small" class="mt-2 me-2" [routerLink]="['edit',plan.id]">
+                      {{ 'form.edit' | translate }}
+                    </a>
+                    <button nbButton status="danger" size="small" class="mt-2" (click)="open(dialog)" *ngIf="!plan.cannotDelete"
+                      [nbSpinner]="deleteLoading">{{ 'general.delete' | translate }}</button>
+                  </div>
+
+                </ng-template>
+
+                <ng-template #dialog let-data let-ref="dialogRef">
+                  <nb-card>
+                    <nb-card-header>{{ 'general.confirmDeletion' | translate }}</nb-card-header>
+                    <nb-card-body>{{ data }}</nb-card-body>
+                    <nb-card-footer>
+                      <button nbButton size="tiny" (click)="ref.close()">{{ 'form.cancel' | translate }}</button>
+                      <button nbButton size="tiny" status="danger" style="margin-left: 12px;" *ngIf="!plan.cannotDelete"
+                        (click)="ref.close(plan.id)">{{ 'general.delete' | translate }}</button>
+                    </nb-card-footer>
+                  </nb-card>
+                </ng-template>
+              </div>
+            </nb-card-footer>
+          </nb-card>
+
+        </div>
+
+      </div>
+      <!--//BLOCK ROW END-->
+
+    </div>
+  </section>
+</div>

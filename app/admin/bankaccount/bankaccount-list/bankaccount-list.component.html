@@ -1,0 +1,533 @@
+<ng-container>
+  <div class="container-fluid">
+    <div>
+      <h4 class="col-6">{{ 'bankAccount.index.title' | translate }}</h4>
+    </div>
+    <div class="row mb-3">
+      <div class="col-12">
+        <a class="float-end ms-2" href="#" routerLink="/dashboard/bank-account/connect" nbButton status="primary" size="small">
+          <nb-icon icon="link-2-outline"></nb-icon>
+          {{ 'bankAccount.index.btnConnectBank' | translate }}
+        </a>
+      </div>
+    </div>
+    <nb-card accent="primary" [nbSpinner]="loading">
+      <nb-card-header>
+        {{ 'bankAccount.index.overview' | translate }}
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="text-success">
+              <p class=""><b>{{ 'bankAccount.index.totalBalance' | translate }}</b></p>
+              <h5 class="text-primary"><span *ngIf="currency">{{currency.symbol}}</span>{{totalBalanceString}}</h5>
+            </div>
+          </div>
+          <div class="col">
+            <div >
+              <p class=""><b>
+                {{ 'bankAccount.index.totalPending' | translate }}
+              </b></p>
+              <h5 class="text-primary"><span *ngIf="currency">{{currency.symbol}}</span>{{pendingBalanceString}}</h5>
+            </div>
+
+          </div>
+        </div>
+        <hr>
+        <div class="row mt-4">
+          <div class="col">
+            <div>
+              <p class="">
+                <b>
+                  {{ 'bankAccount.index.stripeBalance' | translate }}
+                </b>
+              </p>
+              <h5 class="text-primary">
+                <span *ngIf="stripeCurrency">{{stripeCurrency | uppercase}}</span>{{totalStripeBalanceString}}
+              </h5>
+            </div>
+          </div>
+          <div class="col">
+            <div >
+              <p class=""><b>
+                {{ 'bankAccount.index.stripePending' | translate }}
+              </b></p>
+              <h5 class="text-primary"><span *ngIf="stripeCurrency">{{stripeCurrency | uppercase}}</span>{{pendingStripeBalanceString}}</h5>
+            </div>
+          </div>
+          <div class="col">
+            <div>
+              <p class="">
+                <b>
+                  {{ 'bankAccount.index.paypalBalance' | translate }}
+                </b>
+              </p>
+              <h5 class="text-primary">
+                <span *ngIf="currency">{{currency.symbol}}</span>{{totalPayPalBalanceString}}
+                <button
+                  nbTooltip="{{ 'bankAccount.index.paypalWarning' | translate }}"
+                    nbTooltipPlacement="top" nbTooltipStatus="warning" size="small"  nbButton status="warning">
+                   <nb-icon icon="alert-circle-outline"></nb-icon>
+                </button>
+              </h5>
+            </div>
+          </div>
+          <div class="col">
+            <div >
+              <p class="">
+                <b>
+                  {{ 'bankAccount.index.paypalPending' | translate }}
+                </b>
+              </p>
+              <h5 class="text-primary">
+                <span *ngIf="currency">{{currency.symbol}}</span>{{pendingPayPalBalanceString}}
+                <button
+                  nbTooltip=" {{ 'bankAccount.index.paypalWarning' | translate }}"
+                  nbTooltipPlacement="top" nbTooltipStatus="warning" size="small"  nbButton status="warning">
+                <nb-icon icon="alert-circle-outline"></nb-icon>
+              </button>
+              </h5>
+            </div>
+          </div>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large" class="mt-2">
+        <nb-card-body>
+          <!-- All account -->
+          <nb-tabset (changeTab)="tabChanged($event)">
+            <nb-tab tabTitle="all">
+              <div class="row mt-5">
+                <div class="col-6">
+                  <nb-select [(ngModel)]="_tableService.pageSize">
+                    <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  </nb-select>
+                </div>
+                <div class="col-6">
+                  <nb-form-field class="float-end">
+                    <nb-icon nbPrefix icon="search-outline"></nb-icon>
+                    <input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+                  </nb-form-field>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="table-responsive">
+                  <table class="table table-striped table-borderless">
+                    <thead>
+                      <tr>
+                        <th class="bank-name" scope="col" sortable="bankName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankName' | translate }}
+                        </th>
+                        <th  scope="col" sortable="createdAt" (sort)="onSort($event)">
+                          {{ 'table.createdAt' | translate }}
+                        </th>
+                        <th class="bank-holder-name" scope="col" sortable="bankHolderName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankHolderName' | translate }}
+                        </th>
+                        <th class="account-number" scope="col" sortable="accountNumber" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankNumber' | translate }}
+                        </th>
+                        <th class="pendingBalance" scope="col" sortable="pendingBalance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.pendingBalance' | translate }}
+                        </th>
+                        <th class="balance" scope="col" sortable="balance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.balance' | translate }}
+                        </th>
+                        <th class="phone" scope="col" sortable="phone" (sort)="onSort($event)">
+                          {{ 'general.type' | translate }}
+                        </th>
+                        <th>{{ 'table.actions' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="bankaccounts">
+                      <tr *ngFor="let item of bankaccounts | async">
+                        <td>
+                          <b>
+                            <ngb-highlight [result]="item.bankName" [term]="_tableService.searchTerm"></ngb-highlight>
+                          </b>
+                        </td>
+                        <td> <ngb-highlight [result]="item.createdAt |  date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight></td>
+                        <td>
+                          <ngb-highlight [result]="item.bankHolderName" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight [result]="item.accountNumber" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td class="text-primary">
+                          <b>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.pendings.length > 0">
+                              {{item.stripeCurrency | uppercase}}
+                              {{item.stripeBalance.pendings[0].amount.toFixed(2)}}
+                            </span>
+                            <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+                            <!-- <span *ngIf="!item.currency">{{currency.symbol}}</span> -->
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.pendingBalance?.toFixed(2)" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </b>
+                        </td>
+                        <td class="text-primary">
+                          <b>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.availables.length > 0">
+                              {{item.stripeCurrency | uppercase}}
+                              {{item.stripeBalance.availables[0].amount}}
+                            </span>
+                            <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+                            <!-- <span *ngIf="!item.currency">{{currency.symbol}}</span> -->
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.balance?.toFixed(2)" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </b>
+                        </td>
+                        <td>
+                          <ngb-highlight  *ngIf="item.type !== 'Stripe' && item.type !=='PayPal'" [result]="item.type" [term]="_tableService.searchTerm"></ngb-highlight>
+                          <span *ngIf="item.type === 'Stripe'">
+                            <img src="assets/images/stripe.svg" alt="stripe logo" width="45" />
+                          </span>
+                          <span *ngIf="item.type === 'PayPal'" class="paypal-font-size text-primary">
+                            <i class="fab fa-fw fa-paypal"></i>
+                          </span>
+                        </td>
+                        <td>
+                          <!-- <a nbButton ghost status="control" [nbContextMenu]="tableActions" nbContextMenuPlacement="bottom-end">
+                            <nb-icon icon="more-vertical-outline"></nb-icon>
+                          </a> -->
+                          <a [routerLink]="['/dashboard/bank-account/edit',item.id]" nbButton ghost status="warning" *ngIf="item.type==='Manual'">
+                            <nb-icon icon="edit"></nb-icon>
+                          </a>
+                          <a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+                            <nb-icon icon="close-outline"></nb-icon>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ngb-pagination [(page)]="_tableService.page"
+                                [pageSize]="_tableService.pageSize"
+                                [collectionSize]="total$ | async">
+                </ngb-pagination>
+              </div>
+            </nb-tab>
+            <!-- Stripe account -->
+            <nb-tab tabTitle="Stripe">
+              <div class="row mt-5">
+                <div class="col-6">
+                  <nb-select [(ngModel)]="_tableService.pageSize">
+                    <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  </nb-select>
+                </div>
+                <div class="col-6">
+                  <nb-form-field class="float-end">
+                    <nb-icon nbPrefix icon="search-outline"></nb-icon>
+                    <input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+                  </nb-form-field>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="table-responsive">
+                  <table class="table table-striped table-borderless">
+                    <thead>
+                      <tr>
+                        <th class="bank-name" scope="col" sortable="bankName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankName' | translate }}
+                        </th>
+                        <th  scope="col" sortable="createdAt" (sort)="onSort($event)">
+                          {{ 'table.createdAt' | translate }}
+                        </th>
+                        <th class="bank-holder-name" scope="col" sortable="bankHolderName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankHolderName' | translate }}
+                        </th>
+                        <th class="account-number" scope="col" sortable="accountNumber" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankNumber' | translate }}
+                        </th>
+                        <th class="pendingBalance" scope="col" sortable="pendingBalance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.pendingBalance' | translate }}
+                        </th>
+                        <th class="balance" scope="col" sortable="balance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.balance' | translate }}
+                        </th>
+                        <th class="phone" scope="col" sortable="phone" (sort)="onSort($event)">
+                          {{ 'general.type' | translate }}
+                        </th>
+                        <th>{{ 'table.actions' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="stripeBankaccounts">
+                      <tr *ngFor="let item of stripeBankaccounts | async">
+                        <td>
+                          <b>
+                            <ngb-highlight [result]="item.bankName" [term]="_tableService.searchTerm"></ngb-highlight>
+                          </b>
+                        </td>
+                        <td> <ngb-highlight [result]="item.createdAt | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight></td>
+                        <td>
+                          <ngb-highlight [result]="item.bankHolderName" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight [result]="item.accountNumber" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td class="text-primary">
+                          <b>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.pendings.length > 0">
+                              {{item.stripeCurrency | uppercase}}
+                              {{item.stripeBalance.pendings[0].amount}}
+                            </span>
+                            <!-- <span *ngIf="item.currency">{{item.currency.symbol}}</span> -->
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.pendingBalance" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </b>
+                        </td>
+                        <td class="text-primary">
+                          <b>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.availables.length > 0">
+                              {{item.stripeCurrency | uppercase}}
+                              {{item.stripeBalance.availables[0].amount.toFixed(2)}}
+                            </span>
+                            <!-- <span *ngIf="item.currency">{{item.currency.symbol}}</span> -->
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.balance.toFixed(2)" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </b>
+                        </td>
+                        <td>
+                          <ngb-highlight  *ngIf="item.type !== 'Stripe'" [result]="item.type" [term]="_tableService.searchTerm"></ngb-highlight>
+                          <span *ngIf="item.type === 'Stripe'">
+                            <img src="assets/images/stripe.svg" alt="stripe logo" width="45" />
+                          </span>
+                        </td>
+                        <td>
+                          <a [routerLink]="['/dashboard/bank-account/edit',item.id]" nbButton ghost status="warning" *ngIf="item.type==='Manual'">
+                            <nb-icon icon="edit"></nb-icon>
+                          </a>
+                          <a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+                            <nb-icon icon="close-outline"></nb-icon>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ngb-pagination [(page)]="_tableService.page"
+                                [pageSize]="_tableService.pageSize"
+                                [collectionSize]="total$ | async">
+                </ngb-pagination>
+              </div>
+            </nb-tab>
+            <!--Paypal -->
+            <nb-tab tabTitle="Paypal">
+              <div class="row mt-5">
+                <div class="col-6">
+                  <nb-select [(ngModel)]="_tableService.pageSize">
+                    <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  </nb-select>
+                </div>
+                <div class="col-6">
+                  <nb-form-field class="float-end">
+                    <nb-icon nbPrefix icon="search-outline"></nb-icon>
+                    <input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+                  </nb-form-field>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="table-responsive">
+                  <table class="table table-striped table-borderless">
+                    <thead>
+                      <tr>
+                        <th class="bank-name" scope="col" sortable="bankName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankName' | translate }}
+                        </th>
+                        <th  scope="col" sortable="createdAt" (sort)="onSort($event)">
+                          {{ 'table.createdAt' | translate }}
+                        </th>
+                        <th class="bank-holder-name" scope="col" sortable="bankHolderName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankHolderName' | translate }}
+                        </th>
+                        <th class="account-number" scope="col" sortable="accountNumber" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankNumber' | translate }}
+                        </th>
+                        <th class="pendingBalance" scope="col" sortable="pendingBalance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.pendingBalance' | translate }}
+                        </th>
+                        <th class="balance" scope="col" sortable="balance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.balance' | translate }}
+                        </th>
+                        <th class="phone" scope="col" sortable="phone" (sort)="onSort($event)">
+                          {{ 'general.type' | translate }}
+                        </th>
+                        <th>{{ 'table.actions' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="paypalBankaccounts">
+                      <tr *ngFor="let item of paypalBankaccounts | async">
+                        <td>
+                          <b>
+                            <ngb-highlight [result]="item.bankName" [term]="_tableService.searchTerm"></ngb-highlight>
+                          </b>
+                        </td>
+                        <td> <ngb-highlight [result]="item.createdAt | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight></td>
+                        <td>
+                          <ngb-highlight [result]="item.bankHolderName" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight [result]="item.accountNumber" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td class="text-primary">
+                          <strong>
+                            <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.pendings.length > 0">
+                              {{item.stripeBalance.pendings[0].amount.toFixed(2)}}
+                            </span>
+                            <span *ngIf="!item.currency && currency">{{currency.symbol}}</span>
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.pendingBalance.toFixed(2)" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </strong>
+                        </td>
+                        <td class="text-primary">
+                          <strong>
+                            <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.availables.length > 0">
+                              {{item.stripeBalance.availables[0].amount}}
+                            </span>
+                            <span *ngIf="!item.currency && currency">{{currency.symbol}}</span>
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.balance.toFixed(2)" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </strong>
+                        </td>
+                        <td>
+                          <span *ngIf="item.type === 'PayPal'" class="paypal-font-size text-primary">
+                            <i class="fab fa-fw fa-paypal"></i>
+                          </span>
+                        </td>
+                        <td>
+                          <a [routerLink]="['/dashboard/bank-account/edit',item.id]" nbButton ghost status="warning" *ngIf="item.type==='Manual'">
+                            <nb-icon icon="edit"></nb-icon>
+                          </a>
+                          <a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+                            <nb-icon icon="close-outline"></nb-icon>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ngb-pagination [(page)]="_tableService.page"
+                                [pageSize]="_tableService.pageSize"
+                                [collectionSize]="total$ | async">
+                </ngb-pagination>
+              </div>
+            </nb-tab>
+            <!-- Manual account -->
+            <nb-tab tabTitle="Manual">
+              <div class="row mt-5">
+                <div class="col-6">
+                  <nb-select [(ngModel)]="_tableService.pageSize">
+                    <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                    <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  </nb-select>
+                </div>
+                <div class="col-6">
+                  <nb-form-field class="float-end">
+                    <nb-icon nbPrefix icon="search-outline"></nb-icon>
+                    <input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+                  </nb-form-field>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="table-responsive">
+                  <table class="table table-striped table-borderless">
+                    <thead>
+                      <tr>
+                        <th class="bank-name" scope="col" sortable="bankName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankName' | translate }}
+                        </th>
+                        <th  scope="col" sortable="createdAt" (sort)="onSort($event)">
+                          {{ 'table.createdAt' | translate }}
+                        </th>
+                        <th class="bank-holder-name" scope="col" sortable="bankHolderName" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankHolderName' | translate }}
+                        </th>
+                        <th class="account-number" scope="col" sortable="accountNumber" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.bankNumber' | translate }}
+                        </th>
+                        <th class="pendingBalance" scope="col" sortable="pendingBalance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.pendingBalance' | translate }}
+                        </th>
+                        <th class="balance" scope="col" sortable="balance" (sort)="onSort($event)">
+                          {{ 'bankAccount.index.balance' | translate }}
+                        </th>
+                        <th class="phone" scope="col" sortable="phone" (sort)="onSort($event)">
+                          {{ 'general.type' | translate }}
+                        </th>
+                        <th>{{ 'table.actions' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="manualBankaccounts">
+                      <tr *ngFor="let item of manualBankaccounts | async">
+                        <td>
+                          <b>
+                            <ngb-highlight [result]="item.bankName" [term]="_tableService.searchTerm"></ngb-highlight>
+                          </b>
+                        </td>
+                        <td> <ngb-highlight [result]="item.createdAt | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight></td>
+                        <td>
+                          <ngb-highlight [result]="item.bankHolderName" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight [result]="item.accountNumber" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </td>
+                        <td class="text-primary">
+                          <strong>
+                            <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.pendings.length > 0">
+                              {{item.stripeBalance.pendings[0].amount}}
+                            </span>
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.pendingBalance" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </strong>
+                        </td>
+                        <td class="text-primary">
+                          <strong>
+                            <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+                            <span *ngIf="item.stripeBalance != null && item.stripeBalance.availables.length > 0">
+                              {{item.stripeBalance.availables[0].amount.toFixed(2)}}
+                            </span>
+                            <ngb-highlight *ngIf="item.stripeBalance == null" [result]="item.balance.toFixed(2)" [term]="_tableService.searchTerm">
+                            </ngb-highlight>
+                          </strong>
+                        </td>
+                        <td>
+                          <ngb-highlight  *ngIf="item.type !== 'Stripe'" [result]="item.type" [term]="_tableService.searchTerm"></ngb-highlight>
+                          <span *ngIf="item.type === 'Stripe'">
+                            <img src="assets/images/stripe.svg" alt="stripe logo" width="45" />
+                          </span>
+                        </td>
+                        <td>
+                          <a [routerLink]="['/dashboard/bank-account/edit',item.id]" nbButton ghost status="warning" *ngIf="item.type==='Manual'">
+                            <nb-icon icon="edit"></nb-icon>
+                          </a>
+                          <a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+                            <nb-icon icon="close-outline"></nb-icon>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ngb-pagination [(page)]="_tableService.page"
+                                [pageSize]="_tableService.pageSize"
+                                [collectionSize]="total$ | async">
+                </ngb-pagination>
+              </div>
+            </nb-tab>
+          </nb-tabset>
+
+        </nb-card-body>
+    </nb-card>
+  </div>
+</ng-container>

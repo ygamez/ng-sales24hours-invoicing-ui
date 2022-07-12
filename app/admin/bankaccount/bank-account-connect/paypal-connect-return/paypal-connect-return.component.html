@@ -1,0 +1,8 @@
+<div class="container text-center">
+  <h4 class="text-warning">{{ 'bankConnect.doNotLeaveSetup' | translate }} </h4>
+  <img class="img-fluid m-0" src="assets/images/done.svg" alt="Paypal connect success" width="40%" >
+  <div class="text-center">
+    <h4 [class]="color">{{message}}</h4>
+    <a routerLink="/dashboard/bank-account-list" nbButton status="primary" class="mt-4">{{ 'general.bankAccounts' | translate }} </a>
+  </div>
+</div>

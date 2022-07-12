@@ -1,0 +1,134 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// Color system
+
+$white:				$px-white !default;
+$gray-100:			$px-gray-100 !default;
+$gray-200:			$px-gray-200 !default;
+$gray-300:			$px-gray-300 !default;
+$gray-400:			$px-gray-400 !default;
+$gray-500:			$px-gray-500 !default;
+$gray-600:			$px-gray-600 !default;
+$gray-700:			$px-gray-700 !default;
+$gray-800:			$px-gray-800 !default;
+$gray-900:			$px-gray-900 !default;
+$black:				$px-black !default;
+
+
+$primary:       	$px-primary !default;
+$secondary:     	$px-secondary !default;
+$success:       	$px-success !default;
+$info:          	$px-info !default;
+$warning:       	$px-warning !default;
+$danger:        	$px-danger !default;
+
+$light:         	$px-light !default;
+$dark:          	$px-dark !default;
+
+
+// Body
+//
+// Settings for the `<body>` element.
+$body-color:     $px-body-color !default;
+
+
+// The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+$min-contrast-ratio:   $px-min-contrast-ratio !default;
+
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+$font-family-sans-serif: 	$px-font-family-sans-serif !default;
+
+$font-size-base:              $px-font-size-base !default; // Assumes the browser default, typically `16px`
+$font-size-sm:                $px-font-size-sm !default;
+$font-size-lg:                $px-font-size-lg !default;
+
+$headings-font-weight:        $px-headings-font-weight !default;
+$headings-color:              $px-headings-color !default;
+
+// scss-docs-start display-headings
+$display-font-weight:         $px-display-font-weight !default;
+
+$lead-font-size:           $px-lead-font-size !default;
+$lead-font-weight:         $px-lead-font-weight !default;
+
+
+// Links
+//
+// Style anchor elements.
+$link-decoration:                         $px-link-decoration !default;
+$link-hover-decoration:                   $px-link-hover-decoration !default;
+
+
+// Navbar
+
+$navbar-padding-y:                  $px-navbar-padding-y !default;
+$navbar-nav-link-padding-x:         $px-navbar-nav-link-padding-x !default;
+
+
+// Components
+//
+// Define common padding and border radius sizes and more.
+$box-shadow:          $px-box-shadow !default;
+$box-shadow-lg:          $px-box-shadow-lg !default;
+
+
+
+// Cards
+$card-spacer-x:                     $px-card-spacer-x !default;
+$card-spacer-y:                     $px-card-spacer-y !default;
+$card-border-color:                 $px-card-border-color !default;
+$card-border-radius:                $px-card-border-radius !default;
+$card-box-shadow:                   $px-card-box-shadow !default;
+$card-cap-bg:                       $px-card-cap-bg !default;
+$card-cap-padding-y:             	$px-card-cap-padding-y !default;
+$card-cap-padding-x:             	$px-card-cap-padding-x !default;
+
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-negative-margins:     $px-enable-negative-margins !default;
+
+// Accordion
+$accordion-button-focus-border-color:     $px-accordion-button-focus-border-color !default;
+$accordion-button-focus-box-shadow:       $px-accordion-button-focus-box-shadow !default;
+$accordion-button-color:				  $px-accordion-button-color !default;
+$accordion-border-color:                  $px-accordion-border-color !default;
+$accordion-button-active-bg:              $px-accordion-button-active-bg !default;
+$accordion-button-active-color:           $px-accordion-button-active-color !default;
+
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+$input-btn-padding-y:         $px-input-btn-padding-y !default;
+$input-btn-padding-x:         $px-input-btn-padding-x !default;
+
+$input-btn-padding-y-sm:      $px-input-btn-padding-y-sm !default;
+$input-btn-padding-x-sm:      $px-input-btn-padding-x-sm !default;
+$btn-line-height-sm:		 $px-btn-line-height-sm !default;
+
+
+$input-btn-padding-y-lg:      $px-input-btn-padding-y-lg !default;
+$input-btn-padding-x-lg:      $px-input-btn-padding-x-lg !default;
+$input-btn-font-size-lg:		$px-input-btn-font-size-lg !default;
+
+$btn-font-weight:		$px-btn-font-weight !default;
+
+// Breadcrumbs
+$breadcrumb-bg:                     $px-breadcrumb-bg !default;
+$breadcrumb-divider-color:          $px-breadcrumb-divider-color !default;
+
+
+// List group
+$list-group-border-color:           $px-list-group-border-color !default;
+$list-group-item-padding-y:         $px-list-group-item-padding-y !default;

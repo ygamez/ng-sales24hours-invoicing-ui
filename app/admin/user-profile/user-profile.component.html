@@ -1,0 +1,78 @@
+<nb-card [nbSpinner]="cardLoading"
+          accent="primary"
+         nbSpinnerSize="large"
+         nbSpinnerMessage="">
+  <nb-card-header>
+    {{ 'general.userProfile' | translate }}
+  </nb-card-header>
+
+  <nb-card-body>
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="userForm" (ngSubmit)="upsertUser(userForm.value)" #formDir="ngForm" novalidate >
+
+          <h6 class="mt-5">{{'general.userInfo' | translate }}</h6>
+
+          <!-- fullname -->
+          <div class="mt-3 form-group row">
+            <label for="fullname" class="col-3 col-form-label">{{'general.fullname' | translate}}</label>
+            <div class="col-8">
+              <input type="text" nbInput fullWidth id="fullname" placeholder="{{'general.fullname' | translate}}" formControlName="fullname">
+              <span class="text-danger" *ngIf="userForm.hasError('required', ['fullname']) && formDir.submitted">
+                {{'general.requiredName' | translate}}
+              </span>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="mt-3 form-group row">
+            <label for="email" class="col-3 col-form-label">{{'general.email' | translate}}</label>
+            <div class="col-8">
+              <input type="email" nbInput fullWidth id="email" placeholder="{{'general.email' | translate}}" formControlName="email">
+              <span class="text-danger" *ngIf="userForm.hasError('required', ['email']) && formDir.submitted">
+                {{'general.requiredEmail' | translate}}.
+              </span>
+            </div>
+          </div>
+
+          <h6 class="mt-5">Change password</h6>
+          <div>
+            <small>{{ 'general.doNotFillPassword' | translate }}</small>
+          </div>
+
+          <!-- Current password -->
+          <div class="mt-3 form-group row">
+            <label for="email" class="col-3 col-form-label">{{'general.currentPassword' | translate}}</label>
+            <div class="col-8">
+              <input nbInput type="password" id="input-password" placeholder="{{'general.password' | translate }}" fullWidth formControlName="password">
+              <span class="text-danger" *ngIf="userForm.hasError('required', ['password']) && formDir.submitted">
+                {{'general.requiredPassword' | translate}}.
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-3 form-group row">
+            <label for="email" class="col-3 col-form-label">{{'general.newPassword' | translate}}</label>
+            <div class="col-8">
+              <input nbInput type="password" id="input-password" placeholder="{{'general.newPassword' | translate }}" fullWidth formControlName="newPassword">
+            </div>
+          </div>
+
+          <div class="mt-3 form-group row">
+            <label for="email" class="col-3 col-form-label">{{'general.repeatPassword' | translate}}</label>
+            <div class="col-8">
+              <input nbInput type="password" id="input-password" placeholder="{{'general.repeatPassword' | translate }}" fullWidth formControlName="confirmNewPassword">
+              <div class="text-danger" *ngIf="errorMessage">{{errorMessage}}</div>
+            </div>
+          </div>
+
+          <div class="mt-3 form-group row">
+            <div class="offset-sm-3 col-sm-7">
+              <button type="submit" nbButton status="primary" [nbSpinner]="loading" nbSpinnerStatus="control">{{'form.save' | translate}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

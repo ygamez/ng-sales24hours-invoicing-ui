@@ -1,0 +1,89 @@
+<nb-card class="dialog" accent="primary" size="tiny ">
+  <nb-card-header>
+    <h6>{{formTitle}}</h6>
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <table class="table ">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">{{ 'general.account' | translate }}</th>
+            <th scope="col">{{ 'general.contact' | translate }}</th>
+            <th scope="col">{{ 'general.customerVendor' | translate }}</th>
+            <th scope="col">{{ 'general.tax' | translate }}</th>
+            <th scope="col">{{ 'general.debit' | translate }}</th>
+            <th scope="col">{{ 'general.credit' | translate }}</th>
+            <th scope="col">{{ 'general.description' | translate }}</th>
+            <th scope="col">{{ 'table.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div>
+                <nb-select (selectedChange)="selectAccount($event)" id="account" name="account"
+                  formControlName="accountId" placeholder="Select a account" fullWidth status="primary">
+                  <nb-option *ngFor="let account of accounts" [(value)]="account.id">{{account.accountName}}</nb-option>
+                </nb-select>
+              </div>
+            </td>
+            <td>
+              <nb-select id="category" formControlName="category" (selectedChange)="selectedCategory($event)" fullWidth status="primary">
+                <nb-option value="customer">{{ 'general.customer' | translate }}</nb-option>
+                <nb-option value="vendor">{{ 'general.vendor' | translate }}</nb-option>
+              </nb-select>
+            </td>
+            <td>
+              <div [hidden]="!isCustomer">
+                <!-- <label class="col-4" for="customer">Customer</label> -->
+                <div>
+                  <nb-select id="customer" name="customer" formControlName="customerId" placeholder="Select a Customer"
+                    (selectedChange)="selectCustomer($event)" fullWidth status="primary">
+                    <nb-option *ngFor="let customer of customers" [(value)]="customer.id">{{customer.name}}</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <div [hidden]="isCustomer">
+                <div>
+                  <nb-select id="vendor" name="vendor" formControlName="vendorId" placeholder="Select a Vendor"
+                    (selectedChange)="selectVendor($event)" fullWidth status="primary">
+                    <nb-option *ngFor="let vendor of vendors" [(value)]="vendor.id">{{vendor.name}}</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <nb-select id="tax" name="tax" formControlName="taxId" placeholder="Select a tax"
+                (selectedChange)="selectTax($event)" fullWidth status="primary">
+                <nb-option *ngFor="let tax of taxes" [(value)]="tax.id">{{tax.name}} ({{tax.rate}}%)</nb-option>
+              </nb-select>
+            </td>
+            <td>
+              <input (keyup)="onDebitKeyUp(debit.value)" #debit class="form-control" id="debit" name="debit"
+                formControlName="debit" nbInput placeholder="Debit" fullWidth status="primary" type="number" min="0">
+            </td>
+            <td>
+              <input (keyup)="onCreditKeyUp(credit.value)" #credit class="form-control" id="credit" name="credit"
+                formControlName="credit" nbInput placeholder="Credit" fullWidth status="primary" type="number" min="0">
+            </td>
+            <td>
+              <input class="form-control" id="description" name="description" formControlName="description" nbInput
+                placeholder="Description" fullWidth status="primary">
+            </td>
+            <td>
+              <button type="submit" [nbSpinner]="loading" ghost nbButton>
+                <nb-icon icon="checkmark-outline"></nb-icon>
+              </button>
+              <button (click)="close()" nbButton ghost class="ms-2">
+                <nb-icon icon="close-outline"></nb-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </form>
+  </nb-card-body>
+</nb-card>

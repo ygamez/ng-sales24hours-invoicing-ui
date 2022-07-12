@@ -1,0 +1,9 @@
+
+<nb-card class="chart-line2-card-height" accent="primary" [nbSpinner]="loading">
+  <nb-card-header>
+    {{ 'general.invoiceAnalytics' | translate }}
+  </nb-card-header>
+  <nb-card-body class="mb-3">
+    <div echarts [options]="options" class="echart"></div>
+  </nb-card-body>
+</nb-card>

@@ -1,0 +1,9 @@
+
+.card{
+  cursor: pointer;
+}
+
+.card.active{
+  color: #274bdb;
+  border: 1px solid #274bdb;
+}

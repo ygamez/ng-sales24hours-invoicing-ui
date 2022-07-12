@@ -1,0 +1,52 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-2" for="youtube">Youtube</label>
+				<div class="col-5">
+					<input class="form-control" id="youtube" name="youtube"
+            formControlName="youtube"  nbInput placeholder="Youtube"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-2" for="instagram">Instagram</label>
+				<div class="col-5">
+					<input class="form-control" id="instagram" name="instagram"
+            formControlName="instagram" nbInput placeholder="Instagram"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-2" for="facebook">Facebook</label>
+				<div class="col-5">
+					<input class="form-control" id="facebook" name="facebook"
+            formControlName="facebook"  nbInput placeholder="Facebook"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-2" for="twitter">Twitter</label>
+				<div class="col-5">
+					<input class="form-control" id="twitter" name="twitter"
+            formControlName="twitter" nbInput placeholder="Twitter"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+			<div class="mg-top form-group row mb-4">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>Save</button>
+				</div>
+			</div>
+
+		</form>
+	</nb-card-body>
+</nb-card>

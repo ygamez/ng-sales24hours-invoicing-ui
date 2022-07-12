@@ -1,0 +1,81 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{'general.emailSettings' | translate }}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="emailHost">{{'general.emailHost' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="emailHost" name="emailHost"
+            formControlName="emailHost"  nbInput placeholder="{{'general.emailHost' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="emailPort">{{'general.emailPort' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="emailPort" name="emailPort"
+            formControlName="emailPort" nbInput placeholder="{{'general.emailPort' | translate }}"
+            fullWidth status="primary" type="number">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="authentication"></label>
+				<div class="col-8">
+					<nb-toggle
+            formControlName="authentication"
+            labelPosition="end"
+            status="primary" >{{'general.useDefaultCredentials' | translate }}</nb-toggle>
+        </div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="username">{{'general.username' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="username" name="username"
+            formControlName="username"  nbInput placeholder="{{'general.email' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="password">{{'general.password' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="password" name="password"
+            formControlName="password" nbInput placeholder="{{'general.password' | translate }}"
+            fullWidth status="primary" type="password">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="fromEmail">{{'general.fromEmail' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="fromEmail" name="fromEmail"
+            formControlName="fromEmail" nbInput placeholder="{{'general.fromEmail' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+      <div class="mg-top form-group row mb-4">
+				<label class="col-3" for="fromNameEmail">{{'general.fromName' | translate }}</label>
+				<div class="col-8">
+					<input class="form-control" id="fromNameEmail" name="fromNameEmail"
+            formControlName="fromNameEmail" nbInput placeholder="{{'general.fromEmail' | translate }}"
+            fullWidth status="primary" type="text">
+				</div>
+			</div>
+
+			<div class="mg-top form-group row mb-4">
+				<div class="offset-sm-3 col-sm-9">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{'form.save' | translate }}</button>
+					<a [nbSpinner]="sending" nbButton class="ms-2" (click)="sendTestEmail()">{{'general.sendTestEmail' | translate }}</a>
+				</div>
+			</div>
+
+		</form>
+	</nb-card-body>
+</nb-card>

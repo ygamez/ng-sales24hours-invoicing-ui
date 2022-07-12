@@ -1,0 +1,50 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{formTitle}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+
+			<div class="mg-top form-group row">
+				<label class="col-2" for="name">{{'general.name' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="name" name="name" formControlName="name"nbInput placeholder="{{'general.name' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['name']) && formDir.submitted" for="name">{{'general.requiredName' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="amount">{{'general.amount' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="amount" name="amount" formControlName="amount"nbInput placeholder="{{'general.amount' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['amount']) && formDir.submitted" for="amount">{{'general.requiredAmount' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="from">{{'general.startAt' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="from" name="from" formControlName="from"nbInput placeholder="{{'general.startAt' | translate }}" status="primary" autocomplete="off" [nbDatepicker]="datepickerfrom">
+					<nb-datepicker #datepickerfrom></nb-datepicker>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['from']) && formDir.submitted" for="from">{{'general.requiredDate' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-2" for="to">{{'general.endAt' | translate }} *</label>
+				<div class="col-5">
+					<input class="form-control" id="to" name="to" formControlName="to"nbInput placeholder="{{'general.endAt' | translate }}" status="primary" autocomplete="off" [nbDatepicker]="datepickerto">
+					<nb-datepicker #datepickerto></nb-datepicker>
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['to']) && formDir.submitted" for="to">{{'general.requiredDate' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<div class="offset-sm-2 col-sm-10">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

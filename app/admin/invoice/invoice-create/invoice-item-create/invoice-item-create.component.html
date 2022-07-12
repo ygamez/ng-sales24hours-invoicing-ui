@@ -1,0 +1,82 @@
+<nb-card class="dialog" accent="primary" size="tiny">
+  <nb-card-header>
+    <h6>{{ 'general.addPdtSrvc' | translate }}</h6>
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">{{ 'invoice.detail.category' | translate }}</th>
+            <th scope="col">{{ 'invoice.detail.items' | translate }}</th>
+            <th scope="col">{{ 'general.quantity' | translate }}</th>
+            <th scope="col">{{ 'invoice.detail.price' | translate }}</th>
+            <th scope="col">{{ 'invoice.detail.discount' | translate }} (%)</th>
+            <th scope="col">{{ 'invoice.detail.totalPrice' | translate }}</th>
+            <th scope="col">{{ 'general.description' | translate }}</th>
+            <th scope="col">{{ 'table.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <nb-select id="category" formControlName="category" (selectedChange)="selectedCategory($event)" fullWidth
+                status="primary">
+                <nb-option value="product">{{ 'general.product' | translate }}</nb-option>
+                <nb-option value="service">{{ 'general.service' | translate }}</nb-option>
+              </nb-select>
+            </td>
+            <td>
+              <div [hidden]="!isProduct">
+                <div>
+                  <nb-select id="product" name="product" formControlName="productId" placeholder="Select a Product"
+                    (selectedChange)="selectProduct($event)" fullWidth status="primary">
+                    <nb-option *ngFor="let product of products" [(value)]="product.id">{{product.name}}</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <div [hidden]="isProduct">
+                <div>
+                  <nb-select id="service" name="service" formControlName="serviceId" placeholder="Select a Service"
+                    (selectedChange)="selectService($event)" fullWidth status="primary">
+                    <nb-option *ngFor="let service of services" [(value)]="service.id">{{service.name}}</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+            </td>
+            <td>
+              <input class="form-control" id="quantity" name="quantity" formControlName="quantity" nbInput
+                placeholder="Quantity" (change)="quantityChange($event)" fullWidth status="primary" type="number"
+                min="1">
+            </td>
+            <td>
+              <input class="form-control" id="price" name="price" formControlName="price" nbInput placeholder="Price"
+                fullWidth status="primary" type="number" readonly>
+            </td>
+            <td>
+              <input class="form-control" id="discount" name="discount" formControlName="discount" nbInput
+                placeholder="Discount" fullWidth status="primary" type="number" min="0" max="100">
+            </td>
+            <td>
+              <input class="form-control" id="total-price" name="totalPrice" formControlName="totalPrice" nbInput
+                placeholder="Total price" fullWidth status="primary" type="text" readonly>
+            </td>
+            <td>
+              <input class="form-control" id="description" name="description" formControlName="description" nbInput
+                placeholder="Description" fullWidth status="primary">
+            </td>
+            <td>
+              <button type="submit" [nbSpinner]="loading" ghost nbButton>
+                <nb-icon icon="checkmark-outline"></nb-icon>
+              </button>
+              <button (click)="close()" nbButton ghost class="ms-2">
+                <nb-icon icon="close-outline"></nb-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </nb-card-body>
+</nb-card>

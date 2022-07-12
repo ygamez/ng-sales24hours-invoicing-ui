@@ -1,0 +1,241 @@
+<div class="container" *ngIf="proposal; else noContent">
+
+  <div class="row mb-3" >
+	  <div class="col-12">
+      <a class="float-end" nbButton size="small" status="warning" [routerLink]="['/dashboard/proposal/edit', proposal.id]" >
+        <nb-icon icon="edit-outline"></nb-icon>
+        {{'general.edit' | translate}}
+      </a>
+    </div>
+	</div>
+
+  <nb-card accent="primary" [nbSpinner]="loading">
+    <nb-card-header>
+      <h6>{{'estimate.index.title' | translate}}</h6>
+      <small>{{'estimate.index.reference' | translate}}: <b>{{proposal.reference}}</b></small>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="mt-4">
+        <nb-stepper orientation="horizontal" #stepper [(selectedIndex)]="proposal.stepperIndex" disableStepNavigation>
+          <nb-step label="{{labelOne}}" [completed]="proposal.approved">
+            <h4>{{'estimate.stepper.desc1' | translate}}</h4>
+            <p>
+              <span class="mt-1">{{ 'general.status' | translate }}: </span> <span class="badge {{proposal.badgeStatus}}">{{proposal.status}}</span>
+              <br />
+            <button nbButton size="small" status="primary" class="mt-2" (click) ="approve(proposal)">
+              {{'general.approve' | translate}} <nb-icon icon="checkmark-outline"></nb-icon></button>
+            </p>
+          </nb-step>
+          <nb-step label="{{labelTwo}}" [completed]="proposal.sent">
+            <div class="text-center">
+              <h4>{{'estimate.stepper.desc1' | translate}}</h4>
+              <p><span class="badge {{proposal.badgeStatus}}">{{proposal.status}}</span>  </p>
+              <button nbButton status="primary" size="small" (click)="markAsSent(proposal)"  class="me-2">{{'general.markAsSent' | translate}} <nb-icon icon="checkmark-outline"></nb-icon></button>
+              <button nbButton status="primary" size="small" (click)="send(proposal)">{{ 'general.send' | translate }} <nb-icon icon="paper-plane-outline"></nb-icon></button>
+            </div>
+          </nb-step>
+          <nb-step label="{{labelTwo}}" [completed]="proposal.accepted || proposal.declined">
+            <div class="text-end">
+              <h4>{{'estimate.stepper.desc3' | translate}}</h4>
+              <p><span class="badge {{proposal.badgeStatus}}">{{proposal.status}}</span>  </p>
+              <button nbButton status="danger" size="small" (click)="declined(proposal)"  class="me-2">{{'general.declined' | translate}} <nb-icon icon="close-outline"></nb-icon></button>
+              <button nbButton status="success" size="small" (click)="accepted(proposal)">{{'general.accepted' | translate}}  <nb-icon icon="checkmark-circle-outline"></nb-icon></button>
+            </div>
+          </nb-step>
+          <nb-step [hidden]="true" label="Third step">
+            <div class="text-end">
+              <h4>{{'estimate.stepper.desc3' | translate}}</h4>
+              <p><span class="badge {{proposal.badgeStatus}}">{{proposal.status}}</span>  </p>
+              <button nbButton status="danger" size="small" (click)="declined(proposal)"  class="me-2" [disabled]="proposal.declined">{{'general.declined' | translate}} <nb-icon icon="close-outline"></nb-icon></button>
+              <button nbButton status="success" size="small" (click)="accepted(proposal)" [disabled]="proposal.accepted">{{'general.accepted' | translate}} <nb-icon icon="checkmark-circle-outline"></nb-icon></button>
+            </div>
+          </nb-step>
+        </nb-stepper>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+	<div class="row mt-5 mb-2">
+	  <div class="col-12">
+      <a class="float-end me-2"  nbButton status="primary" size="small" (click)="downloadPdf()">
+        <nb-icon icon="download-outline"></nb-icon>
+        {{ 'general.download' | translate }}
+      </a>
+      <a class="float-end me-2"  nbButton status="primary" size="small" (click)="print()" >
+        <nb-icon icon="printer-outline"></nb-icon>
+        {{ 'general.print' | translate }}
+      </a>
+      <a *ngIf="['Sent', 'Declined', 'Accepted'].includes(proposal.status)" [nbSpinner]="sending"
+        class="float-end me-2" (click)="resend(proposal)" nbButton status="primary" size="small">
+        <nb-icon icon="paper-plane-outline"></nb-icon>
+        {{ 'general.resend' | translate }}
+      </a>
+      <button class="float-end me-2" (click)="previewCustomerInvoice(proposal.customerPreviewUrl)" nbButton status="primary" size="small">
+        <nb-icon icon="eye-outline"></nb-icon>
+        {{ 'estimate.detail.customerPreview' | translate }}
+      </button>
+	  </div>
+	</div>
+  <nb-card accent="primary" id="pdfContent" [nbSpinner]="loading">
+    <nb-card-body>
+      <div class="p-5" >
+        <div class="row">
+          <div class="col-6">
+            <div class="row" *ngIf="proposal.customer">
+              <div class="col-10">
+                <div class="mb-2"><b>{{ 'general.sentTo' | translate }}</b></div>
+                <div>
+                  {{proposal.customer.name}}
+                 </div>
+                <div>
+                  {{proposal.customer.phone}}
+                </div>
+                <div *ngIf="proposal.customer.billingAddress">
+                  <address>
+                    <div>{{proposal.customer.billingAddress.addressLine1}}</div>
+                    <div>{{proposal.customer.billingAddress.addressLine2}}</div>
+                    <div>{{proposal.customer.billingAddress.zipCode}} {{proposal.customer.billingAddress.city}} - {{proposal.customer.billingAddress.country}}</div>
+                  </address>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4" >
+              <div class="col-10">
+                <div class="mb-2"><b>{{ 'general.from' | translate }}</b></div>
+                <div *ngIf="company">
+                  <div>
+                    {{company.name}}
+                   </div>
+                  <div>
+                    {{company.phone}}
+                  </div>
+                  <div *ngIf="company.billingAddress">
+                    <address>
+                      <div>{{company.billingAddress.addressLine1}}</div>
+                      <div>{{company.billingAddress.addressLine2}}</div>
+                      <div>{{company.billingAddress.zipCode}} {{company.billingAddress.city}} - {{company.billingAddress.country}}</div>
+                    </address>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <a routerLink="/dashboard/setting-list/company" nbButton status="basic" size="tiny">
+                <nb-icon icon="edit-outline"></nb-icon> {{ 'general.editCompany' | translate }}
+              </a>
+            </div>
+          </div>
+          <div class="col-6 text-end">
+            <div><b>{{ 'general.date' | translate }}:</b> {{proposal.proposalDate | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2"><b>{{ 'estimate.index.expireAt' | translate }}: </b> {{proposal.issueDate | date: 'MMM d, y, HH:mm'}}</div>
+            <div class="mt-2"><b>{{ 'estimate.index.reference' | translate }}: </b> {{proposal.reference}}</div>
+            <div class="mt-2" *ngIf="proposal.proposalNumber"><b>{{ 'general.number' | translate }}:</b> {{proposal.proposalNumber}}</div>
+            <div class="mt-2"><b>{{ 'general.status' | translate }}: </b><span class="badge  {{proposal.badgeStatus}}">{{proposal.status}}</span></div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <h6 class="mt-5">{{ 'estimate.detail.productsAndServices' | translate }}</h6>
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">{{ 'estimate.detail.items' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.category' | translate }}</th>
+                  <th scope="col">{{ 'general.quantity' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.price' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.tax' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.discount' | translate }}</th>
+                  <th scope="col">{{ 'estimate.detail.totalPrice' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="proposal.proposalLineItems && proposal.proposalLineItems.length > 0; else empty">
+                <ng-container *ngFor="let item of proposal.proposalLineItems">
+                  <tr>
+                    <td>
+                      <b>
+                        <span *ngIf="item.product != null && item.category === 'product'" >{{item.product.name}} </span>
+                        <span *ngIf="item.service != null && item.category === 'service'" >{{item.service.name}}</span>
+                      </b>
+                      <span><br />{{item.description}}</span>
+                    </td>
+                    <td>{{item.category}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{item.price}}</td>
+                    <td *ngIf="item.product != null && item.category === 'product'" >
+                      <span *ngIf="item.product != null && item.product.tax != null">{{item.product.tax.name}} ({{item.product.tax.rate}}%)</span>
+                    </td>
+                    <td *ngIf="item.service != null && item.category === 'service'" >
+                      <span *ngIf="item.service != null && item.service.tax != null">{{item.service.tax.name}} ({{item.service.tax.rate}}%)</span>
+                    </td>
+                    <td>{{item.discount}}%</td>
+                    <td><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{item.totalPrice}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <ng-template #empty>
+                <tbody>
+                  <tr>
+                   <td colspan="8" class="text-center"><b>{{ 'general.noItemAdded' | translate }}</b></td>
+                  </tr>
+                </tbody>
+              </ng-template>
+            </table>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-6">
+              </div>
+              <div class="col-6 bg-light" >
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>{{ 'estimate.detail.subTotal' | translate }}: </td>
+                      <td><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{proposal.subTotalPrice}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'estimate.detail.discount' | translate }}: </td>
+                      <td><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{proposal.totalDiscount}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'estimate.detail.tax' | translate }}: </td>
+                      <td><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{proposal.totalTax}}</td>
+                    </tr>
+                    <ng-container *ngIf="proposal.totalCreditNote">
+                      <tr>
+                        <td>{{ 'estimate.detail.creditNote' | translate }}: </td>
+                        <td><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{proposal.totalCreditNote}}</td>
+                      </tr>
+                    </ng-container>
+                    <tr>
+                      <td><b>{{ 'estimate.detail.totalPrice' | translate }}:</b></td>
+                      <td><b><span *ngIf="proposal.currency">{{proposal.currency.symbol}}</span>{{proposal.totalAmount}}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mg-top row mt-5" *ngIf="proposal.description">
+          <div class="col-12">
+            <div>{{ 'estimate.detail.noteAndTerms' | translate }} </div>
+            <div>{{proposal.description}}</div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>
+<ng-template #noContent>
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,112 @@
+<nb-card accent="primary">
+	<nb-card-header>
+		<h6>{{'general.bankAccounts' | translate}}</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<form [formGroup]="entityForm" #formDir="ngForm" (ngSubmit)="save(entityForm.value)" novalidate>
+
+      <div class="row mb-4">
+        <div class="col-12">
+          {{'general.mandatoryField' | translate}}
+        </div>
+      </div>
+
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="bank-name">{{ 'bankAccount.index.bankName' | translate }} *</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="bank-name" name="bankName" formControlName="bankName"  nbInput placeholder="{{ 'bankAccount.index.bankName' | translate }}" fullWidth status="primary" type="text">
+					<span class="text-danger" *ngIf="entityForm.hasError('required', ['bankName']) && formDir.submitted" for="bank-name">{{ 'bankAccount.form.requiredBankName' | translate }}</span>
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="bank-holder-name">{{ 'bankAccount.index.bankHolderName' | translate }}</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="bank-holder-name" name="bankHolderName" formControlName="bankHolderName"  nbInput placeholder="{{ 'bankAccount.index.bankHolderName' | translate }}" fullWidth status="primary" type="text">
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="account-number">{{ 'bankAccount.index.bankNumber' | translate }}</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="account-number" name="accountNumber" formControlName="accountNumber"  nbInput placeholder="{{ 'bankAccount.index.bankNumber' | translate }}" fullWidth status="primary" type="text">
+				</div>
+			</div>
+			<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="balance">{{ 'bankAccount.index.balance' | translate }} *</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="balance" name="balance" formControlName="balance"  nbInput placeholder="{{ 'general.amount' | translate }}" fullWidth status="primary" type="text">
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['balance']) && formDir.submitted" for="bank-name">{{ 'bankAccount.form.requiredBalance' | translate }}</span>
+				</div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="pendingBalance">{{ 'bankAccount.index.pendingBalance' | translate }} (*)</label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="pendingBalance" name="pendingBalance" formControlName="pendingBalance"  nbInput placeholder="Amount" fullWidth status="primary" type="text">
+          <span class="text-danger" *ngIf="entityForm.hasError('required', ['pendingBalance']) && formDir.submitted" for="bank-name">{{ 'bankAccount.form.requiredPendingBalance' | translate }}</span>
+        </div>
+			</div>
+      <div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="category">{{ 'general.currency' | translate }} *</label>
+				<div class="col-4">
+					<nb-select id="currency" name="currency" formControlName="currencyId"  placeholder="{{ 'general.currency' | translate }}" fullWidth status="primary">
+						<nb-option *ngFor="let currency of currencies" [(value)]="currency.id">{{currency.name}}</nb-option>
+					</nb-select>
+          <div>
+					  <span class="text-danger" *ngIf="entityForm.hasError('required', ['currencyId']) && formDir.submitted" for="currency">
+              {{ 'general.requiredCurrency' | translate }}
+            </span>
+          </div>
+          <a routerLink="/dashboard/setting-list/currencies/create" nbButton class="mt-2" status="basic" size="tiny">
+            <nb-icon icon="plus"></nb-icon>
+            {{ 'bankAccount.form.btnNewCurrency' | translate }}
+          </a>
+				</div>
+			</div>
+    	<div class="mg-top form-group row">
+				<label class="col-4 col-sm-4 col-md-2" for="phone">
+          {{ 'address.phone' | translate }}
+        </label>
+				<div class="col-7 col-sm-7 col-md-6">
+					<input class="form-control" id="phone" name="phone" formControlName="phone"  nbInput placeholder="{{ 'address.phone' | translate }}" fullWidth status="primary" type="text">
+				</div>
+			</div>
+			<h6 class="txt-primary mb-2 mt-5">{{ 'address.title' | translate }}</h6>
+			<ng-container formGroupName="address">
+				<div class="mg-top form-group row mt-5">
+					<label class="col-4 col-sm-4 col-md-2" for="address-line1">{{ 'address.address1' | translate }}</label>
+					<div class="col-7 col-sm-7 col-md-6">
+						<input class="form-control" id="address-line1" name="addressLine1" formControlName="addressLine1"  nbInput placeholder="{{ 'address.address1' | translate }}" fullWidth status="primary" type="text">
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-4 col-sm-4 col-md-2" for="address-line2">{{ 'address.address2' | translate }}</label>
+					<div class="col-7 col-sm-7 col-md-6">
+						<input class="form-control" id="address-line2" name="addressLine2" formControlName="addressLine2"  nbInput placeholder="{{ 'address.address2' | translate }}" fullWidth status="primary" type="text">
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-4 col-sm-4 col-md-2" for="zip-code">{{ 'address.zip' | translate }}</label>
+					<div class="col-7 col-sm-7 col-md-6">
+						<input class="form-control" id="zip-code" name="zipCode" formControlName="zipCode"  nbInput placeholder="{{ 'address.zip' | translate }}" fullWidth status="primary" type="text">
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-4 col-sm-4 col-md-2" for="city">{{ 'address.city' | translate }}</label>
+					<div class="col-7 col-sm-7 col-md-6">
+						<input class="form-control" id="city" name="city" formControlName="city"  nbInput placeholder="City" fullWidth status="primary" type="text">
+					</div>
+				</div>
+				<div class="mg-top form-group row">
+					<label class="col-4 col-sm-4 col-md-2" for="country">{{ 'address.country' | translate }}</label>
+					<div class="col-7 col-sm-7 col-md-6">
+						<input class="form-control" id="country" name="country" formControlName="country"  nbInput placeholder="Country" fullWidth status="primary" type="text">
+					</div>
+				</div>
+			</ng-container>
+			<div class="mg-top form-group row">
+				<div class="offset-4 offset-sm-4 offset-md-2 col-7 col-sm-7 col-md-6">
+					<button type="submit" [nbSpinner]="loading" status="primary" nbButton>{{ 'form.save' | translate }}</button>
+				</div>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

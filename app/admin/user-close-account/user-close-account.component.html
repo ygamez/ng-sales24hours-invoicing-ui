@@ -1,0 +1,35 @@
+<nb-card [nbSpinner]="cardLoading"
+          accent="primary"
+         nbSpinnerSize="large"
+         nbSpinnerMessage="">
+  <nb-card-header>
+    {{ 'general.closeAccount' | translate }}
+  </nb-card-header>
+
+  <nb-card-body>
+    <h6>{{ 'general.closeAccountDesc' | translate }}</h6>
+
+    <button class="mt-5 mb-4" nbButton
+              fullWidth
+              [nbSpinner]="loading"
+              status="danger"
+              size="large"
+              (click)="open(dialog)">
+              {{'general.closeAccount' | translate }}
+    </button>
+
+    <ng-template #dialog let-data let-ref="dialogRef">
+      <nb-card>
+        <nb-card-header> {{'general.confirmDeletion' | translate }}</nb-card-header>
+        <nb-card-body>{{ 'general.closeAccountDesc' | translate }}</nb-card-body>
+        <nb-card-footer>
+          <button nbButton size="tiny" (click)="ref.close()">{{ 'general.cancel' | translate }}</button>
+          <button nbButton size="tiny" status="danger" style="margin-left: 12px;" (click)="ref.close(userId)">
+            {{'general.closeAccount' | translate }}</button>
+        </nb-card-footer>
+      </nb-card>
+    </ng-template>
+
+  </nb-card-body>
+
+</nb-card>

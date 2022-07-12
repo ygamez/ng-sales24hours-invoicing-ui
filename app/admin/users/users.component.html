@@ -1,0 +1,103 @@
+<ng-container >
+
+  <nb-card class="mb-5" *ngIf="subscriptionPercentLimit > 90">
+    <nb-card-body>
+       <div class="row">
+        <div class="col-8">
+          <div>{{'general.youHave' | translate }} {{totalUser}}/{{subscription.plan.maxUser}} {{'subscription.message.userLimit' | translate }}. </div>
+          <div>{{'subscription.message.updatePlan' | translate }} </div>
+         </div>
+         <div class="col-4">
+          <a nbButton status="primary" class="float-end" size="medium" routerLink="/dashboard/setting-list/pricings">
+            {{'subscription.btnUpgrade' | translate }}
+          </a>
+        </div>
+       </div>
+    </nb-card-body>
+  </nb-card>
+
+  <div class="container-fluid">
+
+    <!--*** row ***-->
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="control" nbSpinnerSize="large" nbSpinnerMessage="" class="row" accent="primary">
+      <nb-card-header>
+        <div class="row">
+          <div class="col-6">
+            <h5>{{'general.users' | translate }}</h5>
+          </div>
+          <div class="col-6">
+            <a nbButton size="tiny" class="float-end" status="primary" (click)="redirectToUserCreateComponent()" >
+              <nb-icon icon="plus"></nb-icon>
+              {{'general.inviteUser' | translate }}
+            </a>
+          </div>
+        </div>
+      </nb-card-header>
+
+
+      <nb-card-body class="full-width">
+        <div>
+          <p class="text-success" *ngIf="successMessage">{{successMessage}}</p>
+          <p class="text-danger" *ngIf="errorMessage">{{errorMessage}}</p>
+        </div>
+
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">{{'general.fullname' | translate }}</th>
+              <th scope="col">{{'general.role' | translate }}</th>
+              <th scope="col">{{'table.createdAt' | translate }}</th>
+
+            </tr>
+          </thead>
+          <tbody *ngIf="users">
+            <tr *ngFor="let user of users; let index = index;">
+              <!-- <th scope="row"><nb-checkbox status="primary"></nb-checkbox></th> -->
+              <td>
+                <nb-user size="large"
+                        status="primary"
+                        [name]="user.fullname"
+                        [title]="user.email">
+                </nb-user>
+              </td>
+              <td>{{user.role.name}}</td>
+              <td>{{user.createdAt | date: 'MMM d, y, HH:mm'}}</td>
+              <td>
+                <a nbButton size="tiny" ghost status="primary" [routerLink]="['/dashboard/super-admin-console/pricings/user/'+user.id+'/assign']"
+                  *ngIf="parentRoute === 'super-admin-console' && userRole === 'SuperAdmin' && user.role.name === 'Admin'">
+                  {{'general.editPlan' | translate }}
+                </a>
+              </td>
+              <td>
+                <a (click)="sendRecoveryLink(user)" nbButton ghost status="primary">
+                  <nb-icon icon="paper-plane-outline"></nb-icon>
+                </a> <a [routerLink]="['edit',user.id]" nbButton ghost status="warning">
+                  <nb-icon icon="edit"></nb-icon>
+                </a>
+                <button nbButton ghost status="danger" (click)="open(dialog)">
+                  <nb-icon icon="close-outline"></nb-icon>
+                </button>
+              </td>
+              <ng-template #dialog let-data let-ref="dialogRef">
+                <nb-card>
+                  <nb-card-header> {{'general.confirmDeletion' | translate }}</nb-card-header>
+                  <nb-card-body>{{ data }}</nb-card-body>
+                  <nb-card-footer>
+                    <button nbButton size="tiny" (click)="ref.close()">{{'general.cancel' | translate }}</button>
+                    <button nbButton size="tiny" status="danger" style="margin-left: 12px;" (click)="ref.close(user.id)">
+                      {{'general.delete' | translate }}
+                    </button>
+                  </nb-card-footer>
+                </nb-card>
+              </ng-template>
+
+            </tr>
+          </tbody>
+      </table>
+      <p *ngIf="message">{{message}}</p>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+</ng-container>

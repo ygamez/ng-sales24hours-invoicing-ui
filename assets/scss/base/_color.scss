@@ -1,0 +1,26 @@
+@each $color, $value in $px-grays {
+	.bg-#{$color} {
+		background-color: $value; 
+	}	
+}
+
+@each $color, $value in $px-theme-colors {
+	.bg-#{$color}-light {
+		background-color: rgba($value, 0.2);
+	}
+}
+
+@each $color, $value in $px-theme-colors {
+	.bg-#{$color}-gradient {
+		background: linear-gradient(180deg, $value 50%, darken($value, 10%) 100%) repeat-x !important;
+	}
+}
+
+@each $color, $value in $px-theme-colors {
+	.bg-#{$color}-after {
+		&:after {
+			background-color: $value;
+		}
+	}
+}
+

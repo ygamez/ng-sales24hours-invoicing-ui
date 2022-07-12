@@ -1,0 +1,131 @@
+<ng-container>
+  <div class="container-fluid">
+	<div class="row mb-3">
+	  <div class="col-12">
+      <a class="float-end" href="#" [routerLink]="['/dashboard/bill/create']" nbButton status="primary" size="small">
+        <nb-icon icon="plus"></nb-icon>{{ 'bill.index.btnNewBill' | translate }}
+      </a>
+	  </div>
+	</div>
+      <nb-card accent="primary" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large">
+          <nb-card-header class="row">
+						<h4 class="col-6">{{ 'bill.index.title' | translate }}</h4>
+          </nb-card-header>
+          <nb-card-body>
+						<div class="row mt-4">
+							<div class="col-6">
+								<nb-select [(ngModel)]="_tableService.pageSize">
+                  <nb-option [value]="10">10 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  <nb-option [value]="20">20 {{ 'table.itemPerPage' | translate }}</nb-option>
+                  <nb-option [value]="50">50 {{ 'table.itemPerPage' | translate }}</nb-option>
+								</nb-select>
+							</div>
+							<div class="col-6">
+								<nb-form-field class="float-end">
+									<nb-icon nbPrefix icon="search-outline"></nb-icon>
+									<input nbInput name="searchTerm" type="text" [(ngModel)]="_tableService.searchTerm">
+								</nb-form-field>
+							</div>
+						</div>
+						<div>
+							<div class="table-responsive mt-4">
+								<table class="table table-striped table-borderless">
+									<thead>
+										<tr>
+											<th class="reference" scope="col" sortable="reference" (sort)="onSort($event)">
+                        {{ 'bill.index.reference' | translate }}
+                      </th>
+											<th class="vendor" scope="col" sortable="vendor" (sort)="onSort($event)">
+                        {{ 'general.vendor' | translate }}
+                      </th>
+											<th class="bill-date" scope="col" sortable="billDate" (sort)="onSort($event)">
+                        {{ 'general.date' | translate }}
+                      </th>
+											<th class="issue-date" scope="col" sortable="issueDate" (sort)="onSort($event)">
+                        {{ 'bill.index.dueDate' | translate }}
+                      </th>
+											<!-- <th scope="col" sortable="totalTax" (sort)="onSort($event)">Debit notes</th> -->
+											<th scope="col" sortable="totalDiscount" (sort)="onSort($event)">
+                        {{ 'general.discount' | translate }}
+                      </th>
+											<th scope="col" sortable="totalTax" (sort)="onSort($event)">
+                        {{ 'general.tax' | translate }}
+                      </th>
+											<th class="total-amount" scope="col" sortable="totalAmount" (sort)="onSort($event)">
+                        {{ 'general.amount' | translate }}
+                      </th>
+											<th class="status" scope="col" sortable="status" (sort)="onSort($event)">
+                        {{ 'general.status' | translate }}
+                      </th>
+											<th>
+                        {{ 'table.actions' | translate }}
+                      </th>
+										</tr>
+									</thead>
+									<tbody *ngIf="bills">
+										<tr *ngFor="let item of bills | async">
+											<td>
+                        <a [routerLink]="['/dashboard/bill/details', item.id]">
+                          <b>
+												    <ngb-highlight [result]="item.reference" [term]="_tableService.searchTerm"></ngb-highlight>
+                          </b>
+                        </a>
+											</td>
+											<td>
+                        <nb-user *ngIf="item.vendor" size="medium"
+                            name="{{item.vendor.name}}"
+                            title="{{item.vendor.email}}"
+                            [showTitle]="true">
+                        </nb-user>
+											</td>
+                      <td>
+												<ngb-highlight [result]="item.billDate | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+											<td [ngClass]="item.dueDateIsPassed ? 'text-danger':'' ">
+												<ngb-highlight [result]="item.issueDate | date: 'MMM d, y, HH:mm'" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+                      <td>
+                        <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+												<ngb-highlight [result]="item.totalDiscount" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+											<td>
+                        <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+												<ngb-highlight [result]="item.totalTax" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+                      <td class="text-primary">
+                        <span *ngIf="item.currency">{{item.currency.symbol}}</span>
+												<ngb-highlight [result]="item.totalAmount" [term]="_tableService.searchTerm"></ngb-highlight>
+											</td>
+											<td>
+                        <span class="badge {{item.badgeStatus}}">
+                          <ngb-highlight [result]="item.status" [term]="_tableService.searchTerm"></ngb-highlight>
+                        </span>
+											</td>
+											<td>
+                        <a nbButton ghost status="primary" (click)="resend(item)" >
+												  <nb-icon icon="paper-plane"></nb-icon>
+												</a>
+												<a nbButton ghost status="basic" [routerLink]="['/dashboard/bill/details',item.id]" >
+												  <nb-icon icon="eye-outline"></nb-icon>
+												</a>
+												<a [routerLink]="['/dashboard/bill/edit',item.id]" nbButton ghost status="warning">
+												  <nb-icon icon="edit-outline"></nb-icon>
+												</a>
+												<a nbButton ghost status="danger" (click)="deleteConfirmation(item.id)">
+												  <nb-icon icon="close-outline"></nb-icon>
+												</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<ngb-pagination [(page)]="_tableService.page"
+							                [pageSize]="_tableService.pageSize"
+							                [collectionSize]="total$ | async">
+							</ngb-pagination>
+						</div>
+          </nb-card-body>
+      </nb-card>
+  </div>
+</ng-container>
