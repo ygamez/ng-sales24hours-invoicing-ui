@@ -45,7 +45,7 @@ import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
     BillDownloadComponent,
     SuccessCheckoutComponent,
     InvoiceDownload2Component,
-      EstimateDownload2Component
+      EstimateDownload2Component,
    ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

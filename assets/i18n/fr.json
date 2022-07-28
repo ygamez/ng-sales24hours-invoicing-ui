@@ -540,7 +540,9 @@
     "btnNewCustomer":"Nouveau client",
     "deletedCustomer": "Le client a été supprimé",
     "addedCustomer":"Le nouveau client a été ajouté",
-    "modifiedCustomer":"Le client a été modifié"
+    "modifiedCustomer":"Le client a été modifié",
+    "existCustomerRuc":"Il y a déjà un client avec ce RUC",
+    "existCustomerEmail":"Il y a déjà un client avec cet Email"
   },
   "assets" : {
     "index" : {

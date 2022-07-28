@@ -90,23 +90,49 @@
                 <div class="mg-top form-group row">
                   <label class="col-4" for="issue-date">{{ 'estimate.index.expireAt' | translate }}</label>
                   <div class="col-8">
-                    <input class="form-control" id="issue-date" name="issueDate" formControlName="issueDate" nbInput
-                      placeholder="Issue date" status="primary" autocomplete="off" [nbDatepicker]="datepickerissueDate">
+                    <input class="form-control" 
+                            id="issue-date" 
+                            name="issueDate" 
+                            formControlName="issueDate" 
+                            nbInput
+                            placeholder="Issue date" 
+                            status="primary" 
+                            autocomplete="off" 
+                            [nbDatepicker]="datepickerissueDate">
                     <nb-datepicker #datepickerissueDate></nb-datepicker>
                   </div>
                 </div>
                 <div class="mg-top form-group row mt-5">
-                  <label class="col-4" for="reference">{{ 'estimate.index.reference' | translate }}</label>
+                  <label class="col-4" 
+                          for="reference">{{ 'estimate.index.reference' | translate }}</label>
                   <div class="col-8">
-                    <input class="form-control" id="reference" name="reference" formControlName="reference" nbInput
-                      placeholder="Reference" fullWidth status="primary" type="text" readonly>
+                    <input class="form-control" 
+                            id="reference" 
+                            name="reference" 
+                            formControlName="reference" 
+                            nbInput
+                            placeholder="Reference" 
+                            fullWidth 
+                            status="primary" 
+                            type="text" 
+                            readonly>
                   </div>
                 </div>
                 <div class="mg-top form-group row mt-5">
-                  <label class="col-4" for="order-number">{{ 'general.number' | translate }}</label>
+                  <label class="col-4" 
+                          for="order-number">{{ 'general.number' | translate }}</label>
                   <div class="col-8">
-                    <input class="form-control" id="order-number" name="orderNumber" formControlName="proposalNumber"
-                      nbInput placeholder="Order number" fullWidth status="primary" type="text">
+                    <input class="form-control" 
+                            id="order-number" 
+                            name="orderNumber" 
+                            formControlName="proposalNumber"
+                            nbInput 
+                            placeholder="Order number" 
+                            fullWidth 
+                            status="primary" 
+                            type="text"
+                            readonly>
+                            
                   </div>
                 </div>
               </div>

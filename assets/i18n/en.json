@@ -542,7 +542,9 @@
     "btnEditCustomer":"Edit Customer",
     "deletedCustomer": "The client has been successfully removed",
     "addedCustomer":"The client has been successfully created",
-    "modifiedCustomer":"The client has been successfully modified"
+    "modifiedCustomer":"The client has been successfully modified",
+    "existCustomerRuc":"There is already a client with this RUC",
+    "existCustomerEmail":"There is already a client with this Email"
   },
   "assets": {
     "index": {

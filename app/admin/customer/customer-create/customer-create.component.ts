@@ -8,6 +8,10 @@ import { Customer } from 'src/app/models/customer';
 import { AddressService } from 'src/app/service/address.service';
 import { Address } from 'src/app/models/address';
 import { TranslateService } from '@ngx-translate/core';
+// import { emailPattern, rucPattern } from 'src/app/utils/validators/validaciones';
+import { Stripe } from '../../../models/application-setting';
+import { EmailValidatorService } from '../../../utils/validator/email-validator.service';
+import { emailPattern } from 'src/app/utils/validator/validaciones';
 
 @Component({
 	selector: 'customer-create',
@@ -15,11 +19,15 @@ import { TranslateService } from '@ngx-translate/core';
 	styleUrls: ['./customer-create.component.scss']
 })
 export class CustomerCreateComponent implements OnInit {
+	
 	formTitle: string = "Add new customer";
-	entityForm: FormGroup;
+	// entityForm: FormGroup;
 	loading: boolean = false;
 	id: string = this.activatedRoute.snapshot.params["id"];
 	public addresss: Address[] = [];
+	public customers: Customer[] = [];
+	showMessages: any = {};
+	errors: string[] = [];
   public errorMessage: string;
   public deletedItem: string;
 	public addItem: string;
@@ -27,8 +35,13 @@ export class CustomerCreateComponent implements OnInit {
 	public addedCustomer: string;
 	public modifiedCustomer: string;
 	public deletedCustomer: string;
+	public existCustomerRuc: string;
+	public existCustomerEmail: string;
 	public success: string;
-
+	public btnNewCustomer: string;
+	public btnEditCustomer: string;
+	userAlreadyExist: string;
+  getcustoerResponse : Customer;	
 	// @ViewChild('formDir') formDir: NgForm;
 
 	customerResponse : Customer = {
@@ -44,9 +57,27 @@ export class CustomerCreateComponent implements OnInit {
 		billingAddressId: 0,
 		shippingAddressId: 0,
 		shippingAddress: new Address
-	}
-	btnNewCustomer: any;
-	btnEditCustomer: any;
+	}	
+	entityForm : FormGroup = this.fb.group({
+		email: ['', [Validators.required, Validators.pattern( emailPattern )  ], /*[this.ev]*/],
+		name: ['', [Validators.required, ]],
+		ruc: ['', [Validators.required, Validators.min(0) ,Validators.minLength(9), Validators.maxLength(12) ]],
+		phone: '',
+		billingAddress : this.fb.group({
+			addressLine1: ['',[Validators.required]],
+			addressLine2: '',
+			zipCode: [''],
+			country: ['Ecuador',[Validators.required]],
+			city: ['',[Validators.required]],
+		}),
+		shippingAddress : this.fb.group({
+			addressLine1: ['',[Validators.required]],
+			addressLine2: '',
+			zipCode: [''],
+			country: ['Ecuador',[Validators.required]],
+			city: ['',[Validators.required]],
+		}),
+	});
 
 	constructor(private translate: TranslateService,
 		private customerService : CustomerService,
@@ -55,31 +86,21 @@ export class CustomerCreateComponent implements OnInit {
 		private fb: FormBuilder,
 		private activatedRoute: ActivatedRoute,
 		private addressService: AddressService,
-		private toastrService: NbToastrService
+		private toastrService: NbToastrService,
+		private ev: EmailValidatorService
 	){
-		this.entityForm = this.fb.group({
-		  email: ['',[Validators.required, Validators.email]],
-		  name: ['',[Validators.required, Validators.minLength(5)]],
-		  ruc: ['',[Validators.required]],
-		  phone: '',
-      billingAddress : this.fb.group({
-			  addressLine1: ['',[Validators.required]],
-        addressLine2: '',
-			  zipCode: [''],
-			  city: ['',[Validators.required]],
-			  country: ['',[Validators.required]],
-		  }),
-		  shippingAddress : this.fb.group({
-			  addressLine1: ['',[Validators.required]],
-			  addressLine2: '',
-			  zipCode: [''],
-			  city: ['',[Validators.required]],
-			  country: ['',[Validators.required]],
-		  }),
-		});
+		
 	}
 
 	ngOnInit(): void {
+
+		// this.entityForm.controls.billingAddress.reset({
+		// 	country: 'Ecuador',
+		// })
+		// this.entityForm.controls.shippingAddress.reset({
+		// 	country: 'Ecuador',
+		// })
+
     this.translate.get('general.occurredError').subscribe(res => this.errorMessage = res);
     this.translate.get('general.addItem').subscribe(res => this.addItem = res);
     this.translate.get('general.updateItem').subscribe(res => this.updateItem = res);
@@ -90,22 +111,12 @@ export class CustomerCreateComponent implements OnInit {
     this.translate.get('customer.deletedCustomer').subscribe(res => this.deletedCustomer = res);
     this.translate.get('customer.btnNewCustomer').subscribe(res => this.btnNewCustomer = res);
     this.translate.get('customer.btnEditCustomer').subscribe(res => this.btnEditCustomer = res);
+		this.translate.get('customer.existCustomerRuc').subscribe(res => this.existCustomerRuc = res);
+    this.translate.get('customer.existCustomerEmail').subscribe(res => this.existCustomerEmail = res);
 	  this.getCustomer();
+		this.getCustomerAll();
+
 	}
-
-	customerenjson: {
-    "requiredCustomer":"Customer is required",
-    "btnaddCustomer":"Add Customer",
-    "btnNewCustomer":"New Customer",
-    "deletedCustomer": "The client has been deleted",
-    "addedCustomer":"The new client has been added",
-    "modifiedCustomer":"The client has been modified"
-  }
-
-	// save(entityForm) {
-	// 	console.log(entityForm);
-		
-	// 	}
 
 	save(entity: Customer ) {	
 
@@ -114,38 +125,56 @@ export class CustomerCreateComponent implements OnInit {
 		  entity.createdById = this._authService.getCurrentUser().id;
 		  entity.billingAddressId = this.customerResponse.billingAddressId ;
 		  entity.shippingAddressId = this.customerResponse.shippingAddressId ;
-			//actualizar
-		  if (this.id != null && this.id !==''){
-		      entity.id = +this.id;
-          // entity.updateAt = new Date();
-		      return this.customerService.update(entity)
-		      .subscribe(() => {
+			var existRuc = this.customers.find( r => r.ruc == entity.ruc )
+			var existemail = this.customers.find( r => r.email == entity.email )
+
+			if( existRuc!= null){
+				this.loading = false;
+				this.showToast('danger', this.existCustomerRuc );
+				
+			}else if( existemail!= null){
+				this.loading = false;
+				this.showToast('danger', this.existCustomerEmail );				
+			}			
+			else{
+				//actualizar
+				if (this.id != null && this.id !==''){
+					entity.id = +this.id;
+					// entity.updateAt = new Date();
+					return this.customerService.update(entity)
+					.subscribe(() => {
 						this.showToast('success', this.modifiedCustomer );
 						this.router.navigateByUrl('dashboard/customer-list')
 					},
-		      error => {
-		          this.loading = false;
-		          console.log(error);
-		          this.showToast('danger', this.errorMessage)
-		      });
-		  } else {
-			//agregar un registro
-        // entity.createdAt = new Date();
-		      return this.customerService.create(entity)
-		      .subscribe(() => {
+					error => {
+							this.loading = false;
+							console.log(error);
+							this.showToast('danger', this.errorMessage)
+					});
+				} else {
+				//agregar un registro
+				// entity.createdAt = new Date();
+					return this.customerService.create(entity)
+					.subscribe(() => {
 						this.showToast('success', this.addedCustomer);
 					this.router.navigateByUrl('dashboard/customer-list')
-					},
-		      error => {
-		          this.loading = false;
-		          console.log(error);
-		          this.showToast('danger', this.errorMessage)
-		      });
-		  }
+					},err => {
+						this.loading = false;
+						console.log(err);
+						this.showMessages.error = true;
+						if ( err === 409 ){
+							this.errors.push(this.userAlreadyExist);
+						}else{
+							this.errors.push(this.errorMessage);
+						}
+					}
+					);
+				}
+			}
 		}
 	}
 
-	getCustomer(){
+	getCustomer( ){
 		if(this.id != null && this.id !== ""){
 		this.formTitle = "Update customer";
 		  let id : number = +this.id;
@@ -160,6 +189,16 @@ export class CustomerCreateComponent implements OnInit {
 		    }
 		  );
 		}
+	}
+
+	getCustomerAll( ){
+		return this.customerService.getAll()
+					 .subscribe( resul => {
+								this.customers = resul
+					 }, error => {
+						console.log( error );
+						}
+					 );
 	}
 
   checkIfSameAddress(checked){
@@ -186,14 +225,17 @@ export class CustomerCreateComponent implements OnInit {
     return ((this.entityForm.controls[controlName]) as FormGroup)
 					.controls[childControl].hasError(errorName);
   }
-  controlIsTouched(controlName: string) {
-    return this.entityForm.hasError('required', [controlName]) 
-				&& this.entityForm.controls[controlName]?.touched;
+  controlIsTouched( controlFormName : string, controlName: string) {
+    return this[controlFormName].hasError('required', [controlName]) 
+				&& this[controlFormName].controls[controlName]?.touched;
   }
-  controlIsRequireddir() {
-    return this.entityForm.hasError('required', ['addressLine1']) 
-				&& this.entityForm.controls.addressLine1?.touched;
+  controlGroupIsTouched( controlFormName : string, controlGroupName :string, controlName: string) {
+    return this[controlFormName].controls[controlGroupName].hasError('required', [controlName]) 
+				&& this[controlFormName].controls[controlGroupName].get(controlName).touched;
   }
-	// entityForm.hasError('required', ['ruc']) && entityForm.controls.ruc?.touched
-	// controlName: string, childControl: string, errorName: string
+
+	rucNoNegativo( ): boolean{
+		this.entityForm.controls.ruc.setErrors ( null );
+		return  this.entityForm.controls.ruc.value < 0;
+	}
 }
